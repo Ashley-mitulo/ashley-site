@@ -3,15 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>关于 · Ashley Lab</title>
-<link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/theme.css">
+<title>关于 · Ashley</title>
+<link rel="stylesheet" href="/css/style.css?v=20260717-v2">
+<link rel="stylesheet" href="/css/theme.css?v=20260717-v2">
+<style>
+  .about-card{ background:#fff; border-radius:20px; padding:44px 40px; box-shadow:0 8px 24px rgba(15,23,42,.06); }
+  .about-title{ color:var(--primary); font-size:26px; margin:0 0 14px; }
+  .info-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin:22px 0 8px; }
+  .info-item{ background:#f8fafc; border-radius:12px; padding:14px 16px; display:flex; flex-direction:column; gap:4px; }
+  .info-item strong{ color:#334155; font-size:14px; }
+  .info-item span{ color:#0f172a; font-weight:500; }
+  .badge{ display:inline-block; padding:4px 10px; border-radius:999px; background:#eff6ff; color:#1d4ed8; font-size:13px; margin:2px 4px 2px 0; }
+  .about-card h3{ color:var(--primary); margin-top:32px; margin-bottom:12px; }
+  .about-card ul{ color:#334155; line-height:2; padding-left:20px; }
+  .quote{ border-left:4px solid var(--primary); background:#f8fafc; padding:14px 18px; border-radius:8px; color:#475569; font-style:italic; margin:20px 0; }
+  .tl{ position:relative; padding-left:28px; color:#334155; line-height:1.9; }
+  .tl::before{ content:''; position:absolute; left:8px; top:6px; bottom:6px; width:2px; background:#e2e8f0; }
+  .tl-item{ position:relative; margin-bottom:14px; }
+  .tl-item::before{ content:''; position:absolute; left:-24px; top:8px; width:10px; height:10px; border-radius:50%; background:var(--primary); box-shadow:0 0 0 3px #eff6ff; }
+  .tl-year{ color:var(--primary); font-weight:600; margin-right:6px; }
+</style>
 </head>
 <body>
 <nav class="navbar">
   <div class="nav-inner">
     <div class="brand"><div class="brand-mark">A</div>
-      <div><div class="brand-name">Ashley Lab</div><div class="brand-sub">南京 · 智能系统实验室</div></div></div>
+      <div><div class="brand-name">Ashley</div><div class="brand-sub">南京 · 独立开发者</div></div></div>
     <div class="nav-menu">
       <a href="/">首页</a><a href="/about.html" class="active">关于我</a>
       <a href="/projects.html">项目展示</a><a href="/feedback.html">Bug 反馈</a>
@@ -21,39 +38,83 @@
 </nav>
 
 <section class="hero" style="padding:60px 24px;">
-  <div class="hero-inner"><h1>关于我</h1>
-    <p class="subtitle">工程师 × 研究者 × 城市观察员</p></div>
+  <div class="hero-inner">
+    <h1>关于我</h1>
+    <p class="subtitle">一个在南京写代码、也在写文档的普通人 🦐</p>
+  </div>
 </section>
 
 <section class="container">
   <div class="about-card">
+
     <h2 class="about-title">👋 你好，我是 Ashley</h2>
     <p style="color:#334155;font-size:16px;line-height:1.9;">
-      坐标南京，长期在做与交通、城市与知识图谱相关的智能系统。
-      我喜欢把复杂的算法藏在简洁的界面背后，让每一个功能都能被点、能被看懂、能被找到 bug。
-      这个网站就是我把自研项目集中展示给朋友的地方，欢迎大家点进来玩，也欢迎砸 bug 过来 —— 越多越好。
+      坐标南京，本职是研究者，业余爱好是把研究做出来的东西写成能点开、能看懂、能被朋友吐槽的产品。
+      从交通事故到光伏功率，从港口调度到社区适老化，我做的项目跨度有点大 —— 但线索只有一条：
+      <strong>把复杂的数据和算法，藏在一个干净的界面后面</strong>。
     </p>
+
+    <div class="quote">
+      "研究里最难的不是把模型跑通，而是把 100 行 SQL 变成一句话，把一张热力图变成一个能被朋友一眼看懂的故事。"
+    </div>
 
     <div class="info-grid">
       <div class="info-item"><strong>📍 城市</strong><span>南京</span></div>
-      <div class="info-item"><strong>🎯 方向</strong><span>知识图谱 · 城市数据 · 智能问答</span></div>
-      <div class="info-item"><strong>🛠 常用栈</strong><span>Node.js · ECharts · Leaflet · Python</span></div>
-      <div class="info-item"><strong>🎈 兴趣</strong><span>老年社区研究 · 交通事故分析 · 独立开发</span></div>
+      <div class="info-item"><strong>💼 身份</strong><span>研究者 · 独立开发者 · Bug 收集爱好者</span></div>
+      <div class="info-item"><strong>🎯 方向</strong><span>知识图谱 · 城市数据 · 交通分析 · 智能问答</span></div>
+      <div class="info-item"><strong>🛠 常用栈</strong><span>Node.js · Python · ECharts · Leaflet · D1</span></div>
+      <div class="info-item"><strong>🎨 兴趣</strong><span>老龄友好社区 · 城市空间 · 独立项目 · 数据可视化</span></div>
+      <div class="info-item"><strong>☕ 状态</strong><span>持续维护 8 个项目 · 每周一小版本</span></div>
     </div>
 
-    <h3 style="color:var(--primary);margin-top:32px;margin-bottom:12px;">🌱 我在做的事</h3>
-    <ul style="color:#334155;line-height:2;padding-left:20px;">
-      <li><strong>交通事故知识图谱</strong> —— 从事故文本到因果链的自动化解析。</li>
-      <li><strong>适老化社区评估</strong> —— 基于真实 POI 与步行网络的社区打分工具。</li>
-      <li><strong>交通智能问答</strong> —— 让不会写 SQL 的人也能一句话查数据集。</li>
+    <h3>🌱 现在正在做的三件事</h3>
+    <ul>
+      <li><strong>交通事故知识图谱 v3.4.7</strong> —— 从事故新闻/报告里自动抽出"谁撞了谁、责任怎么划、诱因在哪"，配力导向图 + 热力图。三轮盲测闭环刚打完包。</li>
+      <li><strong>山东节假日交通预测</strong> —— 5 种交通 × 7 个节假日 = 35 组预测，394 条历史，客运+知识图谱+智能体三大模块。</li>
+      <li><strong>智慧港口一张屏</strong> —— 8 个业务子页联动的港口驾驶舱：实时监控、健康度评估、吞吐量预测、故障推演。</li>
     </ul>
+    <p style="color:#64748b;font-size:14px;">
+      还有 5 个正在维护的独立项目（老年社区、光伏、城市体检、交通智能体、卫生站选址）—— 都能在
+      <a href="/projects.html" style="color:var(--primary);">项目展示</a> 里点开玩。
+    </p>
 
-    <h3 style="color:var(--primary);margin-top:32px;margin-bottom:12px;">💌 想找我聊聊</h3>
-    <p style="color:#334155;">注册账号后到 <a href="/feedback.html">Bug 反馈</a> 页面留言，我都会看。</p>
+    <h3>📖 一份不太严肃的时间线</h3>
+    <div class="tl">
+      <div class="tl-item"><span class="tl-year">2024</span> 开始独立做研究相关的小工具，第一个上线的是老年社区评估。</div>
+      <div class="tl-item"><span class="tl-year">2025</span> 开始搞交通事故知识图谱，从 v1.0 一路迭到 v3.x，中途踩过一百个坑。</div>
+      <div class="tl-item"><span class="tl-year">2026 上</span> 把手头 7 个独立项目一个一个"翻新" —— 港口、光伏、城市体检、山东交通、卫生站选址陆续上线。</div>
+      <div class="tl-item"><span class="tl-year">2026-07-17</span> 搭了这个网站，把所有项目丢在 Cloudflare Pages 上，配了个自己的 Bug 收集页 —— 今天。</div>
+    </div>
+
+    <h3>💡 关于这个网站</h3>
+    <p style="color:#334155;line-height:1.9;">
+      这不是"简历站"，也不是"作品集站"，更像是一个<strong>朋友入口</strong>：
+      把我做过的项目摆出来，让家人、朋友、师兄师姐能点进去玩，
+      看到 bug 了直接在
+      <a href="/feedback.html" style="color:var(--primary);">Bug 反馈</a>
+      留言。所有反馈我都会看 —— 越尖锐越好。
+    </p>
+    <p style="color:#64748b;font-size:14px;">
+      站点托管在 Cloudflare Pages，反馈存 D1，源码全部开源在
+      <a href="https://github.com/Ashley-mitulo/ashley-site" target="_blank" rel="noopener" style="color:var(--primary);">GitHub</a>。
+    </p>
+
+    <h3>💌 想找我聊聊</h3>
+    <p style="color:#334155;">
+      注册账号后到 <a href="/feedback.html" style="color:var(--primary);">Bug 反馈</a> 页留言就行。
+      不管是找 bug、提功能建议、还是纯粹想说"这个配色好看"，我都会看。
+    </p>
+    <div style="margin-top:20px;">
+      <span class="badge">📊 8 个项目</span>
+      <span class="badge">🐛 欢迎砸 bug</span>
+      <span class="badge">📮 每周回信</span>
+      <span class="badge">☕ 南京请喝咖啡</span>
+    </div>
   </div>
 </section>
 
-<footer class="footer">© 2026 Ashley · 南京</footer>
-<script src="/js/app.js"></script><script>renderNavUser();</script>
+<footer class="footer">© 2026 Ashley · 南京 · 用心做每一个小工具</footer>
+<script src="/js/app.js?v=20260717-v2"></script>
+<script>renderNavUser();</script>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a8f71cf4e7a54303b1f71c7e9e4214a0"}'></script>
 </body></html>
