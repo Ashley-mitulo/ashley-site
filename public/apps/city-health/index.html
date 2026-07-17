@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>城市体检智能诊断系统</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🏙️</div>
+        <div>
+          <h1>城市体检</h1>
+          <p>智能诊断系统</p>
+        </div>
+      </div>
+      <nav class="nav">
+        <button class="nav-item active" data-page="dashboard">📊 体检驾驶舱</button>
+        <button class="nav-item" data-page="indicators">📈 指标监测</button>
+        <button class="nav-item" data-page="diagnosis">🧠 智能诊断</button>
+        <button class="nav-item" data-page="spatial">🗺️ 空间体检</button>
+        <button class="nav-item" data-page="graph">🕸️ 诊断图谱</button>
+        <button class="nav-item" data-page="qa">💬 智能问答</button>
+        <button class="nav-item" data-page="knowledge">📚 知识库</button>
+        <button class="nav-item" data-page="reports">📝 报告中心</button>
+      </nav>
+      <div class="sidebar-card">
+        <div class="small-title">S-E-D 认知闭环</div>
+        <div class="sed-mini"><span>S 表征</span><span>E 解释</span><span>D 决策</span></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2 id="pageTitle">城市体检驾驶舱</h2>
+          <p id="pageSubtitle">基于 S-E-D 认知闭环的城市运行评估智能体</p>
+        </div>
+        <div class="top-actions">
+          <span class="status-dot"></span>
+          <span>南京 · 2024</span>
+        </div>
+      </header>
+
+      <section id="page-dashboard" class="page active">
+        <div class="hero-grid">
+          <div class="health-card glass">
+            <div class="card-label">城市健康指数</div>
+            <div class="score-wrap"><span id="totalScore">--</span><small>分</small></div>
+            <div id="healthLevel" class="level">--</div>
+            <p id="overviewSummary"></p>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi glass"><b id="indicatorCount">--</b><span>监测指标</span></div>
+            <div class="kpi glass"><b id="normalCount">--</b><span>正常指标</span></div>
+            <div class="kpi glass"><b id="warningCount">--</b><span>预警指标</span></div>
+            <div class="kpi glass"><b id="riskCount">--</b><span>风险指标</span></div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="panel"><h3>六维度健康雷达</h3><div id="radarChart" class="chart"></div></div>
+          <div class="panel"><h3>年度综合趋势</h3><div id="trendChart" class="chart"></div></div>
+        </div>
+        <div class="grid-2">
+          <div class="panel"><h3>风险指标 Top</h3><div id="riskList" class="risk-list"></div></div>
+          <div class="panel"><h3>AI 综合诊断摘要</h3><div class="agent-strip"><span>指标分析智能体</span><span>规划知识智能体</span><span>归因诊断智能体</span><span>策略生成智能体</span></div><div id="aiSummary" class="diagnosis-box"></div></div>
+        </div>
+      </section>
+
+      <section id="page-indicators" class="page">
+        <div class="toolbar">
+          <select id="categoryFilter"><option value="">全部维度</option></select>
+          <select id="statusFilter"><option value="">全部状态</option><option value="normal">正常</option><option value="attention">关注</option><option value="warning">预警</option><option value="risk">风险</option></select>
+        </div>
+        <div class="grid-2 indicators-layout">
+          <div class="panel"><h3>指标列表</h3><div id="indicatorList" class="indicator-list"></div></div>
+          <div class="panel"><h3 id="indicatorDetailTitle">指标详情</h3><div id="indicatorTrend" class="chart"></div><div id="indicatorDetail" class="diagnosis-box"></div></div>
+        </div>
+      </section>
+
+      <section id="page-diagnosis" class="page">
+        <div class="toolbar">
+          <select id="diagnosisType"><option value="overall">综合诊断</option><option value="category">维度诊断</option><option value="indicator">单指标诊断</option></select>
+          <select id="diagnosisTarget"></select>
+          <button id="runDiagnosis" class="primary-btn">开始诊断</button>
+        </div>
+        <div class="topic-grid" id="topicGrid"></div>
+        <div class="panel"><h3>S-E-D 智能诊断链</h3><div id="diagnosisResult" class="sed-result"></div></div>
+      </section>
+
+      <section id="page-spatial" class="page">
+        <div class="grid-2">
+          <div class="panel"><h3>南京区县空间体检图</h3><div id="districtMap" class="map-stage"></div></div>
+          <div class="panel"><h3 id="districtTitle">区县 S-E-D 诊断</h3><div id="districtDiagnosis" class="diagnosis-box">点击左侧区县节点查看空间诊断。</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="panel"><h3>区县健康排行</h3><div id="districtRank" class="risk-list"></div></div>
+          <div class="panel"><h3>空间维度均值</h3><div id="districtDimChart" class="chart"></div></div>
+        </div>
+      </section>
+
+      <section id="page-graph" class="page">
+        <div class="panel"><h3>指标—问题—成因—政策—策略诊断知识图谱</h3><div id="diagnosisGraph" class="graph-stage"></div></div>
+      </section>
+
+      <section id="page-qa" class="page">
+        <div class="qa-layout">
+          <div class="panel suggestions"><h3>推荐问题</h3><div id="suggestions"></div></div>
+          <div class="panel chat-panel">
+            <h3>城市体检智能问答 <span class="sub-badge">增强版：关联指标 + 证据引用 + 推荐追问</span></h3>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input"><input id="questionInput" placeholder="例如：南京城市体检目前最突出的问题是什么？" /><button id="askBtn" class="primary-btn">提问</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-knowledge" class="page">
+        <div class="grid-2">
+          <div class="panel">
+            <h3>上传知识片段</h3>
+            <div class="form-stack">
+              <input id="knowledgeTitle" placeholder="知识标题，例如：南京城市更新专项政策" />
+              <input id="knowledgeTags" placeholder="标签，用逗号分隔，例如：城市更新,闲置土地" />
+              <textarea id="knowledgeContent" placeholder="粘贴政策、规范或报告片段..." rows="8"></textarea>
+              <button id="uploadKnowledge" class="primary-btn">上传到知识库</button>
+            </div>
+          </div>
+          <div class="panel"><h3>规划政策知识库</h3><div id="knowledgeList" class="knowledge-list"></div></div>
+        </div>
+      </section>
+
+      <section id="page-reports" class="page">
+        <div class="toolbar"><button id="generateReport" class="primary-btn">生成年度体检报告</button><select id="reportCategory"><option value="">综合报告</option></select><button id="copyReport" class="ghost-btn">复制 Markdown</button><button id="downloadReport" class="ghost-btn">下载 TXT</button></div>
+        <div class="grid-2">
+          <div class="panel"><h3>报告预览</h3><pre id="reportContent" class="report-content">点击生成报告。</pre></div>
+          <div class="panel"><h3>问题清单 / 整改台账</h3><div id="reportSummary" class="diagnosis-box">生成报告后自动提取。</div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>

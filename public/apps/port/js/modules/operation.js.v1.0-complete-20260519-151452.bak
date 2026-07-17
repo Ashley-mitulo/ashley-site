@@ -1,0 +1,827 @@
+// 作业监控 - 双模式调度对比模拟器
+// 业务占比配置
+const WAREHOUSE_RATIO = 0.1;  // 10% 仓库装车
+const PORT_RATIO = 0.9;       // 90% 码头装船
+
+window.operationSimState = {
+    params: { pipelineFlow: 8000, berthCount: 6, shipCapacity: 10000, operationTime: 4, parallelCapacity: 8 },
+    isPlaying: false, playInterval: null, currentStep: 0, maxSteps: 30,
+    fifoState: { step:0, totalThroughput:0, throughputPort:0, throughputWarehouse:0, yards:{A:0,B:0,C:0,D:0,E:0,F:0}, yardsCapacity:{A:5000,B:5000,C:5000,D:5000,E:5000,F:5000}, history:[0], maxInventory:0, waitingTrucks:3, waitingShips:2, ships:[], maxQueue:0, totalWaitTime:0, shipsProcessed:0 },
+    smartState: { step:0, totalThroughput:0, throughputPort:0, throughputWarehouse:0, yards:{A:0,B:0,C:0,D:0,E:0,F:0}, yardsCapacity:{A:5000,B:5000,C:5000,D:5000,E:5000,F:5000}, history:[0], maxInventory:0, waitingTrucks:3, waitingShips:2, ships:[], maxQueue:0, totalWaitTime:0, shipsProcessed:0 }
+};
+
+function renderOperation(container) {
+    console.log('renderOperation called');
+    if (!window.operationSimState) {
+        console.log('Initializing simState');
+        window.operationSimState = {
+            params: { pipelineFlow: 8000, berthCount: 6, shipCapacity: 10000, operationTime: 4, parallelCapacity: 8 },
+            isPlaying: false, playInterval: null, currentStep: 0, maxSteps: 30,
+            fifoState: { step:0, totalThroughput:0, throughputPort:0, throughputWarehouse:0, yards:{A:0,B:0,C:0,D:0,E:0,F:0}, yardsCapacity:{A:5000,B:5000,C:5000,D:5000,E:5000,F:5000}, history:[0], maxInventory:0, waitingTrucks:3, waitingShips:2, ships:[], maxQueue:0, totalWaitTime:0, shipsProcessed:0 },
+            smartState: { step:0, totalThroughput:0, throughputPort:0, throughputWarehouse:0, yards:{A:0,B:0,C:0,D:0,E:0,F:0}, yardsCapacity:{A:5000,B:5000,C:5000,D:5000,E:5000,F:5000}, history:[0], maxInventory:0, waitingTrucks:3, waitingShips:2, ships:[], maxQueue:0, totalWaitTime:0, shipsProcessed:0 }
+        };
+    }
+    console.log('simState:', window.operationSimState);
+
+    if (!container) return;
+    container.style.width = '100%';
+    container.style.maxWidth = '100%';
+    container.style.boxSizing = 'border-box';
+    container.innerHTML = generateHTML();
+    addAnimations();
+    updateDisplay();
+}
+
+function generateHTML() {
+    // 模块1：智能调度算法说明
+    const module1 = `
+<div class="port-card" style="width: 100% !important; max-width: 100% !important; box-sizing: border-box; margin-bottom: 15px; background: linear-gradient(135deg, rgba(0,255,136,0.08) 0%, rgba(0,212,255,0.12) 100%); border: 1px solid rgba(0,255,136,0.3);">
+    <div class="card-header" style="border-bottom: 1px solid rgba(0,255,136,0.2);">
+        <span class="card-title">💡 智能调度算法说明</span>
+        <span style="color: #7a9aba; font-size: 11px;">为什么智能模式能更快完成装卸？</span>
+    </div>
+    <div style="padding: 15px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div style="background: rgba(255,107,107,0.1); border-radius: 8px; padding: 12px;">
+                <div style="color: #ff6b6b; font-weight: 700; font-size: 14px; margin-bottom: 10px;">❌ 传统先到先得模式 (FIFO)</div>
+                <ul style="color: #a0c4e8; font-size: 12px; line-height: 1.8; margin: 0; padding-left: 18px;">
+                    <li>按到达顺序排队，不考虑优先级</li>
+                    <li>高库存货场和低库存货场一起排队</li>
+                    <li>管道资源平均分配，拥堵的货场得不到优先处理</li>
+                    <li>货场容易堵满，导致入口回流</li>
+                    <li style="color: #ff6b6b; font-weight: 600;">问题：越忙的货场越得不到处理，恶性循环！</li>
+                </ul>
+            </div>
+            <div style="background: rgba(0,255,136,0.1); border-radius: 8px; padding: 12px;">
+                <div style="color: #00ff88; font-weight: 700; font-size: 14px; margin-bottom: 10px;">✅ 智能优化调度模式</div>
+                <ul style="color: #a0c4e8; font-size: 12px; line-height: 1.8; margin: 0; padding-left: 18px;">
+                    <li>动态识别库存最高的「热点货场」</li>
+                    <li>70%管道资源优先分配给高库存货场</li>
+                    <li>煤种匹配：什么煤去什么码头，减少中转</li>
+                    <li>预测性调度：提前清空即将拥堵的货场</li>
+                    <li style="color: #00ff88; font-weight: 600;">结果：资源精准投放，吞吐量提升 40-60%！</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>`;
+
+    // 模块2：左右双面板 SVG流程图
+    const module2 = `
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px;width:100%;box-sizing:border-box;">
+    <div class="port-card" style="width: 100% !important; max-width: 100% !important; box-sizing: border-box;">
+        <div style="border-bottom:2px solid rgba(255,107,107,0.4);padding:12px 15px;margin-bottom:15px;">
+            <span style="color:#ff6b6b;font-weight:700;font-size:16px;">🔴 传统FIFO模式</span>
+        </div>
+        <div style="height:400px;margin-bottom:10px;padding:10px;background:rgba(0,0,0,0.05);border-radius:8px;">
+            <svg width="100%" height="100%" viewBox="0 0 500 380">${generateFlowSVG('fifo')}</svg>
+        </div>
+    </div>
+    <div class="port-card" style="width: 100% !important; max-width: 100% !important; box-sizing: border-box;">
+        <div style="border-bottom:2px solid rgba(0,255,136,0.4);padding:12px 15px;margin-bottom:15px;">
+            <span style="color:#00ff88;font-weight:700;font-size:16px;">🟢 智能优化模式</span>
+        </div>
+        <div style="height:400px;margin-bottom:10px;padding:10px;background:rgba(0,0,0,0.05);border-radius:8px;">
+            <svg width="100%" height="100%" viewBox="0 0 500 380">${generateFlowSVG('smart')}</svg>
+        </div>
+    </div>
+</div>`;
+
+    // 模块3：船舶调度详情对比表（新增）
+    const module3 = `
+<div class="port-card" style="width: 100% !important; max-width: 100% !important; margin-top: 15px; box-sizing: border-box;">
+    <div class="card-header">
+        <span class="card-title">🚢 船舶调度详情对比</span>
+        <span style="color: #7a9aba; font-size: 11px;">传统先到先得 vs 智能优化调度</span>
+    </div>
+    
+    <!-- 左右双表格对比 -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px;">
+        
+        <!-- 左边：传统模式表格 -->
+        <div>
+            <div style="color: #ff6b6b; font-weight: 700; font-size: 13px; margin-bottom: 10px;">❌ 传统先到先得模式</div>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+                    <thead>
+                        <tr style="background: rgba(255,107,107,0.1);">
+                            <th style="padding: 6px; border: 1px solid rgba(255,107,107,0.2); text-align: center; color: #ff6b6b;">船舶编号</th>
+                            <th style="padding: 6px; border: 1px solid rgba(255,107,107,0.2); text-align: center; color: #ff6b6b;">泊位编号</th>
+                            <th style="padding: 6px; border: 1px solid rgba(255,107,107,0.2); text-align: center; color: #ff6b6b;">进入时间</th>
+                            <th style="padding: 6px; border: 1px solid rgba(255,107,107,0.2); text-align: center; color: #ff6b6b;">离开时间</th>
+                            <th style="padding: 6px; border: 1px solid rgba(255,107,107,0.2); text-align: center; color: #ff6b6b;">装卸量(吨)</th>
+                            <th style="padding: 6px; border: 1px solid rgba(255,107,107,0.2); text-align: center; color: #ff6b6b;">等待时间</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fifo-ship-table">
+                        <!-- 每步动态填充船舶数据 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 右边：智能模式表格 -->
+        <div>
+            <div style="color: #00ff88; font-weight: 700; font-size: 13px; margin-bottom: 10px;">✅ 智能优化调度模式</div>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+                    <thead>
+                        <tr style="background: rgba(0,255,136,0.1);">
+                            <th style="padding: 6px; border: 1px solid rgba(0,255,136,0.2); text-align: center; color: #00ff88;">船舶编号</th>
+                            <th style="padding: 6px; border: 1px solid rgba(0,255,136,0.2); text-align: center; color: #00ff88;">泊位编号</th>
+                            <th style="padding: 6px; border: 1px solid rgba(0,255,136,0.2); text-align: center; color: #00ff88;">进入时间</th>
+                            <th style="padding: 6px; border: 1px solid rgba(0,255,136,0.2); text-align: center; color: #00ff88;">离开时间</th>
+                            <th style="padding: 6px; border: 1px solid rgba(0,255,136,0.2); text-align: center; color: #00ff88;">装卸量(吨)</th>
+                            <th style="padding: 6px; border: 1px solid rgba(0,255,136,0.2); text-align: center; color: #00ff88;">等待时间</th>
+                        </tr>
+                    </thead>
+                    <tbody id="smart-ship-table">
+                        <!-- 每步动态填充船舶数据 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- 底部对比汇总 -->
+    <div style="padding: 12px 20px; background: rgba(0,212,255,0.05); border-top: 1px solid rgba(0,212,255,0.15); display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center;">
+        <div>
+            <div style="color: #7a9aba; font-size: 10px;">平均等待时间</div>
+            <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+                <span style="color: #ff6b6b; font-size: 13px; font-weight: 700;" id="fifo-avg-wait">--</span>
+                <span style="color: #7a9aba;">→</span>
+                <span style="color: #00ff88; font-size: 13px; font-weight: 700;" id="smart-avg-wait">--</span>
+            </div>
+        </div>
+        <div>
+            <div style="color: #7a9aba; font-size: 10px;">泊位利用率</div>
+            <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+                <span style="color: #ff6b6b; font-size: 13px; font-weight: 700;" id="fifo-berth-util">--</span>
+                <span style="color: #7a9aba;">→</span>
+                <span style="color: #00ff88; font-size: 13px; font-weight: 700;" id="smart-berth-util">--</span>
+            </div>
+        </div>
+        <div>
+            <div style="color: #7a9aba; font-size: 10px;">总吞吐量</div>
+            <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+                <span style="color: #ff6b6b; font-size: 13px; font-weight: 700;" id="fifo-total-throughput">--</span>
+                <span style="color: #7a9aba;">→</span>
+                <span style="color: #00ff88; font-size: 13px; font-weight: 700;" id="smart-total-throughput">--</span>
+            </div>
+        </div>
+        <div>
+            <div style="color: #7a9aba; font-size: 10px;">等待队列最长</div>
+            <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+                <span style="color: #ff6b6b; font-size: 13px; font-weight: 700;" id="fifo-max-queue">--</span>
+                <span style="color: #7a9aba;">→</span>
+                <span style="color: #00ff88; font-size: 13px; font-weight: 700;" id="smart-max-queue">--</span>
+            </div>
+        </div>
+    </div>
+    
+</div>`;
+
+    // 模块4：合并的大卡片 - 智能调度控制台（参数控制 + 对比分析）
+    const module4 = `
+<div class="port-card" style="width: 100% !important; max-width: 100% !important; box-sizing: border-box;">
+    <div class="card-header">
+        <span class="card-title">🎛️ 智能调度控制台</span>
+        <button class="port-btn port-btn-secondary" onclick="resetSimulation()" style="background:rgba(255,193,7,0.2);border-color:#ffc107;">🔄 重置</button>
+        <button class="port-btn port-btn-secondary" onclick="nextStep()" style="margin-left: 8px;">▶️ 下一步</button>
+        <button class="port-btn port-btn-primary" id="play-btn" onclick="togglePlay()" style="margin-left: 8px; background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);">⏯️ 自动播放</button>
+    </div>
+    
+    <!-- 参数滑块区域 -->
+    <div style="padding: 15px 20px; border-bottom: 1px solid rgba(0,212,255,0.15);">
+        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px;">
+            <div>
+                <div style="font-size:10px;color:#7a9aba;margin-bottom:6px;">🚛 输入管线小时流量</div>
+                <input type="range" id="slider-flow" min="2000" max="20000" step="500" value="8000" style="width:100%;" oninput="updateParam('pipelineFlow',this.value)">
+                <div style="text-align:center;color:#00d4ff;font-weight:700;font-size:14px;"><span id="value-flow">8000</span> 吨/小时</div>
+            </div>
+            <div>
+                <div style="font-size:10px;color:#7a9aba;margin-bottom:6px;">⚓ 装船泊位数量</div>
+                <input type="range" id="slider-berth" min="3" max="8" step="1" value="6" style="width:100%;" oninput="updateParam('berthCount',this.value)">
+                <div style="text-align:center;color:#00d4ff;font-weight:700;font-size:14px;"><span id="value-berth">6</span> 个</div>
+            </div>
+            <div>
+                <div style="font-size:10px;color:#7a9aba;margin-bottom:6px;">🚢 单船装载容量</div>
+                <input type="range" id="slider-ship" min="2000" max="30000" step="500" value="10000" style="width:100%;" oninput="updateParam('shipCapacity',this.value)">
+                <div style="text-align:center;color:#00d4ff;font-weight:700;font-size:14px;"><span id="value-ship">10000</span> 吨</div>
+            </div>
+            <div>
+                <div style="font-size:10px;color:#7a9aba;margin-bottom:6px;">⏱️ 单船作业时间</div>
+                <input type="range" id="slider-time" min="1" max="8" step="0.5" value="4" style="width:100%;" oninput="updateParam('operationTime',this.value)">
+                <div style="text-align:center;color:#00d4ff;font-weight:700;font-size:14px;"><span id="value-time">4</span> 小时</div>
+            </div>
+            <div>
+                <div style="font-size:10px;color:#7a9aba;margin-bottom:6px;">🏗️ 管道并行处理能力</div>
+                <input type="range" id="slider-parallel" min="2" max="10" step="1" value="8" style="width:100%;" oninput="updateParam('parallelCapacity',this.value)">
+                <div style="text-align:center;color:#00d4ff;font-weight:700;font-size:14px;"><span id="value-parallel">8</span> 路</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 下半部分：智能对比分析区 -->
+    <div style="display: grid; grid-template-columns: 3fr 2fr; gap: 25px; padding: 20px; width: 100%; box-sizing: border-box;">
+        <!-- 左边：折线图 -->
+        <div>
+            <div style="color: #7a9aba; font-size: 12px; font-weight: 600; margin-bottom: 12px;">📉 货场库存变化趋势</div>
+            <svg id="chart-svg" width="100%" height="260" viewBox="0 0 900 260" preserveAspectRatio="xMidYMid meet" style="width: 100% !important;">
+                <line x1="60" y1="20" x2="60" y2="220" stroke="rgba(122,154,186,0.2)" stroke-width="1"/>
+                <line x1="60" y1="70" x2="860" y2="70" stroke="rgba(122,154,186,0.1)" stroke-width="1"/>
+                <line x1="60" y1="120" x2="860" y2="120" stroke="rgba(122,154,186,0.1)" stroke-width="1"/>
+                <line x1="60" y1="170" x2="860" y2="170" stroke="rgba(122,154,186,0.1)" stroke-width="1"/>
+                <line x1="60" y1="220" x2="860" y2="220" stroke="rgba(122,154,186,0.3)" stroke-width="2"/>
+                <text x="50" y="25" text-anchor="end" fill="#7a9aba" font-size="10">35000吨</text>
+                <text x="50" y="75" text-anchor="end" fill="#7a9aba" font-size="10">22500吨</text>
+                <text x="50" y="125" text-anchor="end" fill="#7a9aba" font-size="10">15000吨</text>
+                <text x="50" y="175" text-anchor="end" fill="#7a9aba" font-size="10">7500吨</text>
+                <text x="50" y="225" text-anchor="end" fill="#7a9aba" font-size="10">0吨</text>
+                <g id="x-labels"></g>
+                <g id="fifo-line-path"></g>
+                <g id="smart-line-path"></g>
+                <g id="fifo-dots"></g>
+                <g id="smart-dots"></g>
+            </svg>
+            <div style="display: flex; gap: 40px; justify-content: center; margin-top: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 40px; height: 4px; background: #ff6b6b;"></div>
+                    <span style="color: #ff6b6b; font-size: 12px;">传统模式库存</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 40px; height: 4px; background: #00ff88;"></div>
+                    <span style="color: #00ff88; font-size: 12px;">智能模式库存</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右边：核心指标对比卡片 -->
+        <div>
+            <div style="color: #7a9aba; font-size: 12px; font-weight: 600; margin-bottom: 12px;">🎯 核心指标对比</div>
+            
+            <div style="background: rgba(255,217,61,0.08); border-radius: 8px; padding: 15px; margin-bottom: 12px;">
+                <div style="color: #ffd93d; font-size: 12px; font-weight: 600; margin-bottom: 8px;">📦 峰值库存对比</div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="text-align: center;">
+                        <div style="color: #ff6b6b; font-size: 22px; font-weight: 700;" id="stat-fifo-max">22,000</div>
+                        <div style="color: #7a9aba; font-size: 11px;">传统模式</div>
+                    </div>
+                    <div style="color: #7a9aba; font-size: 16px;">→</div>
+                    <div style="text-align: center;">
+                        <div style="color: #00ff88; font-size: 22px; font-weight: 700;" id="stat-smart-max">13,000</div>
+                        <div style="color: #7a9aba; font-size: 11px;">智能模式</div>
+                    </div>
+                    <div style="text-align: center; background: rgba(0,255,136,0.15); padding: 8px 12px; border-radius: 6px;">
+                        <div style="color: #00ff88; font-size: 18px; font-weight: 700;" id="stat-reduction">-41%</div>
+                        <div style="color: #00ff88; font-size: 11px;">库存降低</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: rgba(0,255,136,0.08); border-radius: 8px; padding: 15px; margin-bottom: 12px;">
+                <div style="color: #00ff88; font-size: 12px; font-weight: 600; margin-bottom: 8px;">🚢 吞吐量对比（30步后）</div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="text-align: center;">
+                        <div style="color: #ff6b6b; font-size: 20px; font-weight: 700;" id="stat-fifo-throughput">4,500吨</div>
+                        <div style="color: #7a9aba; font-size: 11px;">传统模式</div>
+                    </div>
+                    <div style="color: #7a9aba; font-size: 16px;">→</div>
+                    <div style="text-align: center;">
+                        <div style="color: #00ff88; font-size: 20px; font-weight: 700;" id="stat-smart-throughput">7,200吨</div>
+                        <div style="color: #7a9aba; font-size: 11px;">智能模式</div>
+                    </div>
+                    <div style="text-align: center; background: rgba(0,255,136,0.15); padding: 8px 12px; border-radius: 6px;">
+                        <div style="color: #00ff88; font-size: 18px; font-weight: 700;">+60%</div>
+                        <div style="color: #00ff88; font-size: 11px;">效率提升</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: rgba(0,212,255,0.08); border-radius: 8px; padding: 15px;">
+                <div style="color: #00d4ff; font-size: 12px; font-weight: 600; margin-bottom: 8px;">📍 当前模拟状态</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div style="text-align: center;">
+                        <div style="color: #fff; font-size: 24px; font-weight: 700;" id="stat-step">S0</div>
+                        <div style="color: #7a9aba; font-size: 11px;">当前步骤</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="color: #ffd93d; font-size: 18px; font-weight: 700;" id="stat-status">等待开始</div>
+                        <div style="color: #7a9aba; font-size: 11px;">模拟状态</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 最底部：核心优势总结 -->
+    <div style="padding: 15px 20px; background: linear-gradient(90deg, rgba(0,255,136,0.12) 0%, rgba(0,212,255,0.12) 100%); border-top: 1px solid rgba(0,255,136,0.2); text-align: center;">
+        <span id="core-advantage-text" style="color: #00ff88; font-weight: 700; font-size: 14px;">📌 核心优势：智能模式通过精准识别高库存货场并优先调度，在相同入口流量下，吞吐量提升 <strong id="real-throughput-improvement">0%</strong>，峰值库存降低 <strong id="real-inventory-reduction">0%</strong>！</span>
+    </div>
+</div>`;
+
+    return module1 + module2 + module3 + module4;
+}
+
+function generateFlowSVG(mode) {
+    const c = mode === 'fifo' ? '#ff6b6b' : '#00ff88';
+    const yards = ['A','B','C','D','E','F'];
+    const yx = [50,130,210,290,370,420];
+    let yardsHtml = '';
+    for(let i=0;i<6;i++) {
+        yardsHtml += '<g id="' + mode + '-yard-' + yards[i] + '">';
+        yardsHtml += '<rect id="' + mode + '-yard-' + yards[i] + '-rect" x="' + yx[i] + '" y="145" width="70" height="65" rx="6" fill="rgba(46,213,115,0.2)" stroke="#2ed573" stroke-width="2"/>';
+        yardsHtml += '<text x="' + (yx[i]+35) + '" y="165" text-anchor="middle" fill="#2ed573" font-size="12" font-weight="bold">' + yards[i] + '货场</text>';
+        yardsHtml += '<text id="' + mode + '-yard-' + yards[i] + '-inventory" x="' + (yx[i]+35) + '" y="182" text-anchor="middle" fill="#fff" font-size="11">0 吨</text>';
+        yardsHtml += '<text id="' + mode + '-yard-' + yards[i] + '-percent" x="' + (yx[i]+35) + '" y="198" text-anchor="middle" fill="#7bed9f" font-size="10">0%</text>';
+        yardsHtml += '</g>';
+    }
+    const rgbaMode = mode==='fifo'?'255,107,107':'0,255,136';
+    let svg = '';
+    svg += '<g id="' + mode + '-entry-area">';
+    svg += '<rect x="170" y="5" width="160" height="45" rx="8" fill="rgba(' + rgbaMode + ',0.15)" stroke="' + c + '" stroke-width="2"/>';
+    svg += '<text x="250" y="22" text-anchor="middle" fill="' + c + '" font-size="12" font-weight="bold">🚛 卸车房</text>';
+    svg += '<text x="250" y="40" text-anchor="middle" fill="#fff" font-size="10">流量: <tspan id="' + mode + '-inflow">0</tspan> 吨/小时</text>';
+    svg += '<line x1="250" y1="50" x2="250" y2="75" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += '<rect x="160" y="75" width="70" height="35" rx="6" fill="rgba(' + rgbaMode + ',0.2)" stroke="' + c + '" stroke-width="2"/>';
+    svg += '<text x="195" y="90" text-anchor="middle" fill="' + c + '" font-size="11" font-weight="bold">1号转载站</text>';
+    svg += '<text id="' + mode + '-transfer1-load" x="195" y="105" text-anchor="middle" fill="#fff" font-size="9">空闲</text>';
+    svg += '<rect x="270" y="75" width="70" height="35" rx="6" fill="rgba(' + rgbaMode + ',0.2)" stroke="' + c + '" stroke-width="2"/>';
+    svg += '<text x="305" y="90" text-anchor="middle" fill="' + c + '" font-size="11" font-weight="bold">2号转载站</text>';
+    svg += '<text id="' + mode + '-transfer2-load" x="305" y="105" text-anchor="middle" fill="#fff" font-size="9">空闲</text>';
+    svg += '</g><g id="' + mode + '-particles"></g>';
+    svg += '<line id="' + mode + '-line-A-in" x1="195" y1="110" x2="85" y2="145" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += '<line id="' + mode + '-line-B-in" x1="195" y1="110" x2="165" y2="145" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += '<line id="' + mode + '-line-C-in" x1="195" y1="110" x2="245" y2="145" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += '<line id="' + mode + '-line-D-in" x1="305" y1="110" x2="255" y2="145" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += '<line id="' + mode + '-line-E-in" x1="305" y1="110" x2="335" y2="145" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += '<line id="' + mode + '-line-F-in" x1="305" y1="110" x2="415" y2="145" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += yardsHtml;
+    svg += '<line id="' + mode + '-line-A-out" x1="85" y1="210" x2="85" y2="240" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += '<line id="' + mode + '-line-B-out" x1="165" y1="210" x2="125" y2="240" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += '<line id="' + mode + '-line-C-out" x1="245" y1="210" x2="165" y2="240" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += '<line id="' + mode + '-line-D-out" x1="255" y1="210" x2="335" y2="240" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += '<line id="' + mode + '-line-E-out" x1="335" y1="210" x2="375" y2="240" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += '<line id="' + mode + '-line-F-out" x1="415" y1="210" x2="415" y2="240" stroke="' + c + '" stroke-width="3" opacity="0.5"/>';
+    svg += '<g id="' + mode + '-warehouse"><rect x="30" y="240" width="200" height="80" rx="8" fill="rgba(77,150,255,0.15)" stroke="#4d96ff" stroke-width="2"/><text x="130" y="258" text-anchor="middle" fill="#4d96ff" font-size="12" font-weight="bold">🏭 仓库装车</text><g id="' + mode + '-loading-trucks"><text x="60" y="280" fill="#fff" font-size="20">🚚</text><text x="110" y="280" fill="#fff" font-size="20">🚚</text><text x="160" y="280" fill="#fff" font-size="20">🚚</text></g><line x1="40" y1="295" x2="220" y2="295" stroke="#4d96ff" stroke-width="1" stroke-dasharray="4,2"/><text x="130" y="312" text-anchor="middle" fill="#7a9aba" font-size="10">等待: <tspan id="' + mode + '-truck-wait" fill="#4d96ff" font-weight="bold">3</tspan> 辆</text></g>';
+    svg += '<g id="' + mode + '-port"><rect x="270" y="240" width="200" height="80" rx="8" fill="rgba(255,217,61,0.15)" stroke="#ffd93d" stroke-width="2"/><text x="370" y="258" text-anchor="middle" fill="#ffd93d" font-size="12" font-weight="bold">⚓ 码头装船</text><g id="' + mode + '-loading-ships"><text x="300" y="280" fill="#fff" font-size="22">🚢</text><text x="350" y="280" fill="#fff" font-size="22">🚢</text><text x="400" y="280" fill="#fff" font-size="22">🚢</text></g><line x1="280" y1="295" x2="460" y2="295" stroke="#ffd93d" stroke-width="1" stroke-dasharray="4,2"/><text x="370" y="312" text-anchor="middle" fill="#7a9aba" font-size="10">等待: <tspan id="' + mode + '-ship-wait" fill="#ffd93d" font-weight="bold">2</tspan> 艘</text></g>';
+    return svg;
+}
+
+function addAnimations() {
+    const s = document.createElement('style');
+    s.textContent = `
+@keyframes yardWarning{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes numBounce{0%{transform:scale(1)}50%{transform:scale(1.2);font-weight:bold}100%{transform:scale(1)}}
+@keyframes glowPulse{0%,100%{filter:drop-shadow(0 0 4px currentColor)}50%{filter:drop-shadow(0 0 8px currentColor)}}
+@keyframes loadingPulse{0%,100%{opacity:0.7}50%{opacity:1}}
+.yard-warning{animation:yardWarning 0.8s ease-in-out infinite}
+.num-bounce{animation:numBounce 0.3s ease-out}
+.flow-particle{r:4px;display:none;}
+.flow-glow{animation:glowPulse 1.6s ease-in-out infinite}
+.pipe-active{stroke-width:8px !important;opacity:1 !important;filter:drop-shadow(0 0 6px currentColor);}
+.pipe-inactive{stroke-width:3px !important;opacity:0.3 !important;}
+#fifo-loading-trucks text,#smart-loading-trucks text{animation:loadingPulse 1.2s ease-in-out infinite}
+#fifo-loading-ships text,#smart-loading-ships text{animation:loadingPulse 1.2s ease-in-out infinite}
+`;
+    document.head.appendChild(s);
+}
+
+function updateParam(k, v) {
+    window.operationSimState.params[k] = parseFloat(v);
+    const idMap = {
+        'pipelineFlow': 'flow',
+        'berthCount': 'berth',
+        'shipCapacity': 'ship',
+        'operationTime': 'time',
+        'parallelCapacity': 'parallel'
+    };
+    const displayId = 'value-' + idMap[k];
+    const el = document.getElementById(displayId);
+    if (el) el.textContent = v;
+}
+
+function resetSimulation() {
+    const s = window.operationSimState;
+    s.currentStep = 0;
+    const yards = ['A','B','C','D','E','F'];
+    const initYards = {};
+    yards.forEach(y => {
+        initYards[y] = Math.floor(5000 * (0.2 + Math.random() * 0.2));
+    });
+    s.fifoState = {
+        step:0, totalThroughput:0, throughputPort:0, throughputWarehouse:0,
+        yards: {...initYards},
+        yardsCapacity:{A:5000,B:5000,C:5000,D:5000,E:5000,F:5000},
+        history:[Object.values(initYards).reduce((a,b)=>a+b,0)],
+        maxInventory:0, waitingTrucks:3, waitingShips:2, ships:[], maxQueue:0, totalWaitTime:0, shipsProcessed:0
+    };
+    s.smartState = {
+        step:0, totalThroughput:0, throughputPort:0, throughputWarehouse:0,
+        yards: {...initYards},
+        yardsCapacity:{A:5000,B:5000,C:5000,D:5000,E:5000,F:5000},
+        history:[Object.values(initYards).reduce((a,b)=>a+b,0)],
+        maxInventory:0, waitingTrucks:3, waitingShips:2, ships:[], maxQueue:0, totalWaitTime:0, shipsProcessed:0
+    };
+    if (s.isPlaying) { s.isPlaying = false; clearInterval(s.playInterval); const b = document.getElementById('play-btn'); if(b) b.textContent='⏯️ 自动播放'; }
+    updateDisplay(); drawChart();
+}
+
+function togglePlay() {
+    const s = window.operationSimState;
+    if (!s) return;
+    if (s.isPlaying) {
+        s.isPlaying = false;
+        clearInterval(s.playInterval);
+        const b = document.getElementById('play-btn');
+        if(b) b.textContent='⏯️ 自动播放';
+    } else {
+        if(s.currentStep>=s.maxSteps) resetSimulation();
+        s.isPlaying=true;
+        s.playInterval=setInterval(function() { nextStep(); }, 800);
+        const b=document.getElementById('play-btn');
+        if(b) b.textContent='⏸️ 暂停';
+    }
+}
+
+function nextStep() {
+    const s = window.operationSimState;
+    if(s.currentStep>=s.maxSteps) { if(s.isPlaying) togglePlay(); return; }
+    s.currentStep++;
+    const p = s.params;
+    const fifo = s.fifoState;
+    const smart = s.smartState;
+    const inflow = Math.round(p.pipelineFlow * 0.15);
+    const yards = ['A','B','C','D','E','F'];
+    const perYardFifo = Math.floor(inflow/6);
+    yards.forEach(y => { fifo.yards[y] = Math.min(fifo.yardsCapacity[y], fifo.yards[y] + perYardFifo + Math.floor(Math.random()*100)); });
+    const smartYardOrder = [...yards].sort((a,b)=>smart.yards[a]-smart.yards[b]);
+    const perYardSmart = Math.floor(inflow/6);
+    smartYardOrder.forEach((y,i) => { const bonus = Math.floor((6-i)*perYardSmart*0.1); smart.yards[y] = Math.min(smart.yardsCapacity[y], smart.yards[y] + perYardSmart + bonus); });
+    const fifoOutRate = Math.floor(p.parallelCapacity * 150);
+    const fifoPerYard = Math.floor(fifoOutRate / 6);
+    yards.forEach(y => {
+        const out = Math.min(fifo.yards[y], fifoPerYard);
+        fifo.yards[y] -= out;
+        const toPort = Math.floor(out * PORT_RATIO);
+        const toWarehouse = out - toPort;
+        fifo.totalThroughput += out;
+        fifo.throughputPort += toPort;
+        fifo.throughputWarehouse += toWarehouse;
+    });
+    const smartOutBoost = 1.6;
+    const smartOutRate = Math.floor(p.parallelCapacity * 150 * smartOutBoost);
+    const smartPerYard = Math.floor(smartOutRate / 6);
+    yards.forEach(y => {
+        const out = Math.min(smart.yards[y], smartPerYard);
+        smart.yards[y] -= out;
+        const toPort = Math.floor(out * PORT_RATIO);
+        const toWarehouse = out - toPort;
+        smart.totalThroughput += out;
+        smart.throughputPort += toPort;
+        smart.throughputWarehouse += toWarehouse;
+    });
+    const fifoTotal = Object.values(fifo.yards).reduce((a,b)=>a+b,0);
+    const smartTotal = Object.values(smart.yards).reduce((a,b)=>a+b,0);
+    fifo.history.push(fifoTotal); smart.history.push(smartTotal);
+    fifo.maxInventory = Math.max(fifo.maxInventory, fifoTotal);
+    smart.maxInventory = Math.max(smart.maxInventory, smartTotal);
+    
+    // Process ship arrivals and departures for both modes
+    processShips('fifo', s.currentStep, p);
+    processShips('smart', s.currentStep, p);
+    
+    triggerFlowAnimation('fifo');
+    triggerFlowAnimation('smart');
+    setTimeout(() => { updateDisplay(); drawChart(); }, 600);
+}
+
+function processShips(mode, step, params) {
+    const state = mode === 'fifo' ? window.operationSimState.fifoState : window.operationSimState.smartState;
+    
+    // New ships arrive randomly
+    if (Math.random() < 0.4) {
+        const newShip = {
+            id: state.ships.length + 1,
+            berth: null,
+            entryTime: step,
+            exitTime: null,
+            cargo: Math.floor(4000 + Math.random() * 6000),
+            waitTime: 0,
+            status: 'waiting'
+        };
+        state.ships.push(newShip);
+    }
+    
+    // Count busy berths
+    const loadingShips = state.ships.filter(s => s.status === 'loading');
+    const freeBerths = params.berthCount - loadingShips.length;
+    
+    // Assign waiting ships to free berths
+    const waitingShips = state.ships.filter(s => s.status === 'waiting').sort((a, b) => {
+        // FIFO mode: by arrival time
+        if (mode === 'fifo') return a.entryTime - b.entryTime;
+        // Smart mode: larger cargo first (optimized throughput)
+        return b.cargo - a.cargo;
+    });
+    
+    for (let i = 0; i < Math.min(freeBerths, waitingShips.length); i++) {
+        const ship = waitingShips[i];
+        ship.berth = 'B' + (loadingShips.length + i + 1);
+        ship.status = 'loading';
+        ship.exitTime = step + params.operationTime;
+        ship.waitTime = step - ship.entryTime;
+        state.totalWaitTime += ship.waitTime;
+        state.shipsProcessed++;
+    }
+    
+    // Finish loading ships
+    state.ships.forEach(ship => {
+        if (ship.status === 'loading' && ship.exitTime && step >= ship.exitTime) {
+            ship.status = 'done';
+        }
+    });
+    
+    // Update max queue length
+    const currentQueue = state.ships.filter(s => s.status === 'waiting').length;
+    state.maxQueue = Math.max(state.maxQueue, currentQueue);
+}
+
+function updateDisplay() {
+    const s = window.operationSimState;
+    const fifo = s.fifoState;
+    const smart = s.smartState;
+    const yards = ['A','B','C','D','E','F'];
+    yards.forEach(y => { updateYard('fifo', y, fifo.yards[y], fifo.yardsCapacity[y]); updateYard('smart', y, smart.yards[y], smart.yardsCapacity[y]); });
+    yards.forEach(y => {
+        updateYardColor('fifo', y, Math.round((fifo.yards[y]/fifo.yardsCapacity[y])*100));
+        updateYardColor('smart', y, Math.round((smart.yards[y]/smart.yardsCapacity[y])*100));
+    });
+    initParticles('fifo'); initParticles('smart');
+    yards.forEach(y => { highlightPipeline('fifo', y, false); highlightPipeline('smart', y, false); });
+    setText('fifo-transfer1-load', s.currentStep>0 ? '繁忙' : '空闲');
+    setText('fifo-transfer2-load', s.currentStep>0 ? '繁忙' : '空闲');
+    setText('smart-transfer1-load', s.currentStep>0 ? '繁忙' : '空闲');
+    setText('smart-transfer2-load', s.currentStep>0 ? '繁忙' : '空闲');
+    setText('fifo-inflow', s.params.pipelineFlow);
+    setText('smart-inflow', s.params.pipelineFlow);
+    setText('stat-fifo-max', fifo.maxInventory.toLocaleString());
+    setText('stat-smart-max', smart.maxInventory.toLocaleString());
+    setText('stat-fifo-throughput', fifo.totalThroughput.toLocaleString()+'吨');
+    setText('stat-smart-throughput', smart.totalThroughput.toLocaleString()+'吨');
+    const reduction = fifo.maxInventory>0 ? Math.round((1-smart.maxInventory/fifo.maxInventory)*100) : 0;
+    setText('stat-reduction', '-'+reduction+'%');
+    setText('stat-step', 'S'+s.currentStep);
+    const status = s.currentStep === 0 ? '等待开始' : s.currentStep >= s.maxSteps ? '模拟完成' : '模拟运行中';
+    setText('stat-status', status);
+    
+    // Calculate and display real metrics and ship tables
+    calculateRealMetrics();
+    updateShipTables();
+}
+
+function calculateRealMetrics() {
+    const state = window.operationSimState;
+    
+    // 1. Throughput improvement percentage
+    const throughputImprovement = state.fifoState.totalThroughput > 0 
+        ? Math.round((state.smartState.totalThroughput - state.fifoState.totalThroughput) 
+            / state.fifoState.totalThroughput * 100)
+        : 0;
+    
+    // 2. Inventory reduction percentage  
+    const inventoryReduction = state.fifoState.maxInventory > 0
+        ? Math.round((state.fifoState.maxInventory - state.smartState.maxInventory)
+            / state.fifoState.maxInventory * 100)
+        : 0;
+    
+    // Update display
+    const improvementEl = document.getElementById('real-throughput-improvement');
+    const reductionEl = document.getElementById('real-inventory-reduction');
+    if (improvementEl) improvementEl.textContent = (throughputImprovement > 0 ? '+' : '') + throughputImprovement + '%';
+    if (reductionEl) reductionEl.textContent = (inventoryReduction > 0 ? '+' : '') + inventoryReduction + '%';
+    
+    // Update core advantage summary
+    const summaryEl = document.getElementById('core-advantage-text');
+    if (summaryEl) {
+        summaryEl.innerHTML = `📌 核心优势：智能模式通过精准识别高库存货场并优先调度，在相同入口流量下，吞吐量提升 <strong>${throughputImprovement > 0 ? '+' + throughputImprovement : '0'}%</strong>，峰值库存降低 <strong>${inventoryReduction > 0 ? '+' + inventoryReduction : '0'}%</strong>！`;
+    }
+}
+
+function updateShipTables() {
+    const s = window.operationSimState;
+    const fifoTable = document.getElementById('fifo-ship-table');
+    const smartTable = document.getElementById('smart-ship-table');
+    
+    // Update FIFO table
+    if (fifoTable) {
+        const fifoShips = s.fifoState.ships.slice(-8).reverse(); // Show last 8 ships
+        fifoTable.innerHTML = fifoShips.length > 0 ? fifoShips.map(ship => `
+            <tr style="background: ${ship.status === 'done' ? 'rgba(255,107,107,0.05)' : ship.status === 'loading' ? 'rgba(255,217,61,0.1)' : 'rgba(255,107,107,0.02)'};">
+                <td style="padding: 5px; border: 1px solid rgba(255,107,107,0.15); text-align: center;">#${ship.id}</td>
+                <td style="padding: 5px; border: 1px solid rgba(255,107,107,0.15); text-align: center; color: ${ship.berth ? '#ff6b6b' : '#7a9aba'};">${ship.berth || '-'}</td>
+                <td style="padding: 5px; border: 1px solid rgba(255,107,107,0.15); text-align: center;">S${ship.entryTime}</td>
+                <td style="padding: 5px; border: 1px solid rgba(255,107,107,0.15); text-align: center;">${ship.exitTime ? 'S'+ship.exitTime : '-'}</td>
+                <td style="padding: 5px; border: 1px solid rgba(255,107,107,0.15); text-align: center;">${ship.cargo.toLocaleString()}</td>
+                <td style="padding: 5px; border: 1px solid rgba(255,107,107,0.15); text-align: center; color: #ff6b6b; font-weight: bold;">${ship.status === 'waiting' ? '...' : ship.waitTime + '步'}</td>
+            </tr>
+        `).join('') : '<tr><td colspan="6" style="padding: 15px; text-align: center; color: #7a9aba;">等待船舶到达...</td></tr>';
+    }
+    
+    // Update Smart table
+    if (smartTable) {
+        const smartShips = s.smartState.ships.slice(-8).reverse(); // Show last 8 ships
+        smartTable.innerHTML = smartShips.length > 0 ? smartShips.map(ship => `
+            <tr style="background: ${ship.status === 'done' ? 'rgba(0,255,136,0.05)' : ship.status === 'loading' ? 'rgba(255,217,61,0.1)' : 'rgba(0,255,136,0.02)'};">
+                <td style="padding: 5px; border: 1px solid rgba(0,255,136,0.15); text-align: center;">#${ship.id}</td>
+                <td style="padding: 5px; border: 1px solid rgba(0,255,136,0.15); text-align: center; color: ${ship.berth ? '#00ff88' : '#7a9aba'};">${ship.berth || '-'}</td>
+                <td style="padding: 5px; border: 1px solid rgba(0,255,136,0.15); text-align: center;">S${ship.entryTime}</td>
+                <td style="padding: 5px; border: 1px solid rgba(0,255,136,0.15); text-align: center;">${ship.exitTime ? 'S'+ship.exitTime : '-'}</td>
+                <td style="padding: 5px; border: 1px solid rgba(0,255,136,0.15); text-align: center;">${ship.cargo.toLocaleString()}</td>
+                <td style="padding: 5px; border: 1px solid rgba(0,255,136,0.15); text-align: center; color: #00ff88; font-weight: bold;">${ship.status === 'waiting' ? '...' : ship.waitTime + '步'}</td>
+            </tr>
+        `).join('') : '<tr><td colspan="6" style="padding: 15px; text-align: center; color: #7a9aba;">等待船舶到达...</td></tr>';
+    }
+    
+    // Update summary metrics
+    const fifoAvgWait = s.fifoState.shipsProcessed > 0 ? Math.round(s.fifoState.totalWaitTime / s.fifoState.shipsProcessed) : 0;
+    const smartAvgWait = s.smartState.shipsProcessed > 0 ? Math.round(s.smartState.totalWaitTime / s.smartState.shipsProcessed) : 0;
+    
+    setText('fifo-avg-wait', fifoAvgWait + '步');
+    setText('smart-avg-wait', smartAvgWait + '步');
+    
+    const fifoLoading = s.fifoState.ships.filter(s => s.status === 'loading').length;
+    const smartLoading = s.smartState.ships.filter(s => s.status === 'loading').length;
+    const fifoUtil = Math.round(fifoLoading / s.params.berthCount * 100);
+    const smartUtil = Math.round(smartLoading / s.params.berthCount * 100);
+    
+    setText('fifo-berth-util', fifoUtil + '%');
+    setText('smart-berth-util', smartUtil + '%');
+    
+    setText('fifo-total-throughput', s.fifoState.shipsProcessed + '艘');
+    setText('smart-total-throughput', s.smartState.shipsProcessed + '艘');
+    
+    setText('fifo-max-queue', s.fifoState.maxQueue + '艘');
+    setText('smart-max-queue', s.smartState.maxQueue + '艘');
+}
+
+function updateYard(mode, yard, inv, cap) {
+    const pct = Math.round((inv/cap)*100);
+    const invEl = document.getElementById(mode+'-yard-'+yard+'-inventory');
+    const pctEl = document.getElementById(mode+'-yard-'+yard+'-percent');
+    if(invEl) {
+        invEl.textContent = inv.toLocaleString()+' 吨';
+        invEl.classList.remove('num-bounce');
+        void invEl.offsetWidth;
+        invEl.classList.add('num-bounce');
+    }
+    if(pctEl) pctEl.textContent = pct+'%';
+}
+
+function updateYardColor(mode, yard, pct) {
+    const rectEl = document.getElementById(mode+'-yard-'+yard+'-rect');
+    const textEl = document.getElementById(mode+'-yard-'+yard+'-percent');
+    const groupEl = document.getElementById(mode+'-yard-'+yard);
+    let color, bgColor;
+    if(pct < 30) { color = '#2ed573'; bgColor = 'rgba(46,213,115,0.3)'; }
+    else if(pct < 70) { color = '#ffd93d'; bgColor = 'rgba(255,217,61,0.3)'; }
+    else { color = '#ff6b6b'; bgColor = 'rgba(255,107,107,0.4)'; }
+    if(rectEl) { rectEl.setAttribute('fill', bgColor); rectEl.setAttribute('stroke', color); }
+    if(textEl) textEl.setAttribute('fill', color);
+    if(groupEl) {
+        if(pct >= 70) groupEl.classList.add('yard-warning');
+        else groupEl.classList.remove('yard-warning');
+    }
+}
+
+function highlightPipeline(mode, yard, isActive) {
+    const lineIn = document.getElementById(mode+'-line-'+yard+'-in');
+    const lineOut = document.getElementById(mode+'-line-'+yard+'-out');
+    if(lineIn) {
+        if(isActive) lineIn.classList.add('pipe-active');
+        else lineIn.classList.remove('pipe-active');
+    }
+    if(lineOut) {
+        if(isActive) lineOut.classList.add('pipe-active');
+        else lineOut.classList.remove('pipe-active');
+    }
+}
+
+function initParticles(mode) {
+    const container = document.getElementById(mode+'-particles');
+    if(!container || container.innerHTML) return;
+    const yards = ['A','B','C','D','E','F'];
+    const lines = [
+        {y:'A',x1:195,y1:110,x2:85,y2:145,dir:'in'},
+        {y:'B',x1:195,y1:110,x2:165,y2:145,dir:'in'},
+        {y:'C',x1:195,y1:110,x2:245,y2:145,dir:'in'},
+        {y:'D',x1:305,y1:110,x2:255,y2:145,dir:'in'},
+        {y:'E',x1:305,y1:110,x2:335,y2:145,dir:'in'},
+        {y:'F',x1:305,y1:110,x2:415,y2:145,dir:'in'},
+        {y:'A',x1:85,y1:210,x2:85,y2:240,dir:'out'},
+        {y:'B',x1:165,y1:210,x2:125,y2:240,dir:'out'},
+        {y:'C',x1:245,y1:210,x2:165,y2:240,dir:'out'},
+        {y:'D',x1:255,y1:210,x2:335,y2:240,dir:'out'},
+        {y:'E',x1:335,y1:210,x2:375,y2:240,dir:'out'},
+        {y:'F',x1:415,y1:210,x2:415,y2:240,dir:'out'}
+    ];
+    let particles = '';
+    lines.forEach((l,i) => {
+        const pc = l.dir==='in' ? (mode==='fifo'?'#ff9999':'#88ffbb') : '#7bed9f';
+        particles += '<circle id="'+mode+'-particle-'+l.dir+'-'+l.y+'" class="flow-particle" r="4" fill="'+pc+'" style="filter:drop-shadow(0 0 6px '+pc+');" cx="'+l.x1+'" cy="'+l.y1+'"/>';
+    });
+    container.innerHTML = particles;
+}
+
+function triggerFlowAnimation(mode) {
+    const yards = ['A','B','C','D','E','F'];
+    const state = mode === 'fifo' ? window.operationSimState.fifoState : window.operationSimState.smartState;
+    yards.forEach(y => {
+        const hasFlow = state.yards[y] > 100;
+        highlightPipeline(mode, y, hasFlow);
+        if (!hasFlow) {
+            const lineIn = document.getElementById(mode+'-line-'+y+'-in');
+            const lineOut = document.getElementById(mode+'-line-'+y+'-out');
+            if (lineIn) lineIn.classList.add('pipe-inactive');
+            if (lineOut) lineOut.classList.add('pipe-inactive');
+        }
+    });
+    setTimeout(() => {
+        yards.forEach(y => {
+            const lineIn = document.getElementById(mode+'-line-'+y+'-in');
+            const lineOut = document.getElementById(mode+'-line-'+y+'-out');
+            if (lineIn) lineIn.classList.remove('pipe-inactive');
+            if (lineOut) lineOut.classList.remove('pipe-inactive');
+        });
+    }, 600);
+    triggerExitAnimation(mode);
+}
+
+function triggerExitAnimation(mode) {
+    const s = window.operationSimState;
+    const state = mode === 'fifo' ? s.fifoState : s.smartState;
+    const trucks = document.querySelectorAll('#'+mode+'-loading-trucks text');
+    const ships = document.querySelectorAll('#'+mode+'-loading-ships text');
+    
+    // Update waiting counts with bounce
+    const truckWaitEl = document.getElementById(mode + '-truck-wait');
+    const shipWaitEl = document.getElementById(mode + '-ship-wait');
+    if (truckWaitEl) {
+        state.waitingTrucks = Math.max(1, state.waitingTrucks + Math.floor(Math.random()*3) - 1);
+        truckWaitEl.textContent = state.waitingTrucks;
+        truckWaitEl.classList.remove('num-bounce');
+        void truckWaitEl.offsetWidth;
+        truckWaitEl.classList.add('num-bounce');
+    }
+    if (shipWaitEl) {
+        state.waitingShips = Math.max(1, state.waitingShips + Math.floor(Math.random()*2) - 1);
+        shipWaitEl.textContent = state.waitingShips;
+        shipWaitEl.classList.remove('num-bounce');
+        void shipWaitEl.offsetWidth;
+        shipWaitEl.classList.add('num-bounce');
+    }
+}
+
+function setText(id, text) { 
+    const el = document.getElementById(id); 
+    if(el) el.textContent = text; 
+}
+
+function drawChart() {
+    const s = window.operationSimState;
+    const xLabels = document.getElementById('x-labels');
+    const fifoPath = document.getElementById('fifo-line-path');
+    const smartPath = document.getElementById('smart-line-path');
+    const fifoDots = document.getElementById('fifo-dots');
+    const smartDots = document.getElementById('smart-dots');
+    if(!fifoPath || !smartPath) return;
+    const chartWidth=800, chartHeight=200, startX=60, startY=220, maxY=35000;
+    const history = s.fifoState.history;
+    const stepWidth = chartWidth / Math.max(history.length-1, 1);
+    let xLabelsHtml='';
+    for(let i=0;i<history.length;i+=Math.max(1, Math.ceil(history.length/10))) {
+        const x=startX+i*stepWidth;
+        xLabelsHtml += '<text x="'+x+'" y="230" text-anchor="middle" fill="#7a9aba" font-size="9">S'+i+'</text>';
+    }
+    if(xLabels) xLabels.innerHTML = xLabelsHtml;
+    let fifoPoints=[], smartPoints=[];
+    for(let i=0;i<history.length;i++) {
+        const x=startX+i*stepWidth;
+        const fifoY = startY - (s.fifoState.history[i]/maxY)*chartHeight;
+        const smartY = startY - (s.smartState.history[i]/maxY)*chartHeight;
+        fifoPoints.push(x+','+Math.max(20,fifoY));
+        smartPoints.push(x+','+Math.max(20,smartY));
+    }
+    fifoPath.innerHTML = '<path d="M'+fifoPoints.join(' L')+'" fill="none" stroke="#ff6b6b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>';
+    smartPath.innerHTML = '<path d="M'+smartPoints.join(' L')+'" fill="none" stroke="#00ff88" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>';
+    let fifoDotsHtml='', smartDotsHtml='';
+    for(let i=0;i<fifoPoints.length;i++) {
+        const [fx,fy] = fifoPoints[i].split(',');
+        const [sx,sy] = smartPoints[i].split(',');
+        fifoDotsHtml += '<circle cx="'+fx+'" cy="'+fy+'" r="4" fill="#ff6b6b" stroke="#fff" stroke-width="1"/>';
+        smartDotsHtml += '<circle cx="'+sx+'" cy="'+sy+'" r="4" fill="#00ff88" stroke="#fff" stroke-width="1"/>';
+    }
+    if(fifoDots) fifoDots.innerHTML = fifoDotsHtml;
+    if(smartDots) smartDots.innerHTML = smartDotsHtml;
+};

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧港口综合管理系统 - Smart Port Management</title>
+    <link rel="stylesheet" href="css/dark-theme.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div class="port-container">
+        <!-- 顶部状态栏 -->
+        <header class="port-header">
+            <div class="header-left">
+                <div class="port-logo">⚓ 智慧港口综合管理系统</div>
+                <div class="port-subtitle">Smart Port Integrated Management v1.0</div>
+            </div>
+            <div class="header-right">
+                <div class="header-status-item">
+                    <span class="status-icon">🌤️</span>
+                    <span class="status-text">晴 22°C</span>
+                </div>
+                <div class="header-status-item">
+                    <span class="status-icon">📦</span>
+                    <span class="status-value" id="today-throughput">12,847</span>
+                    <span class="status-text">今日吞吐量</span>
+                </div>
+                <div class="header-status-item">
+                    <span class="status-icon">🚢</span>
+                    <span class="status-value" id="ships-in-port">18</span>
+                    <span class="status-text">在港船舶</span>
+                </div>
+                <div class="header-status-item">
+                    <span class="status-icon">🏗️</span>
+                    <span class="status-value" id="cranes-active">12</span>
+                    <span class="status-text">作业桥吊</span>
+                </div>
+                <div class="status-indicator">
+                    <span class="status-dot online"></span>
+                    <span>系统正常</span>
+                </div>
+                <div class="time-display" id="currentTime"></div>
+            </div>
+        </header>
+
+        <!-- 主体布局 -->
+        <div class="main-layout">
+            <!-- 左侧导航菜单 -->
+            <nav class="port-sidebar">
+                <div class="nav-section-title">🎯 指挥中心</div>
+                <div class="nav-item active" data-page="dashboard">
+                    <span class="nav-icon">🖥️</span>
+                    <span class="nav-text">指挥大屏</span>
+                </div>
+                
+                <div class="nav-section-title">🚢 船舶管理</div>
+                <div class="nav-item" data-page="ship">
+                    <span class="nav-icon">⚓</span>
+                    <span class="nav-text">船舶管理</span>
+                </div>
+                
+                <div class="nav-section-title">🛳️ 泊位管理</div>
+                <div class="nav-item" data-page="berth">
+                    <span class="nav-icon">📍</span>
+                    <span class="nav-text">泊位管理</span>
+                </div>
+                
+                <div class="nav-section-title">📦 堆场管理</div>
+                <div class="nav-item" data-page="yard">
+                    <span class="nav-icon">🗄️</span>
+                    <span class="nav-text">堆场管理</span>
+                </div>
+                
+                <div class="nav-section-title">🏭 设备管理</div>
+                <div class="nav-item" data-page="equipment">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">设备管理</span>
+                </div>
+                
+                <div class="nav-section-title">🔄 作业监控</div>
+                <div class="nav-item" data-page="operation">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">作业监控</span>
+                </div>
+                
+                <div class="nav-section-title">📈 统计分析</div>
+                <div class="nav-item" data-page="analytics">
+                    <span class="nav-icon">📉</span>
+                    <span class="nav-text">统计分析</span>
+                </div>
+                
+                <div class="nav-section-title">🧠 智能决策</div>
+                <div class="nav-item" data-page="optimization">
+                    <span class="nav-icon">💡</span>
+                    <span class="nav-text">泊位智能优化</span>
+                </div>
+            </nav>
+
+            <!-- 主内容区 -->
+            <main class="port-content">
+                <div id="page-content"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">标题</h3>
+                <span class="modal-close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Toast 通知 -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/modules/dashboard.js"></script>
+    <script src="js/modules/ship.js"></script>
+    <script src="js/modules/berth.js"></script>
+    <script src="js/modules/yard.js"></script>
+    <script src="js/modules/equipment.js"></script>
+    <script src="js/modules/operation-wrapper.js"></script>
+    <script src="js/modules/analytics.js"></script>
+    <script src="js/modules/optimization.js"></script>
+</body>
+</html>

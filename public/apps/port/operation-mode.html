@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>作业监控模式</title>
+    <link rel="stylesheet" href="css/dark-theme.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        html, body { margin:0; padding:0; background:#0a0e1a; color:#e8eef8; font-family: 'Microsoft YaHei', sans-serif; }
+        #page-content { padding: 15px; }
+    </style>
+</head>
+<body>
+    <div id="page-content"></div>
+
+    <!-- 模态框（部分原模块需要） -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">标题</h3>
+                <span class="modal-close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+    <div id="toast-container" class="toast-container"></div>
+
+    <script>
+        // 简易 modal/toast 兜底
+        window.closeModal = function() {
+            const m = document.getElementById('modal');
+            if (m) m.classList.add('hidden');
+        };
+        // 根据 URL 参数加载哪个模块
+        const params = new URLSearchParams(location.search);
+        const mode = params.get('mode') || '1';
+        const script = document.createElement('script');
+        // 🆕 v1.11: 加上时间戳打破缓存，保证每次加载最新 JS（避免 强缓存报”代码改了但跨步不生效“）
+        const ts = params.get('t') || Date.now();
+        script.src = (mode === '2' ? 'js/modules/operation2.js' : 'js/modules/operation.js') + '?t=' + ts;
+        script.onload = function() {
+            if (typeof renderOperation === 'function') {
+                renderOperation(document.getElementById('page-content'));
+            } else {
+                document.getElementById('page-content').innerHTML =
+                    '<div style="padding:40px;color:#f88;text-align:center;">⚠️ renderOperation 未找到</div>';
+            }
+        };
+        document.body.appendChild(script);
+    </script>
+</body>
+</html>

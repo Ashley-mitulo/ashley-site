@@ -58,6 +58,9 @@ a:hover { color: var(--primary); }
 .project-cover.c1 { background: linear-gradient(135deg,#003a70,#1e5aa8); }
 .project-cover.c2 { background: linear-gradient(135deg,#0e7c5b,#10b981); }
 .project-cover.c3 { background: linear-gradient(135deg,#8a2be2,#c084fc); }
+.project-cover.c4 { background: linear-gradient(135deg,#0d5e8a,#38bdf8); }
+.project-cover.c5 { background: linear-gradient(135deg,#f59e0b,#fde047); }
+.project-cover.c6 { background: linear-gradient(135deg,#be123c,#fb7185); }
 .project-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
 .project-tag { display: inline-block; background: #eff6ff; color: var(--primary); padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-bottom: 12px; align-self: flex-start; }
 .project-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 8px; }

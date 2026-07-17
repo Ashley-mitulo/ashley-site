@@ -1,0 +1,238 @@
+// ============================================================
+// 🧠 港口智能算法优化中心
+// ============================================================
+
+let currentAlgoTab = 'berth';
+
+function renderOptimization(container) {
+    container.innerHTML = `
+        <div class="page-title">🧠 港口智能算法优化中心</div>
+        
+        <div class="tab-container">
+            <div class="tab-item active" onclick="switchAlgoTab('berth')">🚢 泊位调度优化</div>
+            <div class="tab-item" onclick="switchAlgoTab('relocation')">📦 翻箱率优化</div>
+            <div class="tab-item" onclick="switchAlgoTab('routing')">🚛 集卡路径优化</div>
+        </div>
+        
+        <div id="algo-tab-content"></div>
+    `;
+    switchAlgoTab('berth');
+}
+
+function switchAlgoTab(tab) {
+    currentAlgoTab = tab;
+    document.querySelectorAll('.tab-container .tab-item').forEach((item, idx) => {
+        item.classList.remove('active');
+        const tabs = ['berth', 'relocation', 'routing'];
+        if (tabs[idx] === tab) item.classList.add('active');
+    });
+    
+    const content = document.getElementById('algo-tab-content');
+    switch(tab) {
+        case 'berth': renderBerthAlgo(content); break;
+        case 'relocation': renderRelocationAlgo(content); break;
+        case 'routing': renderRoutingAlgo(content); break;
+    }
+}
+
+// ============================================================
+// 算法1: 泊位调度优化
+// ============================================================
+function renderBerthAlgo(container) {
+    container.innerHTML = `
+        <div class="port-card">
+            <div class="card-header">
+                <span class="card-title">🚢 泊位调度优化 - 遗传算法</span>
+                <button class="port-btn port-btn-primary" onclick="runOptimization()">🚀 运行优化</button>
+            </div>
+            <div style="padding: 30px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 30px;">
+                    <div style="padding: 20px; background: rgba(0,255,136,0.08); border-radius: 8px; text-align: center;">
+                        <div style="color: #7a9aba; font-size: 12px;">平均等待时间</div>
+                        <div style="color: #00ff88; font-size: 28px; font-weight: 700;">2.8 小时</div>
+                        <div style="color: #00ff88; font-size: 12px;">↓ 35%</div>
+                    </div>
+                    <div style="padding: 20px; background: rgba(0,212,255,0.08); border-radius: 8px; text-align: center;">
+                        <div style="color: #7a9aba; font-size: 12px;">泊位利用率</div>
+                        <div style="color: #00d4ff; font-size: 28px; font-weight: 700;">85%</div>
+                        <div style="color: #00d4ff; font-size: 12px;">↑ 12%</div>
+                    </div>
+                    <div style="padding: 20px; background: rgba(255,193,7,0.08); border-radius: 8px; text-align: center;">
+                        <div style="color: #7a9aba; font-size: 12px;">最大延误</div>
+                        <div style="color: #ffc107; font-size: 28px; font-weight: 700;">4.5 小时</div>
+                        <div style="color: #ffc107; font-size: 12px;">↓ 40%</div>
+                    </div>
+                    <div style="padding: 20px; background: rgba(179,136,255,0.08); border-radius: 8px; text-align: center;">
+                        <div style="color: #7a9aba; font-size: 12px;">算法类型</div>
+                        <div style="color: #b388ff; font-size: 24px; font-weight: 700;">遗传算法</div>
+                        <div style="color: #b388ff; font-size: 12px;">种群: 100</div>
+                    </div>
+                </div>
+                
+                <h4 style="color: #00d4ff; margin-bottom: 15px;">优化泊位分配方案</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr><th>船名</th><th>载重吨</th><th>作业箱量</th><th>分配泊位</th><th>靠泊时间</th><th>状态</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td style="color: #00ff88; font-weight: 600;">长赐号</td><td>220,000</td><td>4,800</td><td><span class="status-badge info">B03</span></td><td>今日 18:30</td><td><span class="status-badge working">最优</span></td></tr>
+                        <tr><td style="color: #00d4ff; font-weight: 600;">东方海外香港</td><td>215,000</td><td>5,200</td><td><span class="status-badge info">B06</span></td><td>次日 07:00</td><td><span class="status-badge working">最优</span></td></tr>
+                        <tr><td style="color: #ffc107; font-weight: 600;">中远海运香港</td><td>190,000</td><td>4,100</td><td><span class="status-badge info">B01</span></td><td>次日 16:00</td><td><span class="status-badge warning">可行</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+function runOptimization() {
+    showToast('遗传算法运行中... 种群进化中...', 'info');
+    setTimeout(() => {
+        showToast('优化完成！已生成最优泊位分配方案', 'success');
+    }, 1500);
+}
+
+// ============================================================
+// 算法2: 翻箱率优化
+// ============================================================
+function renderRelocationAlgo(container) {
+    container.innerHTML = `
+        <div class="port-card">
+            <div class="card-header">
+                <span class="card-title">📦 翻箱率优化 - A*启发式搜索算法</span>
+                <button class="port-btn port-btn-primary" onclick="runFullRelocationAnalysis()">🚀 运行A*优化</button>
+            </div>
+            <div style="padding: 30px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 30px;">
+                    <div style="padding: 20px; background: rgba(255,71,87,0.08); border-radius: 8px; text-align: center;">
+                        <div style="color: #7a9aba; font-size: 12px;">原始翻箱率</div>
+                        <div style="color: #ff4757; font-size: 28px; font-weight: 700;">1.84</div>
+                    </div>
+                    <div style="padding: 20px; background: rgba(0,255,136,0.08); border-radius: 8px; text-align: center;">
+                        <div style="color: #7a9aba; font-size: 12px;">A*优化后</div>
+                        <div style="color: #00ff88; font-size: 28px; font-weight: 700;">0.67</div>
+                    </div>
+                    <div style="padding: 20px; background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,212,255,0.05)); border-radius: 8px; text-align: center;">
+                        <div style="color: #7a9aba; font-size: 12px;">优化幅度</div>
+                        <div style="color: #00ff88; font-size: 28px; font-weight: 700;">63.6% ↓</div>
+                    </div>
+                    <div style="padding: 20px; background: rgba(255,193,7,0.08); border-radius: 8px; text-align: center;">
+                        <div style="color: #7a9aba; font-size: 12px;">年节省(千万TEU)</div>
+                        <div style="color: #ffc107; font-size: 28px; font-weight: 700;">¥3.17亿</div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div style="padding: 20px; background: rgba(0,0,0,0.15); border-radius: 8px;">
+                        <h4 style="color: #00d4ff; margin-bottom: 15px; font-size: 14px;">🎯 启发式函数 h(n)</h4>
+                        <div style="color: #a0c4e8; font-size: 12px; line-height: 1.8; font-family: monospace;">
+                            h1 = 栈内倒序对数量<br/>
+                            h2 = 跨栈阻挡数量<br/>
+                            h(n) = max(h1, h2)<br/>
+                            <span style="color: #00ff88;">可采纳 → 保证找到全局最优解</span>
+                        </div>
+                    </div>
+                    <div style="padding: 20px; background: rgba(0,0,0,0.15); border-radius: 8px;">
+                        <h4 style="color: #00d4ff; margin-bottom: 15px; font-size: 14px;">📊 5种算法横向对比</h4>
+                        <table style="width: 100%; font-size: 11px; color: #a0c4e8;">
+                            <tr style="color: #7a9aba;"><td>FCFS先来先服务</td><td style="color: #ff4757;">29次</td><td>1ms</td></tr>
+                            <tr style="color: #7a9aba;"><td>贪心算法</td><td style="color: #ffa502;">21次</td><td>5ms</td></tr>
+                            <tr style="color: #7a9aba;"><td>爬山法</td><td style="color: #ffc107;">18次</td><td>20ms</td></tr>
+                            <tr style="color: #7a9aba;"><td>分支定界</td><td style="color: #00d4ff;">15次</td><td>1200ms</td></tr>
+                            <tr style="color: #7a9aba;"><td style="color: #00ff88; font-weight: 600;">A*算法(h1+h2)</td><td style="color: #00ff88; font-weight: 600;">15次</td><td style="color: #00ff88; font-weight: 600;">85ms</td></tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <h4 style="color: #00d4ff; margin-bottom: 15px;">A*算法最优翻箱步骤 (共10次翻箱)</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr><th>步骤</th><th>操作内容</th><th>g(已耗)</th><th>h(剩余下界)</th><th>f(=g+h)</th><th>策略说明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>栈2顶层→缓冲区</td><td>1</td><td>6</td><td>7</td><td>腾出目标箱上方第一个阻挡箱</td></tr>
+                        <tr><td>2</td><td>栈2顶层→栈8</td><td>2</td><td>5</td><td>7</td><td>同港箱子归位，减少后续翻箱</td></tr>
+                        <tr><td>3</td><td>栈2顶层→栈6</td><td>3</td><td>4</td><td>7</td><td>同港堆叠，栈2暴露目标箱</td></tr>
+                        <tr><td style="color: #00ff88; font-weight: 600;">4</td><td style="color: #00ff88;">✅ 提取目标箱 NYKU827341</td><td>4</td><td>3</td><td>7</td><td>第一个目标箱提取成功！</td></tr>
+                        <tr><td>5</td><td>栈6顶层→栈3</td><td>5</td><td>3</td><td>8</td><td>为下一个目标箱做准备</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+function runFullRelocationAnalysis() {
+    showToast('A*算法搜索中... 已扩展节点: 18/36', 'info');
+    setTimeout(() => {
+        showToast('优化完成！翻箱率从1.84降至0.67，降低63.6%', 'success');
+    }, 1000);
+}
+
+// ============================================================
+// 算法3: 集卡路径优化
+// ============================================================
+function renderRoutingAlgo(container) {
+    container.innerHTML = `
+        <div class="port-card">
+            <div class="card-header">
+                <span class="card-title">🚛 集卡路径优化 - A*路径规划 + 拍卖算法调度</span>
+                <button class="port-btn port-btn-primary" onclick="runRoutingDemo()">🚀 运行路径规划</button>
+            </div>
+            <div style="padding: 30px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 30px;">
+                    <div style="padding: 20px; background: rgba(0,255,136,0.08); border-radius: 8px; text-align: center;">
+                        <div style="color: #7a9aba; font-size: 12px;">平均空驶率</div>
+                        <div style="color: #00ff88; font-size: 28px; font-weight: 700;">18.2%</div>
+                        <div style="color: #00ff88; font-size: 12px;">↓ 23%</div>
+                    </div>
+                    <div style="padding: 20px; background: rgba(0,212,255,0.08); border-radius: 8px; text-align: center;">
+                        <div style="color: #7a9aba; font-size: 12px;">日均作业量</div>
+                        <div style="color: #00d4ff; font-size: 28px; font-weight: 700;">128 单</div>
+                        <div style="color: #00d4ff; font-size: 12px;">↑ 15%</div>
+                    </div>
+                    <div style="padding: 20px; background: rgba(255,193,7,0.08); border-radius: 8px; text-align: center;">
+                        <div style="color: #7a9aba; font-size: 12px;">平均行驶距离</div>
+                        <div style="color: #ffc107; font-size: 28px; font-weight: 700;">2.3 公里</div>
+                        <div style="color: #ffc107; font-size: 12px;">↓ 18%</div>
+                    </div>
+                    <div style="padding: 20px; background: rgba(179,136,255,0.08); border-radius: 8px; text-align: center;">
+                        <div style="color: #7a9aba; font-size: 12px;">双层优化架构</div>
+                        <div style="color: #b388ff; font-size: 20px; font-weight: 700;">A* + 拍卖</div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                    <div style="padding: 20px; background: rgba(0,0,0,0.15); border-radius: 8px;">
+                        <h4 style="color: #00d4ff; margin-bottom: 15px; font-size: 14px;">🗺️ 港口路网A*路径规划 (12×12网格)</h4>
+                        <div style="color: #a0c4e8; font-size: 12px; line-height: 1.8;">
+                            <strong>A*算法评价函数：</strong><br/>
+                            f(n) = g(n) + h(n)<br/>
+                            &nbsp;&nbsp;g(n) = 从起点到节点n的真实行驶距离<br/>
+                            &nbsp;&nbsp;h(n) = 欧氏距离下界（可采纳，保证最优）<br/><br/>
+                            <strong>路径：</strong>B03泊 → [右移6格→上移2格→右移2格] → Yard-A堆场<br/>
+                            <strong>路径长度：</strong>16格（最优，比Dijkstra少扩展37节点）
+                        </div>
+                    </div>
+                    <div style="padding: 20px; background: rgba(0,0,0,0.15); border-radius: 8px;">
+                        <h4 style="color: #00d4ff; margin-bottom: 15px; font-size: 14px;">💰 拍卖算法任务分配</h4>
+                        <table style="width: 100%; font-size: 11px; color: #a0c4e8;">
+                            <tr style="color: #7a9aba;"><th>任务</th><th>起点</th><th>终点</th><th>中标车</th><th>投标价</th></tr>
+                            <tr><td>T001</td><td>B01</td><td>Yard-A</td><td><span style="color:#00ff88;">#3</span></td><td>¥12.5</td></tr>
+                            <tr><td>T002</td><td>B03</td><td>Yard-C</td><td><span style="color:#00ff88;">#1</span></td><td>¥18.2</td></tr>
+                            <tr><td>T003</td><td>B06</td><td>Yard-B</td><td><span style="color:#00ff88;">#2</span></td><td>¥15.8</td></tr>
+                            <tr><td>T004</td><td>B02</td><td>Yard-D</td><td><span style="color:#00ff88;">#4</span></td><td>¥22.1</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function runRoutingDemo() {
+    showToast('A*路径规划 + 拍卖算法调度中...', 'info');
+    setTimeout(() => {
+        showToast('路径规划完成！最优路径长度: 16格', 'success');
+    }, 600);
+}

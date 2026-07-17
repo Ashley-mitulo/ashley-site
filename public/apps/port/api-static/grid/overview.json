@@ -1,0 +1,1 @@
+{"success":true,"data":{"substations":{"count":5,"total_capacity":5250},"transmission_lines":{"count":4,"total_length":580},"power_plants":{"count":3,"total_capacity":4800,"total_output":3700}}}

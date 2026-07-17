@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>新能源调度指挥中心 · 光伏功率预测系统</title>
+  <link rel="stylesheet" href="./assets/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <aside class="sidebar">
+    <div class="brand"><span class="sun">☀</span><div><b>PV Dispatch OS</b><small>新能源调度指挥中心</small></div></div>
+    <nav>
+      <a href="#dashboard" class="active">调度驾驶舱</a>
+      <a href="#data">数据管理/概览</a>
+      <a href="#feature">气象因素分析</a>
+      <a href="#point">点预测模型中心</a>
+      <a href="#interval">区间预测</a>
+      <a href="#compare">模型对比</a>
+      <a href="#algorithms">算法原理可视化</a>
+      <a href="#briefing">汇报页面</a>
+      <a href="#report">报告导出/摘要</a>
+    </nav>
+    <div class="system-card">
+      <span>Algorithm Matrix</span>
+      <b>多模型协同预测引擎</b>
+      <p>KNN-PSO-LSTM / CEEMDAN-DBN-XGBoost / ARIMA-Seq2Seq</p>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar command-topbar">
+      <div>
+        <span class="eyebrow">New Energy Dispatch Command Center</span>
+        <h1>新能源调度指挥中心 · 光伏功率预测系统</h1>
+        <p id="datasetInfo">内置模拟电站数据 · 15分钟粒度 · 未来24小时预测</p>
+      </div>
+      <div class="top-actions">
+        <button id="refreshBtn">刷新态势</button>
+        <button id="generateBtn" class="primary">重新生成模拟数据</button>
+      </div>
+    </header>
+
+    <section class="status-strip panel-lite" aria-label="运行状态总览">
+      <div class="status-cell live"><small>系统状态</small><strong>在线运行</strong><span>API / Model / ECharts 正常</span></div>
+      <div class="status-cell"><small>当前时间</small><strong id="clockNow">--:--:--</strong><span id="clockDate">--</span></div>
+      <div class="status-cell"><small>数据集状态</small><strong id="datasetHealth">待同步</strong><span id="datasetHealthDetail">等待接口返回</span></div>
+      <div class="status-cell"><small>预测置信度</small><strong id="forecastConfidence">--%</strong><span id="forecastConfidenceDetail">基于区间覆盖率评估</span></div>
+      <div class="status-cell"><small>天气 / 云量</small><strong id="weatherSummary">--</strong><span id="weatherDetail">等待气象摘要</span></div>
+      <div class="status-cell risk"><small>风险提示</small><strong id="riskTicker">--</strong><span id="riskTickerDetail">等待区间预测</span></div>
+    </section>
+
+    <section id="dashboard" class="panel hero command-panel">
+      <div class="corner lt"></div><div class="corner rt"></div><div class="corner lb"></div><div class="corner rb"></div>
+      <div class="hero-head">
+        <div>
+          <span class="eyebrow">Real-time Forecast Cockpit</span>
+          <h2>调度驾驶舱</h2>
+          <p>融合气象因素、短期时序记忆与区间风险判断，展示未来24小时光伏出力趋势与调度备用需求。</p>
+        </div>
+        <div class="risk-card" id="riskCard">
+          <small>调度风险</small><strong>--</strong><span>等待预测结果</span>
+        </div>
+      </div>
+      <div class="ops-grid">
+        <div class="ops-card station">
+          <div class="partition-title"><span>PV Station Situation</span><b>光伏电站运行态势</b></div>
+          <div class="plant-radar">
+            <i></i><i></i><i></i>
+            <div class="plant-core">PV</div>
+          </div>
+          <ul>
+            <li><span>并网状态</span><b>稳定并网</b></li>
+            <li><span>采样粒度</span><b id="opsGranularity">15分钟</b></li>
+            <li><span>观测窗口</span><b id="opsWindow">最近24h</b></li>
+          </ul>
+        </div>
+        <div class="ops-card algorithm">
+          <div class="partition-title"><span>Core Algorithm Status</span><b>核心算法状态</b></div>
+          <div class="algo-flow">
+            <span>相似日检索</span><i></i><span>PSO寻优</span><i></i><span>时序预测</span><i></i><span>区间校核</span>
+          </div>
+          <div class="algo-status">
+            <div><small>模型链路</small><strong>ACTIVE</strong></div>
+            <div><small>推理窗口</small><strong>24h</strong></div>
+            <div><small>置信策略</small><strong>80/95%</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="kpi-row six">
+        <div class="kpi"><small>当前功率</small><strong id="kpiPower">--</strong><em>kW</em></div>
+        <div class="kpi"><small>最近24h发电量</small><strong id="kpiEnergy">--</strong><em>kWh</em></div>
+        <div class="kpi"><small>最大功率</small><strong id="kpiMax">--</strong><em>kW</em></div>
+        <div class="kpi"><small>容量因子</small><strong id="kpiCF">--</strong><em>%</em></div>
+        <div class="kpi"><small>预测峰值</small><strong id="kpiPeak">--</strong><em>kW</em></div>
+        <div class="kpi"><small>峰值时刻</small><strong id="kpiPeakTime">--</strong><em></em></div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="chart large" id="dashChart"></div>
+        <div class="side-stack">
+          <div class="gauge-card"><div class="chart small" id="cfGauge"></div></div>
+          <div class="brief-card" id="dashboardAdvice">正在加载调度建议...</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="data" class="panel">
+      <div class="section-title"><h2>数据管理 / 概览</h2><span id="dataRange">--</span></div>
+      <div class="data-toolbar">
+        <div class="dataset-card"><small>当前数据集</small><b id="datasetId">--</b><span id="datasetStatus">--</span></div>
+        <div class="dataset-note">说明：模拟数据会持久保存在后端文件中，普通刷新不会改变；只有点击“重新生成模拟数据”才会产生新数据。</div>
+      </div>
+      <div class="preprocess-flow" id="preprocessFlow"></div>
+      <div class="grid two">
+        <div class="chart" id="energyChart"></div>
+        <div class="table-card">
+          <h3>数据质量</h3>
+          <ul id="qualityList"></ul>
+          <h3>最近数据样本</h3>
+          <table><thead><tr><th>时间</th><th>功率</th><th>辐照度</th><th>温度</th></tr></thead><tbody id="recentTable"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <section id="feature" class="panel">
+      <div class="section-title"><h2>气象因素分析</h2><span>组合模型特征工程映射</span></div>
+      <p class="desc" id="featureMethod"></p>
+      <div class="grid two">
+        <div class="chart" id="corrChart"></div>
+        <div class="chart" id="importanceChart"></div>
+      </div>
+      <div class="chart" id="scatterChart"></div>
+      <div class="insights" id="insights"></div>
+    </section>
+
+    <section id="point" class="panel">
+      <div class="section-title"><h2>点预测模型中心</h2><span>KNN-PSO-LSTM 点预测演示</span></div>
+      <p class="desc" id="pointIdea"></p>
+      <div class="training-demo">
+        <div class="train-card"><div class="train-title">模型训练中</div><div class="progress"><i id="trainProgress"></i></div><span id="trainText">等待开始</span></div>
+        <div class="train-card"><div class="train-title">粒子群寻优中</div><div class="particles" id="particles"></div><span id="psoText">等待开始</span></div>
+      </div>
+      <div class="mini-metrics" id="pointMetrics"></div>
+      <div class="chart large" id="pointChart"></div>
+    </section>
+
+    <section id="interval" class="panel">
+      <div class="section-title"><h2>区间预测</h2><span>ARIMA-Seq2Seq 置信区间演示</span></div>
+      <p class="desc" id="intervalIdea"></p>
+      <div class="mini-metrics" id="intervalMetrics"></div>
+      <div class="chart large" id="intervalChart"></div>
+    </section>
+
+    <section id="compare" class="panel">
+      <div class="section-title"><h2>模型对比</h2><span>误差、稳定性、实时性综合评估</span></div>
+      <div class="grid two">
+        <div class="chart" id="compareChart"></div>
+        <div class="chart" id="radarChart"></div>
+      </div>
+      <div class="table-card"><table><thead><tr><th>模型</th><th>RMSE</th><th>MAE</th><th>MAPE</th><th>R²</th><th>训练耗时</th></tr></thead><tbody id="compareTable"></tbody></table></div>
+    </section>
+
+
+    <section id="algorithms" class="panel">
+      <div class="section-title"><h2>算法原理可视化</h2><span>v1.2 可运行轻量还原</span></div>
+      <p class="desc" id="algoSummary">正在加载算法解释...</p>
+      <div class="algo-cards" id="algoCards"></div>
+      <div class="grid two">
+        <div class="chart" id="psoCurveChart"></div>
+        <div class="chart" id="ceemdanComponentChart"></div>
+      </div>
+      <div class="grid two algo-visual-grid">
+        <div class="chart" id="arimaIntervalBuildChart"></div>
+        <div class="table-card">
+          <h3>算法输入 → 处理 → 输出</h3>
+          <div id="algoIO" class="algo-io-list"></div>
+          <h3>简洁说明</h3>
+          <div id="algoExplain" class="algo-explain"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="briefing" class="panel briefing-page">
+      <div class="section-title"><h2>系统截图 / 汇报页面</h2><button onclick="window.print()">打印/导出PDF</button></div>
+      <div class="briefing-hero">
+        <div><span class="eyebrow">PV POWER FORECAST</span><h2>光伏短期功率预测与风险分析平台</h2><p>面向新能源电站与调度场景，将气象特征分析、组合预测模型、区间风险判断整合为一套可演示、可扩展的智能分析系统。</p></div>
+        <div class="briefing-stat"><strong id="briefAcc">--</strong><small>综合预测精度评分</small></div>
+      </div>
+      <div class="briefing-grid">
+        <div><b>核心能力</b><p>模拟数据生成与持久化、数据预处理、气象因素分析、点预测、区间预测、模型横向对比。</p></div>
+        <div><b>算法路线</b><p>KNN-PSO-LSTM 主流程，CEEMDAN-DBN-XGBoost 分解思想，ARIMA-Seq2Seq 区间表达。</p></div>
+        <div><b>应用场景</b><p>光伏出力预测、调度备用容量评估、低出力风险提示、预测报告生成。</p></div>
+      </div>
+      <div id="briefingSummary" class="report-box"></div>
+    </section>
+
+    <section id="report" class="panel">
+      <div class="section-title"><h2>报告导出 / 摘要</h2><button onclick="window.print()">打印/导出PDF</button></div>
+      <div id="reportBox" class="report-box"></div>
+    </section>
+  </main>
+
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>

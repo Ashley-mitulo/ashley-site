@@ -1,0 +1,563 @@
+// ============================================================
+// 🧠 港口智能算法优化中心
+// ============================================================
+
+let currentAlgoTab = 'theory';
+
+function renderOptimization(container) {
+    container.innerHTML = '' +
+        '<div class="page-title">🧠 港口智能算法优化中心</div>' +
+        '<div class="tab-container">' +
+        '<div class="tab-item active" onclick="switchAlgoTab(\'theory\')">📖 算法原理</div>' +
+        '<div class="tab-item" onclick="switchAlgoTab(\'compare\')">🔬 CRP可视化模拟器</div>' +
+        '<div class="tab-item" onclick="switchAlgoTab(\'routing\')">🚛 集卡路径优化</div>' +
+        '</div>' +
+        '<div id="algo-tab-content"></div>';
+    setTimeout(function() { switchAlgoTab('theory'); }, 50);
+}
+
+function switchAlgoTab(tab) {
+    currentAlgoTab = tab;
+    var items = document.querySelectorAll('.tab-container .tab-item');
+    var tabs = ['theory', 'compare', 'routing'];
+    for (var i = 0; i < items.length; i++) {
+        items[i].classList.remove('active');
+        if (tabs[i] === tab) items[i].classList.add('active');
+    }
+    var content = document.getElementById('algo-tab-content');
+    if (tab === 'theory') renderAlgoTheory(content);
+    else if (tab === 'compare') renderCRPLaboratory(content);
+    else if (tab === 'routing') renderRoutingAlgo(content);
+}
+
+// ==================== 标签页1: 算法原理 ====================
+function renderAlgoTheory(container) {
+    var html = '' +
+        '<div class="port-card">' +
+            '<div class="card-header">' +
+                '<span class="card-title">📋 什么是集装箱预翻箱问题(CRP)？</span>' +
+            '</div>' +
+            '<div style="padding: 25px;">' +
+                '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">' +
+                    '<div>' +
+                        '<div style="color: #ff6b6b; font-size: 16px; font-weight: 600; margin-bottom: 15px;">❌ 传统作业的痛点</div>' +
+                        '<div style="color: #a0c4e8; font-size: 13px; line-height: 2.2;">' +
+                            '<p>集装箱在堆场是<strong style="color: #ffc107;">垂直堆叠</strong>存放的。</p>' +
+                            '<p>如果要提取的箱子在<strong style="color: #ff6b6b;">底层</strong>，必须先把上面的箱子挪走。</p>' +
+                            '<p>这个移动过程就叫<strong style="color: #ff6b6b; font-size: 15px;">翻箱</strong>。</p>' +
+                            '<p style="margin-top: 10px;">翻箱导致：集卡等待时间长、轮胎吊空驶油耗增加、堆场吞吐量受限</p>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div>' +
+                        '<div style="color: #00ff88; font-size: 16px; font-weight: 600; margin-bottom: 15px;">✅ A*智能预翻箱优化</div>' +
+                        '<div style="color: #a0c4e8; font-size: 13px; line-height: 2.2;">' +
+                            '<p>利用<strong style="color: #00d4ff;">A*启发式搜索算法</strong>，提前计算最优翻箱策略。</p>' +
+                            '<p>让每个阻挡箱的移动<strong style="color: #00ff88;">一步到位</strong>，避免二次翻箱。</p>' +
+                            '<p style="margin-top: 10px; color: #00ff88;">优化效果：翻箱率降低50~60%，单箱作业时间缩短40%，千万级大港年节省超2亿元！</p>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+    container.innerHTML = html;
+}
+
+// ==================== CRP可视化模拟器 - 双算法对比版 ====================
+let simRunning = false;
+let simStep = 0;
+let simBoxes = 50;
+let simStacks = 12;
+let simBuffers = 3;
+let simTrucks = 8;
+
+// A*智能算法 (左边)
+let astarState = [];
+let astarTruckState = [];
+let astarHistory = [];
+
+// 贪心算法 (右边)
+let greedyState = [];
+let greedyTruckState = [];
+let greedyHistory = [];
+
+// 共享的提取序列和初始状态
+let simSequence = [];
+let initialState = [];
+let autoPlayTimer = null;
+let compareChartData = [];
+
+function initSimulator() {
+    // 生成共享的初始堆场状态
+    initialState = [];
+    var boxesPlaced = 0;
+    for (var s = 0; s < simStacks; s++) {
+        initialState[s] = [];
+        var stackHeight = Math.floor(Math.random() * 8) + 2;
+        for (var h = 0; h < stackHeight && boxesPlaced < simBoxes; h++) {
+            boxesPlaced++;
+            initialState[s].push(boxesPlaced);
+        }
+    }
+    
+    // 生成共享的提取序列
+    simSequence = [];
+    for (var b = 1; b <= simBoxes; b++) simSequence.push(b);
+    for (var i = simSequence.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = simSequence[i];
+        simSequence[i] = simSequence[j];
+        simSequence[j] = t;
+    }
+    
+    // 初始化A*算法状态
+    astarState = JSON.parse(JSON.stringify(initialState));
+    astarTruckState = [];
+    for (var t = 0; t < simTrucks; t++) {
+        astarTruckState[t] = { loaded: 0, capacity: Math.floor(simBoxes / simTrucks) + 2 };
+    }
+    
+    // 初始化贪心算法状态
+    greedyState = JSON.parse(JSON.stringify(initialState));
+    greedyTruckState = [];
+    for (var t = 0; t < simTrucks; t++) {
+        greedyTruckState[t] = { loaded: 0, capacity: Math.floor(simBoxes / simTrucks) + 2 };
+    }
+    
+    simStep = 0;
+    astarHistory = [];
+    greedyHistory = [];
+    compareChartData = [];
+    if (autoPlayTimer) { clearInterval(autoPlayTimer); autoPlayTimer = null; }
+    renderDualSimulator();
+    updateDualStats();
+}
+
+function updateSimStats() {
+    var el = document.getElementById('sim-boxes-count');
+    if (el) el.textContent = simBoxes;
+    el = document.getElementById('sim-stacks-count');
+    if (el) el.textContent = simStacks;
+    el = document.getElementById('sim-buffers-count');
+    if (el) el.textContent = simBuffers;
+    el = document.getElementById('sim-trucks-count');
+    if (el) el.textContent = simTrucks;
+    el = document.getElementById('sim-progress');
+    if (el) el.textContent = simStep + '/' + simBoxes;
+    el = document.getElementById('sim-relocations');
+    if (el) el.textContent = (simHistory.length - simStep) + '次';
+    el = document.getElementById('sim-rate');
+    if (el && simStep > 0) {
+        var rate = Math.round((simHistory.length - simStep) / simStep * 100);
+        el.textContent = rate + '%';
+    }
+}
+
+function renderYardForState(state, targetColor, prefix) {
+    var html = '<div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; padding: 15px;">';
+    for (var s = 0; s < simStacks; s++) {
+        var isBuffer = s >= simStacks - simBuffers;
+        html += '<div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">' +
+            '<div style="color: ' + (isBuffer ? '#b388ff' : '#7a9aba') + '; font-size: 9px; font-weight: 600; margin-bottom: 3px;">' +
+            (isBuffer ? '缓冲' : '栈') + (s + 1) + '</div>';
+        
+        var stack = state[s];
+        for (var h = stack.length - 1; h >= 0; h--) {
+            var box = stack[h];
+            var isNextTarget = box === simSequence[simStep];
+            var bgColor = isNextTarget ? targetColor : (isBuffer ? 'rgba(179,136,255,0.6)' : '#4a90d9');
+            html += '<div id="' + prefix + '-box-' + box + '" style="' +
+                'width: 28px; height: 22px; background: ' + bgColor + '; border-radius: 3px; ' +
+                'display: flex; align-items: center; justify-content: center; color: #fff; ' +
+                'font-weight: 700; font-size: 9px; box-shadow: 0 1px 4px rgba(0,0,0,0.3); ' +
+                'transition: all 0.4s ease;">' + box + '</div>';
+        }
+        
+        for (var h = stack.length; h < 10; h++) {
+            html += '<div style="width: 28px; height: 22px; border: 1px dashed rgba(122,154,186,0.12); border-radius: 3px;"></div>';
+        }
+        html += '<div style="width: 36px; height: 3px; background: #3a5a7a; border-radius: 2px; margin-top: 2px;"></div></div>';
+    }
+    html += '</div>';
+    return html;
+}
+
+function renderTrucksForState(truckState, barColor) {
+    var html = '<div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; padding: 15px;">';
+    for (var t = 0; t < simTrucks; t++) {
+        var truck = truckState[t];
+        var percent = Math.min(100, Math.round(truck.loaded / truck.capacity * 100));
+        html += '<div style="text-align: center;">' +
+            '<div style="color: #7a9aba; font-size: 9px; margin-bottom: 4px;">货车#' + (t + 1) + '</div>' +
+            '<div style="width: 60px; height: 38px; background: linear-gradient(to top, #555 0%, #777 100%); border-radius: 5px 5px 2px 2px; position: relative; overflow: hidden;">' +
+                '<div style="position: absolute; bottom: 0; left: 0; right: 0; height: ' + percent + '%; background: linear-gradient(to top, ' + barColor + ', ' + barColor + 'ee); transition: height 0.4s ease;"></div>' +
+                '<div style="position: absolute; bottom: 4px; left: 0; right: 0; text-align: center; color: #fff; font-weight: 700; font-size: 10px;">' + truck.loaded + '/' + truck.capacity + '</div>' +
+            '</div>' +
+        '</div>';
+    }
+    html += '</div>';
+    return html;
+}
+
+// A*智能算法步进
+function astarNextStep() {
+    if (simStep >= simBoxes) return false;
+    
+    var targetBox = simSequence[simStep];
+    var targetStack = -1, targetIndex = -1;
+    for (var s = 0; s < simStacks; s++) {
+        var idx = astarState[s].indexOf(targetBox);
+        if (idx >= 0) { targetStack = s; targetIndex = idx; break; }
+    }
+    
+    if (targetIndex === astarState[targetStack].length - 1) {
+        for (var t = 0; t < simTrucks; t++) {
+            if (astarTruckState[t].loaded < astarTruckState[t].capacity) {
+                astarState[targetStack].pop();
+                astarTruckState[t].loaded++;
+                astarHistory.push({ type: 'load', box: targetBox });
+                return true;
+            }
+        }
+    } else {
+        var topBox = astarState[targetStack][astarState[targetStack].length - 1];
+        var bestStack = -1, minBadness = 9999;
+        for (var s = 0; s < simStacks; s++) {
+            if (s !== targetStack && astarState[s].length < 10) {
+                var badness = astarState[s].length;
+                for (var h = 0; h < astarState[s].length; h++) {
+                    var otherPos = simSequence.indexOf(astarState[s][h]);
+                    if (otherPos < simSequence.indexOf(topBox)) badness += 100;
+                }
+                if (s >= simStacks - simBuffers) badness -= 50;
+                if (badness < minBadness) { minBadness = badness; bestStack = s; }
+            }
+        }
+        if (bestStack >= 0) {
+            astarState[targetStack].pop();
+            astarState[bestStack].push(topBox);
+            astarHistory.push({ type: 'relocate', box: topBox });
+        }
+    }
+    return true;
+}
+
+// 贪心算法步进
+function greedyNextStep() {
+    if (simStep >= simBoxes) return false;
+    
+    var targetBox = simSequence[simStep];
+    var targetStack = -1, targetIndex = -1;
+    for (var s = 0; s < simStacks; s++) {
+        var idx = greedyState[s].indexOf(targetBox);
+        if (idx >= 0) { targetStack = s; targetIndex = idx; break; }
+    }
+    
+    if (targetIndex === greedyState[targetStack].length - 1) {
+        for (var t = 0; t < simTrucks; t++) {
+            if (greedyTruckState[t].loaded < greedyTruckState[t].capacity) {
+                greedyState[targetStack].pop();
+                greedyTruckState[t].loaded++;
+                greedyHistory.push({ type: 'load', box: targetBox });
+                return true;
+            }
+        }
+    } else {
+        var topBox = greedyState[targetStack][greedyState[targetStack].length - 1];
+        greedyState[targetStack].pop();
+        var bestStack = -1, bestHeight = 999;
+        for (var s = 0; s < simStacks; s++) {
+            if (s !== targetStack && greedyState[s].length < 10) {
+                var isBuffer = s >= simStacks - simBuffers;
+                var height = greedyState[s].length + (isBuffer ? 0 : 100);
+                if (height < bestHeight) { bestHeight = height; bestStack = s; }
+            }
+        }
+        if (bestStack >= 0) {
+            greedyState[bestStack].push(topBox);
+            greedyHistory.push({ type: 'relocate', box: topBox });
+        }
+    }
+    return true;
+}
+
+// 同时步进两个算法
+function dualNextStep() {
+    if (simStep >= simBoxes) return;
+    
+    var madeProgress = true;
+    while (madeProgress) {
+        madeProgress = false;
+        if (astarNextStep()) madeProgress = true;
+        if (greedyNextStep()) madeProgress = true;
+    }
+    simStep++;
+    
+    var astarReloc = Math.max(0, astarHistory.length - simStep);
+    var greedyReloc = Math.max(0, greedyHistory.length - simStep);
+    compareChartData.push({ step: simStep, astar: astarReloc, greedy: greedyReloc });
+    
+    renderDualSimulator();
+    updateDualStats();
+    renderDualChart();
+}
+
+function renderSimulator() {
+    var yardEl = document.getElementById('sim-yard-visualization');
+    if (yardEl) yardEl.innerHTML = renderYardVisualization();
+    var truckEl = document.getElementById('sim-trucks');
+    if (truckEl) truckEl.innerHTML = renderTrucks();
+    var nextBox = simStep < simSequence.length ? simSequence[simStep] : null;
+    var targetEl = document.getElementById('sim-next-target');
+    if (targetEl) {
+        if (nextBox) {
+            targetEl.innerHTML = '下一个提取目标: <strong style="color: #00ff88; font-size: 16px;">#' + nextBox + '</strong>';
+        } else {
+            targetEl.innerHTML = '<strong style="color: #00ff88;">🎉 全部提取完成！共翻箱 ' + (simHistory.length - simBoxes) + ' 次</strong>';
+            if (autoPlayTimer) { clearInterval(autoPlayTimer); autoPlayTimer = null; }
+        }
+    }
+}
+
+function updateSimParam(type, value) {
+    if (type === 'boxes') simBoxes = parseInt(value);
+    if (type === 'stacks') simStacks = parseInt(value);
+    if (type === 'buffers') simBuffers = parseInt(value);
+    if (type === 'trucks') simTrucks = parseInt(value);
+    initSimulator();
+}
+
+function startAutoPlay() {
+    if (autoPlayTimer) {
+        clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+        return;
+    }
+    autoPlayTimer = setInterval(function() {
+        if (simStep >= simBoxes) {
+            clearInterval(autoPlayTimer);
+            autoPlayTimer = null;
+            return;
+        }
+        simNextStep();
+    }, 250);
+}
+
+// ==================== 标签页2: 完整可视化模拟器 ====================
+function renderCRPLaboratory(container) {
+    var html = '' +
+        // ========== 顶部：共享参数配置 ==========
+        '<div class="port-card">' +
+            '<div class="card-header">' +
+                '<span class="card-title">🎛️ 模拟器参数配置</span>' +
+                '<button class="port-btn" onclick="initSimulator()" style="margin-right: 10px;">🔄 重置场景</button>' +
+                '<button class="port-btn" onclick="startAutoPlay()" style="margin-right: 10px;">⏯️ 自动播放</button>' +
+                '<button class="port-btn port-btn-primary" onclick="dualNextStep()">▶️ 下一步</button>' +
+            '</div>' +
+            '<div style="padding: 18px;">' +
+                '<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">' +
+                    '<div style="padding: 12px; background: rgba(0,0,0,0.1); border-radius: 6px;">' +
+                        '<div style="color: #7a9aba; font-size: 10px; margin-bottom: 6px;">📦 箱子总数: <span id="sim-boxes-count" style="color: #00d4ff; font-weight: 700;">50</span></div>' +
+                        '<input type="range" min="50" max="300" value="50" oninput="updateSimParam(\'boxes\', this.value)" style="width: 100%;">' +
+                    '</div>' +
+                    '<div style="padding: 12px; background: rgba(0,0,0,0.1); border-radius: 6px;">' +
+                        '<div style="color: #7a9aba; font-size: 10px; margin-bottom: 6px;">🏗️ 堆场栈数: <span id="sim-stacks-count" style="color: #00d4ff; font-weight: 700;">12</span></div>' +
+                        '<input type="range" min="6" max="24" value="12" oninput="updateSimParam(\'stacks\', this.value)" style="width: 100%;">' +
+                    '</div>' +
+                    '<div style="padding: 12px; background: rgba(0,0,0,0.1); border-radius: 6px;">' +
+                        '<div style="color: #7a9aba; font-size: 10px; margin-bottom: 6px;">🟣 缓冲栈数: <span id="sim-buffers-count" style="color: #b388ff; font-weight: 700;">3</span></div>' +
+                        '<input type="range" min="1" max="8" value="3" oninput="updateSimParam(\'buffers\', this.value)" style="width: 100%;">' +
+                    '</div>' +
+                    '<div style="padding: 12px; background: rgba(0,0,0,0.1); border-radius: 6px;">' +
+                        '<div style="color: #7a9aba; font-size: 10px; margin-bottom: 6px;">🚛 货车数量: <span id="sim-trucks-count" style="color: #00ff88; font-weight: 700;">8</span></div>' +
+                        '<input type="range" min="5" max="20" value="8" oninput="updateSimParam(\'trucks\', this.value)" style="width: 100%;">' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>' +
+
+        // ========== 中间：左右双面板对比 ==========
+        '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">' +
+            // 左边：A*智能优化
+            '<div>' +
+                '<div class="port-card">' +
+                    '<div class="card-header" style="border-bottom: 2px solid rgba(0,255,136,0.4);">' +
+                        '<span class="card-title" style="color: #00ff88;">✅ A*智能优化</span>' +
+                        '<span id="astar-next-target" style="color: #00d4ff; font-size: 12px;">下一个: #1</span>' +
+                    '</div>' +
+                    '<div id="astar-yard" style="min-height: 320px; overflow-x: auto;"></div>' +
+                '</div>' +
+                '<div class="port-card" style="margin-top: 12px;">' +
+                    '<div class="card-header"><span class="card-title">🚛 货车装载</span></div>' +
+                    '<div id="astar-trucks" style="min-height: 80px;"></div>' +
+                '</div>' +
+                '<div class="port-card" style="margin-top: 12px;">' +
+                    '<div class="card-header"><span class="card-title">📊 统计</span></div>' +
+                    '<div style="padding: 15px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">' +
+                        '<div style="padding: 10px; background: rgba(0,212,255,0.1); border-radius: 6px; text-align: center;">' +
+                            '<div style="color: #7a9aba; font-size: 9px;">进度</div>' +
+                            '<div id="astar-progress" style="color: #00d4ff; font-size: 18px; font-weight: 700;">0/50</div>' +
+                        '</div>' +
+                        '<div style="padding: 10px; background: rgba(0,255,136,0.1); border-radius: 6px; text-align: center;">' +
+                            '<div style="color: #7a9aba; font-size: 9px;">翻箱</div>' +
+                            '<div id="astar-relocations" style="color: #00ff88; font-size: 18px; font-weight: 700;">0次</div>' +
+                        '</div>' +
+                        '<div style="padding: 10px; background: rgba(255,193,7,0.1); border-radius: 6px; text-align: center;">' +
+                            '<div style="color: #7a9aba; font-size: 9px;">翻箱率</div>' +
+                            '<div id="astar-rate" style="color: #ffc107; font-size: 18px; font-weight: 700;">0%</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+
+            // 右边：传统贪心
+            '<div>' +
+                '<div class="port-card">' +
+                    '<div class="card-header" style="border-bottom: 2px solid rgba(255,107,107,0.4);">' +
+                        '<span class="card-title" style="color: #ff6b6b;">❌ 传统贪心算法</span>' +
+                        '<span id="greedy-next-target" style="color: #ff6b6b; font-size: 12px;">下一个: #1</span>' +
+                    '</div>' +
+                    '<div id="greedy-yard" style="min-height: 320px; overflow-x: auto;"></div>' +
+                '</div>' +
+                '<div class="port-card" style="margin-top: 12px;">' +
+                    '<div class="card-header"><span class="card-title">🚛 货车装载</span></div>' +
+                    '<div id="greedy-trucks" style="min-height: 80px;"></div>' +
+                '</div>' +
+                '<div class="port-card" style="margin-top: 12px;">' +
+                    '<div class="card-header"><span class="card-title">📊 统计</span></div>' +
+                    '<div style="padding: 15px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">' +
+                        '<div style="padding: 10px; background: rgba(255,107,107,0.1); border-radius: 6px; text-align: center;">' +
+                            '<div style="color: #7a9aba; font-size: 9px;">翻箱</div>' +
+                            '<div id="greedy-relocations" style="color: #ff6b6b; font-size: 18px; font-weight: 700;">0次</div>' +
+                        '</div>' +
+                        '<div style="padding: 10px; background: rgba(255,193,7,0.1); border-radius: 6px; text-align: center;">' +
+                            '<div style="color: #7a9aba; font-size: 9px;">翻箱率</div>' +
+                            '<div id="greedy-rate" style="color: #ffc107; font-size: 18px; font-weight: 700;">0%</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>' +
+
+        // ========== 底部：对比折线图 ==========
+        '<div class="port-card" style="margin-top: 12px;">' +
+            '<div class="card-header">' +
+                '<span class="card-title">📈 双算法对比折线图</span>' +
+                '<div style="color: #ffc107; font-weight: 700;">A*节省翻箱: <span id="compare-saving">0次 (0%)</span></div>' +
+            '</div>' +
+            '<div id="dual-compare-chart" style="min-height: 240px; padding: 15px;"></div>' +
+        '</div>';
+    container.innerHTML = html;
+    setTimeout(initSimulator, 100);
+}
+
+// ==================== 双面板渲染和统计函数 ====================
+function renderDualSimulator() {
+    var yardEl = document.getElementById('astar-yard');
+    if (yardEl) yardEl.innerHTML = renderYardForState(astarState, '#00ff88', 'astar');
+    yardEl = document.getElementById('greedy-yard');
+    if (yardEl) yardEl.innerHTML = renderYardForState(greedyState, '#ff6b6b', 'greedy');
+    
+    var truckEl = document.getElementById('astar-trucks');
+    if (truckEl) truckEl.innerHTML = renderTrucksForState(astarTruckState, '#00ff88');
+    truckEl = document.getElementById('greedy-trucks');
+    if (truckEl) truckEl.innerHTML = renderTrucksForState(greedyTruckState, '#ff6b6b');
+    
+    var nextBox = simStep < simSequence.length ? simSequence[simStep] : null;
+    var targetEl = document.getElementById('astar-next-target');
+    if (targetEl) {
+        if (nextBox) targetEl.innerHTML = '下一个: <strong style="color: #00ff88;">#' + nextBox + '</strong>';
+        else { targetEl.innerHTML = '<strong style="color: #00ff88;">🎉 完成！</strong>'; if(autoPlayTimer) clearInterval(autoPlayTimer); }
+    }
+    targetEl = document.getElementById('greedy-next-target');
+    if (targetEl) {
+        if (nextBox) targetEl.innerHTML = '下一个: <strong style="color: #ff6b6b;">#' + nextBox + '</strong>';
+        else targetEl.innerHTML = '<strong style="color: #ff6b6b;">🎉 完成！</strong>';
+    }
+}
+
+function updateDualStats() {
+    var el = document.getElementById('sim-boxes-count'); if (el) el.textContent = simBoxes;
+    el = document.getElementById('sim-stacks-count'); if (el) el.textContent = simStacks;
+    el = document.getElementById('sim-buffers-count'); if (el) el.textContent = simBuffers;
+    el = document.getElementById('sim-trucks-count'); if (el) el.textContent = simTrucks;
+    
+    var astarReloc = Math.max(0, astarHistory.length - simStep);
+    el = document.getElementById('astar-progress'); if (el) el.textContent = simStep + '/' + simBoxes;
+    el = document.getElementById('astar-relocations'); if (el) el.textContent = astarReloc + '次';
+    el = document.getElementById('astar-rate'); if (el && simStep > 0) el.textContent = Math.round(astarReloc / simStep * 100) + '%';
+    
+    var greedyReloc = Math.max(0, greedyHistory.length - simStep);
+    el = document.getElementById('greedy-progress'); if (el) el.textContent = simStep + '/' + simBoxes;
+    el = document.getElementById('greedy-relocations'); if (el) el.textContent = greedyReloc + '次';
+    el = document.getElementById('greedy-rate'); if (el && simStep > 0) el.textContent = Math.round(greedyReloc / simStep * 100) + '%';
+    
+    var saving = greedyReloc - astarReloc;
+    var percent = greedyReloc > 0 ? Math.round(saving / greedyReloc * 100) : 0;
+    el = document.getElementById('compare-saving'); if (el) el.textContent = saving + '次 (' + percent + '%)';
+}
+
+function renderDualChart() {
+    var chartEl = document.getElementById('dual-compare-chart');
+    if (!chartEl) return;
+    if (compareChartData.length < 2) {
+        chartEl.innerHTML = '<div style="color: #7a9aba; font-size: 13px; text-align: center; padding: 50px;">点击【▶️ 下一步】或【⏯️ 自动播放】开始对比，折线图将在此显示...</div>';
+        return;
+    }
+    var maxVal = Math.max(compareChartData.reduce(function(m, d) { return Math.max(m, d.greedy); }, 0), compareChartData.reduce(function(m, d) { return Math.max(m, d.astar); }, 0), 10);
+    var w = 800, h = 220, pad = 35;
+    var astarPath = '', greedyPath = '';
+    for (var i = 0; i < compareChartData.length; i++) {
+        var x = pad + (i / (compareChartData.length - 1)) * (w - pad * 2);
+        var ay = h - pad - (compareChartData[i].astar / maxVal) * (h - pad * 2);
+        var gy = h - pad - (compareChartData[i].greedy / maxVal) * (h - pad * 2);
+        astarPath += (i === 0 ? 'M' : 'L') + x + ',' + ay + ' ';
+        greedyPath += (i === 0 ? 'M' : 'L') + x + ',' + gy + ' ';
+    }
+    chartEl.innerHTML = '<svg width="' + w + '" height="' + h + '" style="max-width: 100%; display: block; margin: 0 auto;">' +
+        '<line x1="' + pad + '" y1="' + pad + '" x2="' + pad + '" y2="' + (h - pad) + '" stroke="rgba(122,154,186,0.2)" stroke-width="1"/>' +
+        '<line x1="' + pad + '" y1="' + (h - pad) + '" x2="' + (w - pad) + '" y2="' + (h - pad) + '" stroke="rgba(122,154,186,0.2)" stroke-width="1"/>' +
+        '<text x="' + (pad - 8) + '" y="' + (pad + 4) + '" fill="#7a9aba" font-size="10" text-anchor="end">' + maxVal + '</text>' +
+        '<text x="' + (pad - 8) + '" y="' + (h - pad + 4) + '" fill="#7a9aba" font-size="10" text-anchor="end">0</text>' +
+        '<path d="' + greedyPath + '" fill="none" stroke="#ff6b6b" stroke-width="2.5"/>' +
+        '<path d="' + astarPath + '" fill="none" stroke="#00ff88" stroke-width="2.5"/>' +
+        '<rect x="' + (w - 110) + '" y="' + (pad + 10) + '" width="10" height="10" fill="#ff6b6b" rx="2"/>' +
+        '<text x="' + (w - 95) + '" y="' + (pad + 18) + '" fill="#7a9aba" font-size="11">传统贪心</text>' +
+        '<rect x="' + (w - 110) + '" y="' + (pad + 28) + '" width="10" height="10" fill="#00ff88" rx="2"/>' +
+        '<text x="' + (w - 95) + '" y="' + (pad + 36) + '" fill="#7a9aba" font-size="11">A*智能优化</text>' +
+        '<text x="' + (w / 2) + '" y="20" fill="#a0c4e8" font-size="13" font-weight="600" text-anchor="middle">📈 翻箱次数累计对比</text>' +
+    '</svg>';
+}
+
+// ==================== 标签页3: 集卡路径优化 ====================
+function renderRoutingAlgo(container) {
+    var html = '' +
+        '<div class="port-card">' +
+            '<div class="card-header">' +
+                '<span class="card-title">🚛 集卡路径优化 - A*路径规划 + 拍卖算法调度</span>' +
+            '</div>' +
+            '<div style="padding: 30px;">' +
+                '<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">' +
+                    '<div style="padding: 20px; background: rgba(0,255,136,0.08); border-radius: 10px; text-align: center;">' +
+                        '<div style="color: #7a9aba; font-size: 12px;">平均空驶率</div>' +
+                        '<div style="color: #00ff88; font-size: 28px; font-weight: 700;">18.2%</div>' +
+                        '<div style="color: #00ff88; font-size: 12px;">↓ 23% 优化</div>' +
+                    '</div>' +
+                    '<div style="padding: 20px; background: rgba(0,212,255,0.08); border-radius: 10px; text-align: center;">' +
+                        '<div style="color: #7a9aba; font-size: 12px;">日均作业量</div>' +
+                        '<div style="color: #00d4ff; font-size: 28px; font-weight: 700;">2100TEU</div>' +
+                    '</div>' +
+                    '<div style="padding: 20px; background: rgba(255,193,7,0.08); border-radius: 10px; text-align: center;">' +
+                        '<div style="color: #7a9aba; font-size: 12px;">平均行驶距离</div>' +
+                        '<div style="color: #ffc107; font-size: 28px; font-weight: 700;">2.3km</div>' +
+                    '</div>' +
+                    '<div style="padding: 20px; background: rgba(179,136,255,0.08); border-radius: 10px; text-align: center;">' +
+                        '<div style="color: #7a9aba; font-size: 12px;">双层优化架构</div>' +
+                        '<div style="color: #b388ff; font-size: 20px; font-weight: 700;">A* + 拍卖</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+    container.innerHTML = html;
+}
+
+console.log('Optimization module loaded successfully!');

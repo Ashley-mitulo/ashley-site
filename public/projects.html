@@ -61,6 +61,27 @@ const PROJECTS = [
     meta: ['🤖 Agent', '💬 NL2SQL', '📊 分析'],
     url: '/apps/transport/',
   },
+  {
+    id: 'port', cover: '⚓', coverClass: 'c4', tag: '行业系统 · v1.0-static',
+    title: '智慧港口综合管理系统',
+    desc: '港口一张屏：实时监控、泊位管理、健康度评估、吞吐量预测、绿色港口、故障推演与选址优化，8 个业务子页全联动。',
+    meta: ['🏗️ 港口', '📈 ECharts', '🗺️ GeoJSON'],
+    url: '/apps/port/',
+  },
+  {
+    id: 'pv', cover: '☀️', coverClass: 'c5', tag: '预测系统 · v1.2-static',
+    title: '光伏发电功率短期预测',
+    desc: '新能源调度指挥中心：KNN-PSO-LSTM / CEEMDAN-DBN-XGBoost / ARIMA-Seq2Seq 三大算法模型，预测点+区间、气象因素分析、模型对比。',
+    meta: ['☀ 光伏', '🧠 算法', '📊 ECharts'],
+    url: '/apps/pv/',
+  },
+  {
+    id: 'city-health', cover: '🏙️', coverClass: 'c6', tag: '城市体检 · v1.2-static',
+    title: '城市体检智能诊断系统',
+    desc: 'S-E-D 认知闭环：表征→解释→决策。南京 11 区 30 项指标、六维度雷达图、空间体检、智能问答、知识库、报告中心。',
+    meta: ['🏠 城市', '🧩 S-E-D', '🗺️ 空间'],
+    url: '/apps/city-health/',
+  },
 ];
 
 async function render() {
