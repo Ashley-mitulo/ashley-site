@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "name": "交通事故知识图谱 - 盲测黄金标注集(batch2, 从未参与v3.3.6调参)",
+    "version": "1.0",
+    "createdAt": "2026-07-08",
+    "principle": "与主黄金集同原则：只标注原文显式陈述的事实(规范名)；新闻短讯以缺口/待认定为正确答案。本集样本(GEN-B2-TA-*/web-b2-*)从未用于词典/规则调参，用于测量真实泛化准确率。",
+    "vocabRef": "规范名尽量对齐主 gold-labels.json；个别原文显式但主集未覆盖的表述会引入新规范名，用于暴露真实召回缺口。"
+  },
+  "generated": [
+    { "id": "GEN-B2-TA-001", "expectedFactors": ["积水", "视距遮挡"], "expectedViolationsMin": ["未按条件降低车速", "逆向行驶"], "forbiddenSubjects": [] },
+    { "id": "GEN-B2-TA-002", "expectedFactors": [], "expectedViolationsMin": ["超速行驶", "盲区观察不足"], "forbiddenSubjects": [] },
+    { "id": "GEN-B2-TA-003", "expectedFactors": [], "expectedViolationsMin": ["未让行", "违法超车"], "forbiddenSubjects": ["救护车"], "violationSubjectMap": { "未让行": ["银色轿车", "轿车", "银色车"] } },
+    { "id": "GEN-B2-TA-004", "expectedFactors": ["车辆制动失效"], "expectedViolationsMin": ["未按条件降低车速"], "forbiddenSubjects": [] },
+    { "id": "GEN-B2-TA-005", "expectedFactors": [], "expectedViolationsMin": ["未保持安全车距", "未按条件降低车速"], "forbiddenSubjects": ["网约车", "商务车"], "violationSubjectMap": { "未保持安全车距": ["罐车"] } },
+    { "id": "GEN-B2-TA-006", "expectedFactors": ["视距遮挡"], "expectedViolationsMin": ["倒车未确认安全"], "forbiddenSubjects": [] },
+    { "id": "GEN-B2-TA-007", "expectedFactors": ["视距遮挡"], "expectedViolationsMin": ["未停车让行", "分心驾驶"], "forbiddenSubjects": [], "violationSubjectMap": { "未停车让行": ["骑手", "电动自行车"] } },
+    { "id": "GEN-B2-TA-008", "expectedFactors": ["路面遗撒"], "expectedViolationsMin": ["未按条件降低车速"], "forbiddenSubjects": [] },
+    { "id": "GEN-B2-TA-009", "expectedFactors": ["路面遗撒"], "expectedViolationsMin": ["货物固定不足", "违法变道"], "forbiddenSubjects": [] },
+    { "id": "GEN-B2-TA-010", "expectedFactors": ["视距遮挡"], "expectedViolationsMin": [], "forbiddenSubjects": ["配送车", "无人配送车"] },
+    { "id": "GEN-B2-TA-011", "expectedFactors": [], "expectedViolationsMin": ["违法停车", "未按条件降低车速"], "forbiddenSubjects": [] },
+    { "id": "GEN-B2-TA-012", "expectedFactors": ["视距遮挡"], "expectedViolationsMin": ["逆向行驶"], "forbiddenSubjects": ["公交车"], "violationSubjectMap": { "逆向行驶": ["电动三轮车", "三轮车"] } },
+    { "id": "GEN-B2-TA-013", "expectedFactors": ["冰雪", "大雾"], "expectedViolationsMin": ["未按条件降低车速"], "forbiddenSubjects": ["清障车"] },
+    { "id": "GEN-B2-TA-014", "expectedFactors": ["视距遮挡"], "expectedViolationsMin": ["倒车未确认安全", "违法横穿"], "forbiddenSubjects": [], "violationSubjectMap": { "倒车未确认安全": ["网约车"] } },
+    { "id": "GEN-B2-TA-015", "expectedFactors": ["路面湿滑"], "expectedViolationsMin": ["未按条件降低车速"], "forbiddenSubjects": [] },
+    { "id": "GEN-B2-TA-016", "expectedFactors": [], "expectedViolationsMin": ["违法停车"], "forbiddenSubjects": ["小轿车"] },
+    { "id": "GEN-B2-TA-017", "expectedFactors": ["照明不足"], "expectedViolationsMin": ["起步未确认盲区"], "forbiddenSubjects": [] },
+    { "id": "GEN-B2-TA-018", "expectedFactors": [], "expectedViolationsMin": ["超速行驶"], "forbiddenSubjects": [] },
+    { "id": "GEN-B2-TA-019", "expectedFactors": ["路面遗撒"], "expectedViolationsMin": ["未按条件降低车速"], "forbiddenSubjects": ["环卫单位"] },
+    { "id": "GEN-B2-TA-020", "expectedFactors": [], "expectedViolationsMin": ["操作不当"], "forbiddenSubjects": [], "labelNote": "原文为超宽/强行通行，非载重超限超载；词典无超宽规范名，归为强行通行→操作不当" }
+  ],
+  "news": [
+    { "id": "web-b2-001", "expectedFactors": [], "expectedViolationsMin": ["违反禁令标志", "未让行", "超载"], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-002", "expectedFactors": ["车辆制动失效"], "expectedViolationsMin": [], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-003", "expectedFactors": [], "expectedViolationsMin": ["违法超车"], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-004", "expectedFactors": [], "expectedViolationsMin": ["无证驾驶", "无牌", "超载", "操作不当"], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-005", "expectedFactors": [], "expectedViolationsMin": ["未按交通信号灯通行", "无牌", "超载"], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-006", "expectedFactors": [], "expectedViolationsMin": ["超限超载"], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-007", "expectedFactors": [], "expectedViolationsMin": ["未让行", "超速行驶"], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-008", "expectedFactors": ["路面遗撒"], "expectedViolationsMin": ["未设置警示标志", "疲劳驾驶", "超速行驶"], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-009", "expectedFactors": [], "expectedViolationsMin": ["未让行", "超载"], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-010", "expectedFactors": [], "expectedViolationsMin": ["未按交通信号灯通行", "超限超载", "无证驾驶"], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-011", "expectedFactors": [], "expectedViolationsMin": [], "expectGaps": ["missing-cause"], "negativeSignals": ["排除酒驾毒驾"] },
+    { "id": "web-b2-012", "expectedFactors": [], "expectedViolationsMin": ["未礼让行人"], "expectGaps": [], "negativeSignals": ["排除酒驾毒驾"], "labelNote": "原文显式撞行人于人行横道→未礼让行人已是明确原因，不应再列 missing-cause" },
+    { "id": "web-b2-013", "expectedFactors": [], "expectedViolationsMin": ["酒后驾驶", "未礼让行人"], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-014", "expectedFactors": [], "expectedViolationsMin": ["酒后驾驶"], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-015", "expectedFactors": [], "expectedViolationsMin": [], "expectGaps": ["missing-cause"], "negativeSignals": ["排除酒驾毒驾"] },
+    { "id": "web-b2-016", "expectedFactors": [], "expectedViolationsMin": [], "expectGaps": ["missing-cause", "missing-liability"], "negativeSignals": [] },
+    { "id": "web-b2-017", "expectedFactors": [], "expectedViolationsMin": [], "expectGaps": ["missing-cause"], "negativeSignals": ["排除酒驾毒驾"] },
+    { "id": "web-b2-018", "expectedFactors": [], "expectedViolationsMin": [], "expectGaps": ["missing-cause", "missing-liability"], "negativeSignals": [] },
+    { "id": "web-b2-019", "expectedFactors": ["大雾", "冰雪"], "expectedViolationsMin": ["未保持安全车距"], "expectGaps": [], "negativeSignals": [] },
+    { "id": "web-b2-020", "expectedFactors": ["冰雪"], "expectedViolationsMin": ["未保持安全车距"], "expectGaps": [], "negativeSignals": [] }
+  ]
+}

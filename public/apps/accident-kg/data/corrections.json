@@ -1,0 +1,14 @@
+[
+  {
+    "id": "corr-1784079701345-f5b9",
+    "createdAt": "2026-07-15 09:41",
+    "text": "某文本",
+    "removedViolations": [],
+    "addedViolations": [
+      "超速"
+    ],
+    "removedFactors": [],
+    "addedFactors": [],
+    "note": ""
+  }
+]

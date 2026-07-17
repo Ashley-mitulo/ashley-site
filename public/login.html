@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>登录 · Ashley Lab</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="brand"><div class="brand-mark">A</div>
+      <div><div class="brand-name">Ashley Lab</div><div class="brand-sub">南京 · 智能系统实验室</div></div></div>
+    <div class="nav-menu">
+      <a href="/">首页</a><a href="/about.html">关于我</a>
+      <a href="/projects.html">项目展示</a><a href="/feedback.html">Bug 反馈</a>
+    </div>
+    <div class="nav-user" id="navUser"></div>
+  </div>
+</nav>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h2 class="auth-title">登录</h2>
+    <p class="auth-sub">欢迎回来</p>
+    <div id="msg" class="msg"></div>
+    <form id="loginForm">
+      <div class="form-group">
+        <label>用户名</label>
+        <input type="text" id="username" required placeholder="admin">
+      </div>
+      <div class="form-group">
+        <label>密码</label>
+        <input type="password" id="password" required placeholder="至少 6 位">
+      </div>
+      <button type="submit" class="btn-submit" id="btn">登录</button>
+    </form>
+    <div class="auth-links">
+      还没有账号？      <a href="/register.html">立即注册</a><br>
+      <span style="color:#64748b;font-size:12px;">💡 预设：admin / 123456</span>
+    </div>
+  </div>
+</div>
+
+<script src="/js/app.js"></script>
+<script>
+renderNavUser();
+document.getElementById('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  hideMsg('msg');
+  const btn = document.getElementById('btn');
+  btn.disabled = true; btn.textContent = '登录中...';
+  const res = await api.post('/api/login', {
+    username: document.getElementById('username').value.trim(),
+    password: document.getElementById('password').value,
+  });
+  btn.disabled = false; btn.textContent = '登录';
+  if (res.ok) {
+    showMsg('msg', '登录成功，正在跳转...', 'success');
+    const next = new URLSearchParams(location.search).get('next') || '/projects.html';
+    setTimeout(() => location.href = next, 500);
+  } else {
+    showMsg('msg', res.error || '登录失败', 'error');
+  }
+});
+</script>
+</body></html>

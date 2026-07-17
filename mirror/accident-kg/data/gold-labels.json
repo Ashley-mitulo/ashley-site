@@ -1,0 +1,741 @@
+{
+  "meta": {
+    "name": "交通事故知识图谱 - 准确率黄金标注集",
+    "version": "1.0",
+    "createdAt": "2026-07-03",
+    "principle": "只标注原文显式陈述的事实；需要推断隐藏真相的一律不标。新闻短讯以缺口/待认定为正确答案。",
+    "fields": {
+      "expectedFactors": "原文明确的事故诱因(规范名)，用于诱因召回率",
+      "expectedViolationsMin": "原文明确的违法/过错行为(规范名)，用于违法召回率",
+      "forbiddenSubjects": "绝不应被绑为过错主体的无责/被撞方，用于主体绑定精确率",
+      "violationSubjectMap": "某违法行为应绑定到的正确主体等价词",
+      "forbiddenViolationSubject": "某违法行为绝不应绑定到的错误主体",
+      "expectGaps": "新闻短讯应识别出的缺口key(missing-cause/missing-liability等)",
+      "negativeSignals": "原文否定表述(如未发现酒驾)，对应违法不得被抽出"
+    }
+  },
+  "generated": [
+    {
+      "id": "GEN-TA-001",
+      "expectedFactors": [
+        "积水"
+      ],
+      "expectedViolationsMin": [
+        "未保持安全车距"
+      ],
+      "primarySubjectHints": [
+        "货车",
+        "厢式货车"
+      ],
+      "forbiddenSubjects": [
+        "轿车"
+      ],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "货车雨天未降速、未保持安全距离负主要责任；网约车观察不足对二次碰撞负次要责任（轿车为受害方）"
+    },
+    {
+      "id": "GEN-TA-002",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "未按交通信号灯通行",
+        "分心驾驶"
+      ],
+      "primarySubjectHints": [
+        "轿车",
+        "白色轿车"
+      ],
+      "forbiddenSubjects": [
+        "骑手",
+        "电动自行车",
+        "电动车"
+      ],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "轿车闯红灯、分心驾驶承担主要责任，骑手未发现明显违法"
+    },
+    {
+      "id": "GEN-TA-003",
+      "expectedFactors": [
+        "照明不足"
+      ],
+      "expectedViolationsMin": [
+        "弯道越线"
+      ],
+      "primarySubjectHints": [
+        "客车",
+        "小型客车"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "客车占道会车是主要过错；货车负次要责任"
+    },
+    {
+      "id": "GEN-TA-004",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "盲区观察不足"
+      ],
+      "primarySubjectHints": [
+        "出租车",
+        "乘客",
+        "驾驶员"
+      ],
+      "forbiddenSubjects": [
+        "共享电单车",
+        "电单车"
+      ],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "出租车一方负主要责任（开门未观察）"
+    },
+    {
+      "id": "GEN-TA-005",
+      "expectedFactors": [
+        "视距遮挡"
+      ],
+      "expectedViolationsMin": [
+        "未让行",
+        "超速行驶"
+      ],
+      "primarySubjectHints": [
+        "SUV",
+        "小型SUV"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "SUV左转未让直行且未停车瞭望；摩托车超限速"
+    },
+    {
+      "id": "GEN-TA-006",
+      "expectedFactors": [
+        "大雾"
+      ],
+      "expectedViolationsMin": [
+        "未按条件降低车速"
+      ],
+      "primarySubjectHints": [
+        "客车",
+        "中型客车"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "客车雾天未按规定降速负主要责任"
+    },
+    {
+      "id": "GEN-TA-007",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "酒后驾驶",
+        "逆向行驶"
+      ],
+      "primarySubjectHints": [
+        "皮卡"
+      ],
+      "forbiddenSubjects": [
+        "网约车"
+      ],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "皮卡酒后驾驶、逆向行驶承担主要责任；网约车未发现明显违法"
+    },
+    {
+      "id": "GEN-TA-008",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "未礼让行人"
+      ],
+      "primarySubjectHints": [
+        "轿车",
+        "灰色轿车"
+      ],
+      "forbiddenSubjects": [
+        "行人",
+        "学生"
+      ],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "轿车未礼让行人负主要责任，行人无明显过错"
+    },
+    {
+      "id": "GEN-TA-009",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "违法变道",
+        "疲劳驾驶"
+      ],
+      "primarySubjectHints": [
+        "小客车"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "小客车违法变道负主要责任，半挂疲劳驾驶负次要责任"
+    },
+    {
+      "id": "GEN-TA-010",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "倒车未确认安全"
+      ],
+      "primarySubjectHints": [
+        "货车",
+        "厢式货车"
+      ],
+      "forbiddenSubjects": [
+        "老人"
+      ],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "货车倒车未确保安全负主要责任"
+    },
+    {
+      "id": "GEN-TA-011",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "起步未确认盲区",
+        "违法变道"
+      ],
+      "primarySubjectHints": [
+        "私家车"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "私家车起步前未观察、切入公交车道，负主要责任"
+    },
+    {
+      "id": "GEN-TA-012",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "未让行"
+      ],
+      "primarySubjectHints": [
+        "大巴",
+        "旅游大巴"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "大巴进环岛未让环岛内车辆负主要责任"
+    },
+    {
+      "id": "GEN-TA-013",
+      "expectedFactors": [
+        "照明不足"
+      ],
+      "expectedViolationsMin": [
+        "逆向行驶"
+      ],
+      "primarySubjectHints": [
+        "电动自行车",
+        "无牌电动自行车",
+        "电动车"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "电动自行车逆向行驶、未在规定区域通行是主要过错"
+    },
+    {
+      "id": "GEN-TA-014",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "疲劳驾驶"
+      ],
+      "primarySubjectHints": [
+        "冷藏车",
+        "重型冷藏车",
+        "鲁H"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "驾驶人疲劳驾驶承担单方事故全部责任"
+    },
+    {
+      "id": "GEN-TA-015",
+      "expectedFactors": [
+        "冰雪",
+        "路面湿滑"
+      ],
+      "expectedViolationsMin": [
+        "弯道越线",
+        "未按条件降低车速"
+      ],
+      "primarySubjectHints": [
+        "轿车",
+        "银色轿车"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "轿车未按冰雪湿滑路况降速、越线行驶负主要责任"
+    },
+    {
+      "id": "GEN-TA-016",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "未让行",
+        "盲区观察不足"
+      ],
+      "primarySubjectHints": [
+        "货车",
+        "自卸货车",
+        "重型自卸货车"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "货车右转未确保安全、未让直行非机动车先行承担主要责任"
+    },
+    {
+      "id": "GEN-TA-017",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "未让行"
+      ],
+      "primarySubjectHints": [
+        "网约车"
+      ],
+      "forbiddenSubjects": [],
+      "violationSubjectMap": {
+        "无证驾驶": [
+          "摩托车"
+        ]
+      },
+      "forbiddenViolationSubject": {
+        "无证驾驶": [
+          "网约车"
+        ]
+      },
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "网约车掉头未让正常行驶车辆负主要责任，摩托车无证驾驶负次要责任"
+    },
+    {
+      "id": "GEN-TA-018",
+      "expectedFactors": [
+        "路面遗撒"
+      ],
+      "expectedViolationsMin": [
+        "货物固定不足"
+      ],
+      "primarySubjectHints": [
+        "渣土车"
+      ],
+      "forbiddenSubjects": [
+        "轿车",
+        "小轿车"
+      ],
+      "violationSubjectMap": {
+        "货物固定不足": [
+          "渣土车"
+        ]
+      },
+      "forbiddenViolationSubject": {
+        "货物固定不足": [
+          "轿车",
+          "小轿车",
+          "客车",
+          "轻型客车"
+        ]
+      },
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "渣土车未按规定密闭运输、遗撒物影响安全承担主要责任"
+    },
+    {
+      "id": "GEN-TA-019",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "未让行"
+      ],
+      "primarySubjectHints": [
+        "甲",
+        "甲车"
+      ],
+      "forbiddenSubjects": [
+        "三轮车",
+        "电动三轮车"
+      ],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "甲车未让右方道路来车负主要责任；三轮车静止等待不承担责任"
+    },
+    {
+      "id": "GEN-TA-020",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "违法停车"
+      ],
+      "primarySubjectHints": [
+        "新能源轿车",
+        "新能源车"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "新能源车在隧道行车道低速停车、未及时驶离是主要原因"
+    },
+    {
+      "id": "GEN-TA-021",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "未让行",
+        "违法横穿"
+      ],
+      "primarySubjectHints": [
+        "三轮车",
+        "电动三轮车"
+      ],
+      "forbiddenSubjects": [],
+      "violationSubjectMap": {
+        "超速行驶": [
+          "SUV",
+          "小型SUV"
+        ]
+      },
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "三轮车横穿未让行、灯光缺失负主要责任，SUV超提示速度负次要责任"
+    },
+    {
+      "id": "GEN-TA-022",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "违法停车"
+      ],
+      "primarySubjectHints": [
+        "面包车",
+        "快递面包车"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "面包车违法占用应急车道负主要责任"
+    },
+    {
+      "id": "GEN-TA-023",
+      "expectedFactors": [
+        "视距遮挡"
+      ],
+      "expectedViolationsMin": [
+        "违法横穿"
+      ],
+      "primarySubjectHints": [
+        "行人"
+      ],
+      "forbiddenSubjects": [],
+      "violationSubjectMap": {
+        "违法横穿": [
+          "行人"
+        ]
+      },
+      "forbiddenViolationSubject": {
+        "违法横穿": [
+          "轿车",
+          "小轿车"
+        ]
+      },
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "行人横过道路未走人行横道负主要责任；轿车未充分减速观察负次要责任"
+    },
+    {
+      "id": "GEN-TA-024",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "违法变道"
+      ],
+      "primarySubjectHints": [
+        "罐车",
+        "危化品罐车",
+        "危化品空罐车"
+      ],
+      "forbiddenSubjects": [],
+      "forbiddenViolationSubject": {
+        "违法变道": [
+          "大巴",
+          "通勤大巴"
+        ],
+        "未让行": [
+          "大巴",
+          "通勤大巴"
+        ]
+      },
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "罐车未按导向车道行驶、强行变道是直接原因；大巴预判不足负次要责任"
+    },
+    {
+      "id": "GEN-TA-025",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "逆向行驶",
+        "分心驾驶"
+      ],
+      "primarySubjectHints": [
+        "骑行人",
+        "共享单车"
+      ],
+      "forbiddenSubjects": [],
+      "violationSubjectMap": {
+        "逆向行驶": [
+          "骑行人",
+          "共享单车",
+          "自行车"
+        ]
+      },
+      "forbiddenViolationSubject": {
+        "逆向行驶": [
+          "轿车",
+          "小轿车"
+        ],
+        "违法横穿": [
+          "轿车",
+          "小轿车"
+        ]
+      },
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "骑行人逆向骑行且分心看手机负主要责任，轿车次要责任"
+    },
+    {
+      "id": "GEN-TA-026",
+      "expectedFactors": [
+        "路面坑槽"
+      ],
+      "expectedViolationsMin": [
+        "弯道越线"
+      ],
+      "primarySubjectHints": [
+        "中巴",
+        "客车",
+        "旅游中巴"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "中巴弯道越线、未确保会车安全负主要责任"
+    },
+    {
+      "id": "GEN-TA-027",
+      "expectedFactors": [
+        "车辆制动失效",
+        "车辆超限超载"
+      ],
+      "expectedViolationsMin": [
+        "超载",
+        "未保持安全车距"
+      ],
+      "primarySubjectHints": [
+        "货车",
+        "重型货车"
+      ],
+      "forbiddenSubjects": [
+        "小客车",
+        "轿车"
+      ],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "货车超载、制动性能不符合安全要求且未保持安全距离负主要责任"
+    },
+    {
+      "id": "GEN-TA-028",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "未让行"
+      ],
+      "primarySubjectHints": [
+        "轿车"
+      ],
+      "forbiddenSubjects": [
+        "老人",
+        "电动轮椅"
+      ],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "轿车右转未让行正在通过人行横道的行人类通行主体负主要责任"
+    },
+    {
+      "id": "GEN-TA-029",
+      "expectedFactors": [
+        "路面湿滑",
+        "积水"
+      ],
+      "expectedViolationsMin": [
+        "违法变道",
+        "盲区观察不足"
+      ],
+      "primarySubjectHints": [
+        "摩托车"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "摩托车未按湿滑路面谨慎驾驶、变道观察不足负主要责任；洒水车警示不足负次要责任"
+    },
+    {
+      "id": "GEN-TA-030",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "操作不当",
+        "未保持安全车距"
+      ],
+      "primarySubjectHints": [
+        "小货车",
+        "货车"
+      ],
+      "forbiddenSubjects": [],
+      "hasInjury": true,
+      "hasLiability": true,
+      "evidence": "小货车违法倒车和急停负主要责任；轿车跟车距离不足负次要责任"
+    }
+  ],
+  "news": [
+    {
+      "id": "web-001",
+      "group": "news",
+      "expectedFactors": [],
+      "expectedViolationsMin": [],
+      "expectGaps": [
+        "missing-liability",
+        "missing-cause"
+      ],
+      "hasInjury": true,
+      "note": "面包车超车与对向大货车相撞8死1伤，未写明责任/违法，属超车但责任未认定",
+      "evidence": "在超越一辆轿车过程中与对向大型货车相撞；伤者送医，事故调查处理中"
+    },
+    {
+      "id": "web-002",
+      "group": "news",
+      "expectedFactors": [],
+      "expectedViolationsMin": [],
+      "expectGaps": [
+        "missing-cause",
+        "missing-liability"
+      ],
+      "hasInjury": true,
+      "note": "客货车弯道相撞，核载39实载17（未超员），原因/责任未认定",
+      "evidence": "途经弯道路段时与货车相撞；相关部门现场处置"
+    },
+    {
+      "id": "web-003",
+      "group": "news",
+      "expectedFactors": [],
+      "expectedViolationsMin": [],
+      "expectGaps": [
+        "missing-cause",
+        "missing-liability"
+      ],
+      "negativeSignals": [
+        "未发现酒驾"
+      ],
+      "hasInjury": true,
+      "note": "关键：明确未发现酒驾，不得抽出酒驾违法；原因调查中",
+      "evidence": "经初步检测未发现酒驾嫌疑，事故调查处理中"
+    },
+    {
+      "id": "web-005",
+      "group": "news",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "分心驾驶"
+      ],
+      "expectGaps": [],
+      "negativeSignals": [
+        "排除酒驾",
+        "排除毒驾"
+      ],
+      "hasInjury": true,
+      "note": "显式写明分心驾驶；同时排除酒驾毒驾，不得抽酒驾",
+      "evidence": "排除酒驾、毒驾嫌疑，事故原因初步分析是司机分心驾驶造成"
+    },
+    {
+      "id": "web-006",
+      "group": "news",
+      "expectedFactors": [],
+      "expectedViolationsMin": [
+        "疲劳驾驶",
+        "超速行驶"
+      ],
+      "expectGaps": [],
+      "hasInjury": false,
+      "note": "显式写明疲劳驾驶+超速",
+      "evidence": "驾驶员因为疲劳驾驶再加上超速无法控制车辆"
+    },
+    {
+      "id": "web-007",
+      "group": "news",
+      "expectedFactors": [
+        "车辆制动失效",
+        "车辆超限超载"
+      ],
+      "expectedViolationsMin": [
+        "超载"
+      ],
+      "expectGaps": [],
+      "hasInjury": true,
+      "note": "显式写明超限超载+刹车失灵追尾",
+      "evidence": "大货车严重超限超载、刹车失灵追尾前方车辆所致"
+    },
+    {
+      "id": "web-008",
+      "group": "news",
+      "expectedFactors": [
+        "路面湿滑"
+      ],
+      "expectedViolationsMin": [],
+      "expectGaps": [],
+      "hasInjury": true,
+      "note": "显式写明雨天失控侧滑为诱因",
+      "evidence": "重型半挂牵引车途经事故路段时雨天失控侧滑"
+    },
+    {
+      "id": "web-010",
+      "group": "news",
+      "expectedFactors": [],
+      "expectedViolationsMin": [],
+      "expectGaps": [
+        "missing-cause",
+        "missing-liability"
+      ],
+      "hasInjury": true,
+      "note": "明确写事故原因正在调查中——正确答案就是缺口",
+      "evidence": "事故原因正在调查中"
+    },
+    {
+      "id": "web-011",
+      "group": "news",
+      "expectedFactors": [
+        "大雾"
+      ],
+      "expectedViolationsMin": [],
+      "expectGaps": [
+        "missing-liability"
+      ],
+      "hasInjury": false,
+      "note": "显式写受大雾影响；责任未认定，伤亡统计中",
+      "evidence": "受大雾影响……发生多点多车追尾；人员伤亡情况统计中"
+    },
+    {
+      "id": "web-013",
+      "group": "news",
+      "expectedFactors": [
+        "路面湿滑",
+        "冰雪"
+      ],
+      "expectedViolationsMin": [],
+      "expectGaps": [
+        "missing-liability"
+      ],
+      "hasInjury": true,
+      "note": "显式写雨雪路滑导致连环追尾；责任未认定",
+      "evidence": "因雨雪路滑两辆车发生交通事故，导致18辆车追尾连环相撞"
+    }
+  ]
+}

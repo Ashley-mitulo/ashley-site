@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚗 交通事故分析知识图谱 v3.4.6 正规文本解析加固版</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script src="/src/api/reportsApi.js"></script>
+<script src="/src/parser/lexicon.js"></script>
+<script src="/src/parser/relationExtractor.js"></script>
+<script src="/src/parser/trafficParser.js"></script>
+<script src="/src/parser/gapAnalyzer.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; }
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+.header { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; padding: 24px 32px; border-radius: 16px; margin-bottom: 24px; }
+.chain-visual-layout { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(280px,.8fr); gap:14px; align-items:stretch; }
+.chain-graph-card { background:#fff; border:1px solid #dbeafe; border-radius:16px; padding:14px; box-shadow:0 8px 24px rgba(15,23,42,.05); }
+.chain-side-card { background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:14px; max-height:520px; overflow:auto; }
+.chain-step-strip { display:grid; grid-template-columns:repeat(6,1fr); gap:8px; margin:12px 0; }
+.chain-step-chip { border:1px solid #e2e8f0; background:#fff; border-radius:12px; padding:10px; min-height:82px; cursor:pointer; transition:.15s; }
+.chain-step-chip:hover { transform:translateY(-1px); box-shadow:0 8px 18px rgba(15,23,42,.08); border-color:#93c5fd; }
+.chain-step-chip.active { box-shadow:0 0 0 3px rgba(37,99,235,.14); border-color:#2563eb; }
+.chain-evidence-item { padding:9px 10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:8px;font-size:12px;line-height:1.55;cursor:pointer;transition:.15s; }
+.chain-evidence-item:hover { background:#eff6ff;border-color:#93c5fd;transform:translateY(-1px); }
+.chain-evidence-item.active { background:#fff7ed;border-color:#fb923c;box-shadow:0 0 0 3px rgba(251,146,60,.16); }
+.evidence-hit { background:#fef08a;color:#713f12;font-weight:900;border-radius:4px;padding:1px 3px; }
+.chain-gap-card { background:linear-gradient(135deg,#fff7ed,#fff);border:1px solid #fed7aa;border-radius:16px;padding:14px;margin:12px 0; }
+.chain-gap-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:10px; }
+.chain-gap-item { background:#fff;border:1px dashed #fb923c;border-radius:12px;padding:10px;font-size:12px;line-height:1.55;color:#7c2d12; }
+.chain-gap-item.pending { border-color:#facc15;background:#fefce8;color:#854d0e; }
+.chain-gap-item.missing { border-color:#fb923c;background:#fff7ed;color:#9a3412; }
+.chain-status-badge { display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:900; }
+.chain-status-strong { background:#dcfce7;color:#166534; }
+.chain-status-partial { background:#fef3c7;color:#92400e; }
+.chain-status-weak { background:#fee2e2;color:#991b1b; }
+.chain-gap-node { color:#9a3412;font-weight:900; }
+.confidence-meter { width:96px;height:96px;border-radius:50%;display:grid;place-items:center;font-size:24px;font-weight:900;color:#0f172a; }
+.confidence-factor { display:flex;align-items:center;gap:8px;margin:6px 0;font-size:12px;color:#334155; }
+.confidence-bar { flex:1;height:7px;background:#e2e8f0;border-radius:999px;overflow:hidden; }
+.confidence-bar > span { display:block;height:100%;border-radius:999px; }
+.chain-step-title { font-size:12px; font-weight:900; margin-bottom:6px; }
+.chain-step-items { font-size:12px; color:#334155; line-height:1.45; }
+#chainFlowChart { width:100%; height:420px; }
+@media (max-width: 980px) { .chain-visual-layout { grid-template-columns:1fr; } .chain-step-strip { grid-template-columns:repeat(2,1fr); } }
+.header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.header p { font-size: 14px; opacity: 0.9; }
+.stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; }
+.stat-value { font-size: 32px; font-weight: 700; color: #2563eb; }
+.stat-label { font-size: 13px; color: #64748b; margin-top: 4px; }
+.tabs { display: flex; gap: 8px; border-bottom: 2px solid #e2e8f0; padding-bottom: 0; margin-bottom: 16px; }
+.tab { padding: 12px 24px; background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; border-bottom: none; border-radius: 10px 10px 0 0; cursor: pointer; font-size: 15px; font-weight: 600; }
+.tab.active { background: #fff; color: #2563eb; border-color: #2563eb; border-bottom: 2px solid #fff; margin-bottom: -2px; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.graph-container { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 20px; min-height: 650px; }
+#knowledgeGraph { width: 100%; height: 600px; }
+#heatmapChart { width: 100%; height: 600px; }
+.legend-panel { position: fixed; top: 160px; right: 20px; width: 230px; max-height: calc(100vh - 190px); overflow:auto; background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 16px; box-shadow:0 10px 30px rgba(15,23,42,.08); }
+.legend-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+.legend-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: #f8fafc; border-radius: 6px; margin-bottom: 6px; font-size: 13px; }
+.legend-filter-item { cursor:pointer; user-select:none; justify-content:space-between; }
+.legend-filter-item input { transform: scale(1.05); cursor:pointer; }
+.legend-filter-actions { display:flex; gap:6px; margin:8px 0 10px; }
+.legend-filter-actions button { flex:1; padding:6px 8px; border:none; border-radius:8px; background:#eff6ff; color:#2563eb; font-size:12px; font-weight:700; cursor:pointer; }
+.legend-filter-actions button.secondary { background:#f1f5f9; color:#475569; }
+.entity-summary-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:10px; margin:12px 0 16px; }
+.entity-summary-card { border:1px solid #e2e8f0; border-radius:12px; background:#fff; padding:12px; cursor:pointer; transition:.15s; }
+.entity-summary-card:hover { transform: translateY(-1px); box-shadow:0 8px 20px rgba(15,23,42,.08); border-color:#93c5fd; }
+.entity-summary-card.active { border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.12); }
+.entity-summary-count { font-size:22px; font-weight:800; margin-top:6px; }
+.entity-summary-desc { color:#64748b; font-size:12px; margin-top:6px; line-height:1.45; }
+.entity-detail-toolbar { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0; padding:10px; background:#f8fafc; border-radius:10px; border:1px solid #e2e8f0; }
+.legend-color { width: 16px; height: 16px; border-radius: 50%; }
+.timeline-container { padding: 20px; max-height: 650px; overflow-y: auto; }
+.timeline-item { position: relative; padding-left: 30px; padding-bottom: 28px; border-left: 2px solid #e2e8f0; }
+.timeline-item:last-child { border-left-color: transparent; padding-bottom: 0; }
+.timeline-dot { position: absolute; left: -9px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: #10b981; border: 3px solid #fff; }
+.timeline-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; }
+.timeline-date { font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 6px; }
+.timeline-title { font-weight: 600; color: #1e293b; margin-bottom: 10px; }
+.tag { display: inline-block; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-right: 8px; }
+.tag-type { background: #dbeafe; color: #1d4ed8; }
+.tag-cause { background: #fef3c7; color: #d97706; }
+.tag-level { background: #fee2e2; color: #dc2626; }
+.cluster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+.cluster-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; cursor:pointer; transition:.15s; }
+.cluster-card:hover { border-color:#93c5fd; box-shadow:0 8px 22px rgba(15,23,42,.08); transform:translateY(-1px); }
+.cluster-detail { margin-top:12px; padding-top:12px; border-top:1px dashed #cbd5e1; cursor:default; }
+.cluster-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.cluster-title { font-weight: 600; color: #1e293b; font-size: 16px; }
+.cluster-count { background: #2563eb; color: #fff; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+.analysis-panel { margin-top: 18px; border: 1px solid #e2e8f0; border-radius: 14px; background: #f8fafc; padding: 16px; }
+.analysis-title { font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.relation-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.relation-path { font-weight: 700; color: #334155; margin-bottom: 6px; }
+.relation-reason { font-size: 13px; color: #64748b; line-height: 1.6; }
+.entity-layout { display: grid; grid-template-columns: auto 1fr; gap: 18px; min-height: 620px; align-items: start; }
+.entity-sidebar { width: 360px; min-width: 260px; max-width: 620px; resize: horizontal; overflow: auto; max-height: calc(100vh - 230px); position: sticky; top: 12px; padding: 14px; border: 1px solid #e2e8f0; border-radius: 14px; background: #f8fafc; box-shadow: inset -4px 0 0 rgba(37, 99, 235, 0.06); }
+.entity-sidebar-header { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
+.entity-sidebar-tip { font-size:12px; color:#64748b; margin:6px 0 10px; line-height:1.5; }
+.entity-search { width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #cbd5e1; border-radius:10px; outline:none; font-size:13px; background:#fff; margin-bottom:10px; }
+.entity-search:focus { border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.12); }
+.entity-category-list { padding-right: 4px; }
+.entity-sidebar::-webkit-scrollbar, .entity-category-list::-webkit-scrollbar { width: 8px; height: 8px; }
+.entity-sidebar::-webkit-scrollbar-thumb, .entity-category-list::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:999px; }
+.entity-sidebar::-webkit-scrollbar-track, .entity-category-list::-webkit-scrollbar-track { background:#f1f5f9; border-radius:999px; }
+.entity-association-wrap { min-width:0; max-height: calc(100vh - 230px); overflow:auto; padding-right:4px; }
+.entity-type-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+.entity-type-header { display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:700;margin-bottom:8px;position:sticky;top:0;background:#fff;padding-bottom:6px;z-index:1; }
+.entity-type-actions { display:flex;gap:6px;align-items:center; }
+.entity-mini-btn { border:none;background:#f1f5f9;color:#475569;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:700;cursor:pointer; }
+.entity-mini-btn:hover { background:#dbeafe;color:#2563eb; }
+.entity-chip { display: inline-block; margin: 4px 5px 4px 0; padding: 6px 10px; border-radius: 999px; background: #f1f5f9; color: #475569; font-size: 12px; cursor: pointer; border: 1px solid transparent; }
+.entity-chip:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+.depth-section { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; margin-bottom: 14px; }
+.depth-badge { display: inline-block; padding: 3px 9px; border-radius: 999px; background: #dbeafe; color: #1d4ed8; font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+.report-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; font-size: 13px; }
+.report-table th { background: #f8fafc; color: #475569; text-align: left; padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-weight: 700; position: sticky; top: 0; z-index: 1; }
+.report-table td { padding: 11px 14px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+.report-table tr:hover td { background: #eff6ff; cursor: pointer; }
+.report-tag { display: inline-block; padding: 3px 8px; border-radius: 999px; background: #f1f5f9; color: #475569; font-size: 12px; margin-right: 4px; }
+.report-detail-panel { margin-top: 16px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; display: none; }
+.report-detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
+.detail-kv { background:#f8fafc; border-radius:8px; padding:10px; font-size:13px; color:#475569; }
+.detail-kv strong { color:#1e293b; }
+.toolbar { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:14px; }
+.toolbar input, .toolbar select { padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:14px; outline:none; background:#fff; }
+.toolbar button { padding:10px 14px; border:none; border-radius:8px; background:#2563eb; color:#fff; font-weight:700; cursor:pointer; }
+.toolbar button.secondary { background:#f1f5f9; color:#475569; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🚗 交通事故分析知识图谱 v3.4.6 正规文本解析加固版</h1>
+    <p>独立项目 | 端口: 3003 | 服务端持久化 | 新闻短讯弱链路 | 原因待查/责任待认定 | 缺口节点 | 低置信提示 | 证据高亮 | 链路可信度评分</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-value" id="statAccidents">10</div><div class="stat-label">事故总数</div></div>
+    <div class="stat-card"><div class="stat-value" id="statEntities">63</div><div class="stat-label">实体节点</div></div>
+    <div class="stat-card"><div class="stat-value" id="statRelations">107</div><div class="stat-label">关系连接</div></div>
+    <div class="stat-card"><div class="stat-value" id="statReports">10</div><div class="stat-label">报告数量</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('graph')">🧩 知识图谱</button>
+    <button class="tab" onclick="switchTab('chain')">🧬 事故链路</button>
+    <button class="tab" onclick="switchTab('cluster')">📊 聚类分析</button>
+    <button class="tab" onclick="switchTab('entities')">🧠 实体分析</button>
+    <button class="tab" onclick="switchTab('upload')">📄 报告解析</button>
+    <button class="tab" onclick="switchTab('reports')">📚 报告库</button>
+  </div>
+
+  <div id="tab-graph" class="tab-content active"><div class="graph-container"><div class="toolbar"><input id="graphSearchInput" style="min-width:260px;" placeholder="搜索事故标题/地点/人名/车牌/违法行为" oninput="refreshGraphAccidentOptions()"><select id="graphAccidentSelect" style="min-width:360px;"></select><button onclick="applyGraphEntry()">从该事故入手</button><button class="secondary" onclick="resetGraphEntry()">重置为最近事故</button><span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#475569;">🎚️ 置信度≥<b id="confThresholdVal" style="color:#2563eb;min-width:34px;display:inline-block;text-align:right;">0%</b><input id="confThresholdSlider" type="range" min="0" max="90" step="5" value="0" style="width:120px;cursor:pointer;" oninput="setGraphConfidenceThreshold(this.value)"></span></div><div id="knowledgeGraph"></div><div id="nodeRelationPanel" class="analysis-panel"><div class="analysis-title">🖱️ 节点关系分析</div><div style="color:#64748b;font-size:14px;">默认展示时间最近的一起事故局部图谱；点击违法行为等节点会向外拓展同类事故和其它违法类型事故，点击事故节点可切换到该事故的详细图谱。</div></div></div></div>
+  <div id="tab-chain" class="tab-content"><div class="graph-container"><div class="toolbar"><input id="chainSearchInput" style="min-width:280px;" placeholder="搜索事故标题/地点/违法行为" oninput="refreshChainAccidentOptions()"><select id="chainAccidentSelect" style="min-width:420px;"></select><button onclick="applyChainReport()">查看事故链路</button><button class="secondary" onclick="syncChainWithGraph()">同步当前图谱事故</button></div><div id="chainContent"></div></div></div>
+  <div id="tab-cluster" class="tab-content"><div class="graph-container"><div id="clusterContent" class="cluster-grid"></div></div></div>
+  <div id="tab-entities" class="tab-content"><div class="graph-container"><div class="entity-layout"><aside class="entity-sidebar"><div class="entity-sidebar-header"><div class="analysis-title" style="margin-bottom:0;">📚 实体分类</div><span style="font-size:12px;color:#94a3b8;white-space:nowrap;">可拖右边缘缩放</span></div><input id="entitySearchInput" class="entity-search" placeholder="搜索实体名称/类型/车牌/道路/违法行为" oninput="setEntityFilter(this.value)"><div class="entity-sidebar-tip">左侧面板已独立滚动；数据多时不用拉完整页面，拖动右侧边缘可调整宽度。</div><div id="entityCategoryList" class="entity-category-list"></div><div id="relation-stats-panel" class="analysis-panel" style="margin-top:16px;"></div></aside><div class="entity-association-wrap"><div id="entityAssociationPanel" class="analysis-panel" style="margin-top:0;"><div class="analysis-title">🔍 多层关联探索</div><div style="color:#64748b;font-size:14px;">点击左侧任一实体，查看它的一层、二层、三层关联实体及关联原因。</div></div></div></div></div></div>
+  <div id="tab-reports" class="tab-content">
+    <div class="graph-container">
+      <div style="padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-size:18px;font-weight:600;color:#1e293b;">📚 事故报告库</div>
+          <div style="font-size:14px;color:#64748b;">共 <span id="reportCount">10</span> 篇报告</div>
+        </div>
+        <div class="toolbar"><input id="reportTitleFilter" style="min-width:280px;" placeholder="按标题/地点/创建人/类型筛选" oninput="setReportFilter(this.value)"><select id="reportSortSelect" onchange="setReportSort(this.value)"><option value="dateDesc">时间倒序</option><option value="dateAsc">时间正序</option><option value="titleAsc">标题 A-Z</option><option value="titleDesc">标题 Z-A</option><option value="creatorAsc">创建人 A-Z</option><option value="typeAsc">类型 A-Z</option><option value="uploadDesc">上传时间倒序</option></select><button onclick="exportReports('json')">导出 JSON</button><button onclick="exportReports('csv')">导出 CSV</button><button class="secondary" onclick="document.getElementById('reportImportFile').click()">导入 JSON</button><input id="reportImportFile" type="file" accept="application/json,.json" style="display:none" onchange="importReportsFromFile(this.files && this.files[0])"><button class="secondary" onclick="reloadServerReports()">重载服务端数据</button></div>
+        <div style="max-height:620px;overflow:auto;border-radius:12px;"><table class="report-table"><thead><tr><th onclick="setReportSort('titleAsc')">标题</th><th onclick="setReportSort('dateDesc')">事故时间</th><th onclick="setReportSort('uploadDesc')">上传时间</th><th onclick="setReportSort('creatorAsc')">创建人</th><th onclick="setReportSort('typeAsc')">事故类型</th><th>等级</th><th>地点</th><th>操作</th></tr></thead><tbody id="reportsList"></tbody></table></div>
+        <div id="reportDetailPanel" class="report-detail-panel"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-upload" class="tab-content">
+    <div class="graph-container">
+      <div style="padding:24px 20px;">
+        <div style="text-align:center;">
+          <div style="font-size:40px;margin-bottom:8px;">📄</div>
+          <div style="font-size:18px;font-weight:600;color:#475569;margin-bottom:6px;">上传交通事故报告自动解析实体</div>
+          <div style="font-size:13px;color:#94a3b8;margin-bottom:18px;">推荐按【标准事故报告模板】填写或上传，可显著提升解析准确率</div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:18px;flex-wrap:wrap;">
+          <button id="upModeBtn-write" class="upmode-btn" onclick="switchUploadMode('write')" style="padding:9px 20px;border-radius:8px;border:1px solid #2563eb;background:#2563eb;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">✍️ 直接编写</button>
+          <button id="upModeBtn-form" class="upmode-btn" onclick="switchUploadMode('form')" style="padding:9px 20px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#475569;font-size:14px;font-weight:600;cursor:pointer;">📋 表单填写</button>
+          <button id="upModeBtn-file" class="upmode-btn" onclick="switchUploadMode('file')" style="padding:9px 20px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#475569;font-size:14px;font-weight:600;cursor:pointer;">📁 上传文件</button>
+        </div>
+
+        <div id="upMode-write" class="upmode-panel" style="max-width:640px;margin:0 auto;">
+          <div style="text-align:right;margin-bottom:6px;"><button onclick="insertReportTemplate()" style="padding:6px 14px;border-radius:6px;border:1px solid #2563eb;background:#eff6ff;color:#2563eb;font-size:13px;cursor:pointer;">📋 插入标准模板</button></div>
+          <textarea id="reportText" style="width:100%;height:170px;padding:15px;border:2px dashed #cbd5e1;border-radius:12px;font-size:14px;resize:vertical;outline:none;" placeholder="在此粘贴或编写交通事故报告文本；可先点右上“插入标准模板”按骨架填写。点解析按钮自动提取实体..."></textarea>
+        </div>
+
+        <div id="upMode-form" class="upmode-panel" style="display:none;max-width:720px;margin:0 auto;text-align:left;">
+          <div style="font-size:13px;color:#64748b;margin-bottom:12px;background:#f8fafc;padding:10px 14px;border-radius:8px;">按字段填写，系统自动拼成规范《事故认定书》文本再解析；违法行为与责任为下拉选项，准确率最高。带 * 为建议必填。</div>
+          <div id="reportFormFields" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"></div>
+          <div style="margin-top:14px;"><button onclick="buildTextFromForm()" style="padding:9px 20px;border-radius:8px;border:1px solid #10b981;background:#ecfdf5;color:#059669;font-size:14px;font-weight:600;cursor:pointer;">🧩 生成规范文本</button> <span style="font-size:12px;color:#94a3b8;">生成后可在下方预览，再点“解析报告”</span></div>
+          <textarea id="formPreviewText" style="width:100%;height:110px;margin-top:10px;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;resize:vertical;background:#fffdf7;" placeholder="表单生成的规范文本将显示在这里..."></textarea>
+        </div>
+
+        <div id="upMode-file" class="upmode-panel" style="display:none;max-width:640px;margin:0 auto;">
+          <div onclick="document.getElementById('reportFileInput').click()" style="border:2px dashed #cbd5e1;border-radius:12px;padding:36px 20px;cursor:pointer;background:#f8fafc;">
+            <div style="font-size:32px;margin-bottom:8px;">📁</div>
+            <div style="font-size:14px;color:#475569;font-weight:600;">点击选择或拖入 .txt / .md 文件</div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:6px;">建议文件内容按标准事故报告模板编写；支持多段。</div>
+            <div id="reportFileName" style="font-size:13px;color:#2563eb;margin-top:10px;"></div>
+          </div>
+          <input id="reportFileInput" type="file" accept=".txt,.md,text/plain" style="display:none" onchange="loadReportFromFile(this.files && this.files[0])">
+        </div>
+
+        <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;">
+          <button onclick="parseReport()" style="padding:12px 32px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">🔍 解析报告</button>
+          <button onclick="clearParse()" style="padding:12px 32px;background:#f1f5f9;color:#64748b;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">🗑️ 清空</button>
+        </div>
+        <div id="parseResult" style="margin-top:30px;text-align:left;max-width:700px;margin-left:auto;margin-right:auto;display:none;">
+          <div style="font-size:16px;font-weight:600;color:#1e293b;margin-bottom:15px;">📊 解析结果</div>
+          <div id="parsedEntities"></div>
+          <div style="margin-top:20px;text-align:center;">
+            <button onclick="addToGraph()" style="padding:10px 24px;background:#10b981;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">✅ 添加到知识图谱</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="legend-panel"><div class="legend-title">🎨 实体类型图例</div><div id="legendList"></div><div class="legend-title" style="margin-top:16px;border-top:1px solid #e2e8f0;padding-top:16px;">🔗 关系强度图例</div><div id="relationLegendList"></div></div>
+
+<script src="/src/ui/app-core.js?v=20260715-v346-template"></script>
+<script src="/src/ui/app-graph.js?v=20260715-v346-template"></script>
+<script src="/src/ui/app-cluster-parse.js?v=20260715-v346-template"></script>
+<script src="/src/ui/app-reports-features.js?v=20260715-v346-template"></script>
+</body>
+</html>

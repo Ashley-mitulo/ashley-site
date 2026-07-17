@@ -1,0 +1,3842 @@
+{
+  "summary": {
+    "sampleCount": 40,
+    "parsedCount": 40,
+    "withRelations": 37,
+    "withChain": 27,
+    "withFaultCategory": 28,
+    "withFaultFactor": 11,
+    "withViolation": 24,
+    "withInjury": 32,
+    "withLiability": 17,
+    "avgEntities": 14.9,
+    "avgRelations": 6.2,
+    "relationTypes": {
+      "behavior_belongs_to_category": 82,
+      "report_has_fault_category": 62,
+      "vehicle_collides_vehicle": 28,
+      "person_has_injury": 39,
+      "person_commits_violation": 38
+    },
+    "byGroup": {
+      "generated-batch2": {
+        "count": 20,
+        "withRelations": 19,
+        "withChain": 16,
+        "withFaultCategory": 16,
+        "withFaultFactor": 5,
+        "withViolation": 15,
+        "withInjury": 13,
+        "withLiability": 17,
+        "avgEntities": 16.1,
+        "avgRelations": 6.3
+      },
+      "web-batch2": {
+        "count": 20,
+        "withRelations": 18,
+        "withChain": 11,
+        "withFaultCategory": 12,
+        "withFaultFactor": 6,
+        "withViolation": 9,
+        "withInjury": 19,
+        "withLiability": 0,
+        "avgEntities": 13.7,
+        "avgRelations": 6.2
+      }
+    },
+    "weakSamples": [
+      {
+        "id": "GEN-B2-TA-004",
+        "group": "generated-batch2",
+        "title": "校车雨后制动异常冲入路边浅沟",
+        "reason": "无违法/诱因",
+        "entities": 16,
+        "relations": 2,
+        "steps": 4
+      },
+      {
+        "id": "GEN-B2-TA-005",
+        "group": "generated-batch2",
+        "title": "危化品罐车下桥时与网约车连环追尾",
+        "reason": "无违法/诱因",
+        "entities": 9,
+        "relations": 1,
+        "steps": 4
+      },
+      {
+        "id": "GEN-B2-TA-010",
+        "group": "generated-batch2",
+        "title": "小区环路无人配送车与儿童滑板车相撞",
+        "reason": "链路环节不足(2/6); 无关系; 无违法/诱因",
+        "entities": 7,
+        "relations": 0,
+        "steps": 2
+      },
+      {
+        "id": "GEN-B2-TA-020",
+        "group": "generated-batch2",
+        "title": "隧道施工改道处半挂刮倒临时限宽架",
+        "reason": "无违法/诱因",
+        "entities": 10,
+        "relations": 1,
+        "steps": 4
+      },
+      {
+        "id": "web-b2-001",
+        "group": "web-batch2",
+        "title": "公安部交通管理局公布货车典型案例：河南开封货车违规左转撞超员面包车",
+        "reason": "无违法/诱因",
+        "entities": 12,
+        "relations": 3,
+        "steps": 4
+      },
+      {
+        "id": "web-b2-003",
+        "group": "web-batch2",
+        "title": "公安部交通管理局公布货车典型案例：湖北天门半挂车强行超车撞对向小客车致6死",
+        "reason": "链路环节不足(3/6); 无违法/诱因",
+        "entities": 13,
+        "relations": 2,
+        "steps": 3
+      },
+      {
+        "id": "web-b2-011",
+        "group": "web-batch2",
+        "title": "大连发生一起交通事故致5人死亡，警方通报排除酒驾毒驾",
+        "reason": "无违法/诱因",
+        "entities": 14,
+        "relations": 4,
+        "steps": 4
+      },
+      {
+        "id": "web-b2-012",
+        "group": "web-batch2",
+        "title": "四川宜宾交警通报一起交通事故：小轿车人行横道撞倒2名行人致1死1伤",
+        "reason": "链路环节不足(3/6); 无违法/诱因",
+        "entities": 8,
+        "relations": 2,
+        "steps": 3
+      },
+      {
+        "id": "web-b2-015",
+        "group": "web-batch2",
+        "title": "安徽广德警方通报一起致1死2伤交通事故：小型客车越过绿化带撞非机动车道电动车",
+        "reason": "链路环节不足(3/6); 无违法/诱因",
+        "entities": 8,
+        "relations": 3,
+        "steps": 3
+      },
+      {
+        "id": "web-b2-016",
+        "group": "web-batch2",
+        "title": "广西柳州警方通报：国道209线两辆大货车碰撞起火致1死1伤",
+        "reason": "链路环节不足(2/6); 无关系; 无违法/诱因",
+        "entities": 9,
+        "relations": 0,
+        "steps": 2
+      },
+      {
+        "id": "web-b2-017",
+        "group": "web-batch2",
+        "title": "西安交警通报：小轿车与左转出租车相撞致1死2伤",
+        "reason": "无违法/诱因",
+        "entities": 12,
+        "relations": 3,
+        "steps": 4
+      },
+      {
+        "id": "web-b2-018",
+        "group": "web-batch2",
+        "title": "黑龙江鹤岗发生车祸致3死3伤：G332公路施工养路工人被撞",
+        "reason": "链路环节不足(3/6); 无关系; 无违法/诱因",
+        "entities": 11,
+        "relations": 0,
+        "steps": 3
+      },
+      {
+        "id": "web-b2-020",
+        "group": "web-batch2",
+        "title": "雪天路滑致货车追尾半挂车，甘肃张掖国道227线1人被困",
+        "reason": "链路环节不足(3/6)",
+        "entities": 16,
+        "relations": 3,
+        "steps": 3
+      }
+    ]
+  },
+  "results": [
+    {
+      "id": "GEN-B2-TA-001",
+      "sampleGroup": "generated-batch2",
+      "title": "地下车库坡道会车时电动车被挤倒",
+      "url": "",
+      "source": "物业现场记录",
+      "documentType": "single-report",
+      "entityCount": 31,
+      "relationCount": 14,
+      "typeCounts": {
+        "road_condition": 6,
+        "fault_factor": 5,
+        "vehicle_attr": 8,
+        "vehicle_instance": 7,
+        "accident_type": 2,
+        "injury": 1,
+        "road": 1,
+        "violation": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 6,
+        "report_has_fault_category": 5,
+        "vehicle_collides_vehicle": 1,
+        "person_has_injury": 1,
+        "person_commits_violation": 1
+      },
+      "faultCategories": [
+        "道路环境与设施隐患",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [
+        "积水",
+        "急弯/坡道风险"
+      ],
+      "violations": [
+        "未按条件降低车速"
+      ],
+      "injuries": [
+        "左膝挫伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "相撞",
+        "会车刮倒"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 14,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "积水",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "晚饭点，车库出口坡道有积水，反光镜被灰尘糊住。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "晚饭点，车库出口坡道有积水，反光镜被灰尘糊住。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "急弯/坡道风险",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "晚饭点，车库出口坡道有积水，反光镜被灰尘糊住。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "急弯/坡道风险",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "黑色SUV下坡准备出库时，为躲开右侧停着卸货的小面包车，压到坡道中线；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "黑色SUV下坡准备出库时，为躲开右侧停着卸货的小面包车，压到坡道中线；"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "SUV",
+          "target": "电动车",
+          "confidence": 0.74,
+          "ruleId": "vehicle-collision-same-sentence",
+          "evidence": "两车没有直接相撞，SUV右侧后视镜擦到骑行人肩部，电动车倒地后滑到排水沟边。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "SUV",
+          "target": "左膝挫伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "骑行人左膝挫伤、电脑包进水，SUV后视镜壳开裂。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "SUV",
+          "target": "未按条件降低车速",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "初步看，SUV在狭窄坡道会车未减速靠右、未确保安全是主要原因；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未按条件降低车速",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "初步看，SUV在狭窄坡道会车未减速靠右、未确保安全是主要原因；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "初步看，SUV在狭窄坡道会车未减速靠右、未确保安全是主要原因；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "急弯/坡道风险",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "初步看，SUV在狭窄坡道会车未减速靠右、未确保安全是主要原因；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "初步看，SUV在狭窄坡道会车未减速靠右、未确保安全是主要原因；"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-002",
+      "sampleGroup": "generated-batch2",
+      "title": "黄昏收割机尾灯损坏被小客车追撞",
+      "url": "",
+      "source": "乡村警务简报",
+      "documentType": "police-accident-report",
+      "entityCount": 13,
+      "relationCount": 4,
+      "typeCounts": {
+        "road": 2,
+        "vehicle_attr": 3,
+        "vehicle_instance": 3,
+        "property_loss": 2,
+        "liability": 2,
+        "violation": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "盲区观察不足"
+      ],
+      "injuries": [],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 4,
+      "keyRelCount": 4,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_commits_violation",
+          "source": "小客车",
+          "target": "盲区观察不足",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "小客车黄昏通过村道车速偏快、观察不足，负次要责任。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "盲区观察不足",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "小客车黄昏通过村道车速偏快、观察不足，负次要责任。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "小客车黄昏通过村道车速偏快、观察不足，负次要责任。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "小客车",
+          "target": "小客车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "后方小客车载4人回村，驾驶人称看到前面‘像一团黑影’时已经很近，向左打方向仍撞到收割机后轮。"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-003",
+      "sampleGroup": "generated-batch2",
+      "title": "救护车执行任务中与左转轿车相撞",
+      "url": "",
+      "source": "路口监控摘要",
+      "documentType": "police-accident-report",
+      "entityCount": 22,
+      "relationCount": 5,
+      "typeCounts": {
+        "accident_type": 5,
+        "vehicle_instance": 7,
+        "road_condition": 2,
+        "vehicle_attr": 3,
+        "injury": 1,
+        "property_loss": 1,
+        "violation": 1,
+        "liability": 2
+      },
+      "relCounts": {
+        "vehicle_collides_vehicle": 1,
+        "person_has_injury": 1,
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "未让行"
+      ],
+      "injuries": [
+        "胸部挫伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "救护车避让引发碰撞",
+        "碰撞"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 5,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "轿车",
+          "target": "救护车",
+          "confidence": 0.74,
+          "ruleId": "vehicle-collision-same-sentence",
+          "evidence": "银色轿车从相对方向左转进支路，前方两辆车已经停让，银色车从左侧绕过等待车辆继续转弯，与救护车左前角发生碰撞。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "轿车",
+          "target": "胸部挫伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "救护车内患者担架固定完好，一名随车家属手臂擦伤，轿车驾驶人胸部挫伤，两车受损。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "轿车",
+          "target": "未让行",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "初步意见：轿车未避让执行紧急任务车辆、左转未让直行负主要责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未让行",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "初步意见：轿车未避让执行紧急任务车辆、左转未让直行负主要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "初步意见：轿车未避让执行紧急任务车辆、左转未让直行负主要责任；"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-004",
+      "sampleGroup": "generated-batch2",
+      "title": "校车雨后制动异常冲入路边浅沟",
+      "url": "",
+      "source": "教育部门通报摘录",
+      "documentType": "single-report",
+      "entityCount": 16,
+      "relationCount": 2,
+      "typeCounts": {
+        "road": 1,
+        "vehicle_attr": 3,
+        "vehicle_instance": 3,
+        "weather": 2,
+        "road_condition": 3,
+        "injury": 1,
+        "property_loss": 2,
+        "accident_type": 1
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "学生手臂擦伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "单方事故"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 2,
+      "hasChain": false,
+      "weakReason": "无违法/诱因",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "校车",
+          "target": "学生手臂擦伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "两名学生手臂擦伤，校车前保险杠、右前轮及路边排水沟盖板损坏。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "校车",
+          "target": "校车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "一辆核载19人的校车实载13名学生，雨后沿县道送学。"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-005",
+      "sampleGroup": "generated-batch2",
+      "title": "危化品罐车下桥时与网约车连环追尾",
+      "url": "",
+      "source": "应急联动快报",
+      "documentType": "police-accident-report",
+      "entityCount": 9,
+      "relationCount": 1,
+      "typeCounts": {
+        "road": 1,
+        "vehicle_instance": 4,
+        "property_loss": 2,
+        "road_condition": 1,
+        "liability": 1
+      },
+      "relCounts": {
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [],
+      "liabilities": [
+        "主要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 4,
+      "keyRelCount": 1,
+      "hasChain": false,
+      "weakReason": "无违法/诱因",
+      "topRelations": [
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "网约车",
+          "target": "商务车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "下桥口前方因检查站临时放行变慢，白色网约车排队减速，后方一辆装载乙酸乙酯的罐车制动后仍推撞网约车尾部，网约车又碰到前方商务车。"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-006",
+      "sampleGroup": "generated-batch2",
+      "title": "物流园叉车倒车撞上园区电瓶车",
+      "url": "",
+      "source": "企业内事故记录",
+      "documentType": "police-accident-report",
+      "entityCount": 13,
+      "relationCount": 14,
+      "typeCounts": {
+        "violation": 5,
+        "vehicle_instance": 3,
+        "vehicle_attr": 3,
+        "injury": 1,
+        "liability": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 3,
+        "behavior_belongs_to_category": 5,
+        "report_has_fault_category": 4,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人操作不当",
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "操作不当",
+        "倒车未确认安全",
+        "盲区观察不足",
+        "弯道越线"
+      ],
+      "injuries": [
+        "脚踝骨裂"
+      ],
+      "liabilities": [
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 14,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_commits_violation",
+          "source": "叉车",
+          "target": "操作不当",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "叉车司机倒车拖出托盘时，倒车蜂鸣器声音断断续续，未安排安全员指挥；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "操作不当",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "叉车司机倒车拖出托盘时，倒车蜂鸣器声音断断续续，未安排安全员指挥；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "叉车司机倒车拖出托盘时，倒车蜂鸣器声音断断续续，未安排安全员指挥；"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "叉车",
+          "target": "脚踝骨裂",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "叉车尾部碰到电瓶车侧面，电瓶车驾驶人脚踝骨裂，叉车货叉上的纸箱散落。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "叉车",
+          "target": "倒车未确认安全",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "叉车倒车未确保安全、设备警示故障是主要过错；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "倒车未确认安全",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "叉车倒车未确保安全、设备警示故障是主要过错；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "叉车倒车未确保安全、设备警示故障是主要过错；"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "叉车",
+          "target": "操作不当",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "叉车倒车未确保安全、设备警示故障是主要过错；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "操作不当",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "叉车倒车未确保安全、设备警示故障是主要过错；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "盲区观察不足",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "电瓶车未走划线通道、从视线盲区穿行负次要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "电瓶车未走划线通道、从视线盲区穿行负次要责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "弯道越线",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "园区对货垛占道和设备检修管理不到位。"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-007",
+      "sampleGroup": "generated-batch2",
+      "title": "外卖骑手闯入无信号T形口被轻卡撞倒",
+      "url": "",
+      "source": "当事人口述整理",
+      "documentType": "police-accident-report",
+      "entityCount": 14,
+      "relationCount": 6,
+      "typeCounts": {
+        "road": 1,
+        "vehicle_attr": 4,
+        "vehicle_instance": 4,
+        "violation": 3,
+        "liability": 2
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "未让行",
+        "盲区观察不足",
+        "未按条件降低车速"
+      ],
+      "injuries": [],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 4,
+      "keyRelCount": 6,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未让行",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "初步认定骑手未停车让行、分心骑行负主要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "初步认定骑手未停车让行、分心骑行负主要责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "盲区观察不足",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "轻卡通过餐饮街后巷未充分减速观察负次要责任，商铺广告牌遮挡另行督促清理。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "轻卡通过餐饮街后巷未充分减速观察负次要责任，商铺广告牌遮挡另行督促清理。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未按条件降低车速",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "轻卡通过餐饮街后巷未充分减速观察负次要责任，商铺广告牌遮挡另行督促清理。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "货车",
+          "target": "电动自行车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "主路上一辆轻型冷链货车由北向南行驶，驾驶人说巷口被广告牌挡住，等人影出来时已经刹不住。"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-008",
+      "sampleGroup": "generated-batch2",
+      "title": "山路落石后旅游大巴急避撞护栏",
+      "url": "",
+      "source": "景区道路巡查材料",
+      "documentType": "single-report",
+      "entityCount": 17,
+      "relationCount": 13,
+      "typeCounts": {
+        "weather": 3,
+        "road_condition": 3,
+        "accident_type": 1,
+        "fault_factor": 5,
+        "property_loss": 2,
+        "violation": 2,
+        "road": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 7,
+        "report_has_fault_category": 6
+      },
+      "faultCategories": [
+        "不可控/外部诱因",
+        "机动车驾驶人违规驾驶",
+        "道路环境与设施隐患"
+      ],
+      "faultFactors": [
+        "突发落石",
+        "急弯/坡道风险",
+        "暴雨"
+      ],
+      "violations": [
+        "未系安全带"
+      ],
+      "injuries": [],
+      "liabilities": [],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 13,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "突发落石",
+          "target": "不可控/外部诱因",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "旅游大巴载27名游客下山，驾驶人发现落石后急向左避让，车身擦到对向车道护栏后停下，未与对向小车碰撞。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "不可控/外部诱因",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "旅游大巴载27名游客下山，驾驶人发现落石后急向左避让，车身擦到对向车道护栏后停下，未与对向小车碰撞。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未系安全带",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "车内3名未系安全带游客轻微碰伤，护栏约12米受损，大巴左侧玻璃破裂。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "车内3名未系安全带游客轻微碰伤，护栏约12米受损，大巴左侧玻璃破裂。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "急弯/坡道风险",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "司机在雨后山区弯道未降低到可控速度，是直接原因；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "司机在雨后山区弯道未降低到可控速度，是直接原因；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "暴雨",
+          "target": "不可控/外部诱因",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "景区道路养护单位未在强降雨后及时巡查清障、弯道落石警示不足，存在管理责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "不可控/外部诱因",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "景区道路养护单位未在强降雨后及时巡查清障、弯道落石警示不足，存在管理责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "突发落石",
+          "target": "不可控/外部诱因",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "景区道路养护单位未在强降雨后及时巡查清障、弯道落石警示不足，存在管理责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "急弯/坡道风险",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "景区道路养护单位未在强降雨后及时巡查清障、弯道落石警示不足，存在管理责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "景区道路养护单位未在强降雨后及时巡查清障、弯道落石警示不足，存在管理责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未系安全带",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "未系安全带乘客扩大了伤害后果。"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-009",
+      "sampleGroup": "generated-batch2",
+      "title": "皮卡货厢梯子掉落引发快速路三车事故",
+      "url": "",
+      "source": "行车记录仪摘录",
+      "documentType": "police-accident-report",
+      "entityCount": 15,
+      "relationCount": 8,
+      "typeCounts": {
+        "violation": 2,
+        "vehicle_attr": 5,
+        "vehicle_instance": 5,
+        "property_loss": 1,
+        "injury": 1,
+        "liability": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 2,
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人操作不当",
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "操作不当",
+        "违法变道"
+      ],
+      "injuries": [
+        "站立不稳擦伤"
+      ],
+      "liabilities": [
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 8,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_commits_violation",
+          "source": "轿车",
+          "target": "操作不当",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "经过伸缩缝时梯子弹起掉在第二车道，后方轿车急打方向避让，右侧擦碰同向公交车；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "操作不当",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经过伸缩缝时梯子弹起掉在第二车道，后方轿车急打方向避让，右侧擦碰同向公交车；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "经过伸缩缝时梯子弹起掉在第二车道，后方轿车急打方向避让，右侧擦碰同向公交车；"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "公交车",
+          "target": "站立不稳擦伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "公交车上两名乘客站立不稳擦伤。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "轿车",
+          "target": "违法变道",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "轿车紧急避让时变道未确认右侧车况，承担次要责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "违法变道",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "轿车紧急避让时变道未确认右侧车况，承担次要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "轿车紧急避让时变道未确认右侧车况，承担次要责任；"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "轿车",
+          "target": "公交车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "经过伸缩缝时梯子弹起掉在第二车道，后方轿车急打方向避让，右侧擦碰同向公交车；"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-010",
+      "sampleGroup": "generated-batch2",
+      "title": "小区环路无人配送车与儿童滑板车相撞",
+      "url": "",
+      "source": "社区调解纪要",
+      "documentType": "police-accident-report",
+      "entityCount": 7,
+      "relationCount": 0,
+      "typeCounts": {
+        "time": 1,
+        "vehicle_attr": 1,
+        "injury": 1,
+        "property_loss": 1,
+        "road": 2,
+        "liability": 1
+      },
+      "relCounts": {},
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "儿童手掌擦伤"
+      ],
+      "liabilities": [
+        "主要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 2,
+      "keyRelCount": 0,
+      "hasChain": false,
+      "weakReason": "链路环节不足(2/6); 无关系; 无违法/诱因",
+      "topRelations": []
+    },
+    {
+      "id": "GEN-B2-TA-011",
+      "sampleGroup": "generated-batch2",
+      "title": "夜间垃圾清运车无尾部警示被摩托车追撞",
+      "url": "",
+      "source": "城管协查记录",
+      "documentType": "police-accident-report",
+      "entityCount": 16,
+      "relationCount": 6,
+      "typeCounts": {
+        "vehicle_attr": 3,
+        "vehicle_instance": 3,
+        "property_loss": 2,
+        "time": 2,
+        "violation": 2,
+        "liability": 2,
+        "weather": 2
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2,
+        "person_commits_violation": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "弯道越线",
+        "未按条件降低车速"
+      ],
+      "injuries": [],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 6,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "弯道越线",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "清运车夜间占道作业未设置反光锥桶和有效警示，负主要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "清运车夜间占道作业未设置反光锥桶和有效警示，负主要责任；"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "摩托车",
+          "target": "未按条件降低车速",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "摩托车夜间通过作业车辆区域未减速观察，负次要责任。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未按条件降低车速",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "摩托车夜间通过作业车辆区域未减速观察，负次要责任。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "摩托车夜间通过作业车辆区域未减速观察，负次要责任。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "二轮摩托车",
+          "target": "摩托车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "二轮摩托车从后方驶来，骑手以为清运车仍在缓慢前行，临近才发现升降板横在车道内，刹车侧滑后撞上右下角。"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-012",
+      "sampleGroup": "generated-batch2",
+      "title": "公交专用道内电动三轮突然掉头",
+      "url": "",
+      "source": "公交公司报案说明",
+      "documentType": "police-accident-report",
+      "entityCount": 24,
+      "relationCount": 6,
+      "typeCounts": {
+        "time": 1,
+        "vehicle_attr": 7,
+        "vehicle_instance": 8,
+        "road": 1,
+        "accident_type": 2,
+        "injury": 2,
+        "violation": 1,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_has_injury": 2,
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "逆向行驶"
+      ],
+      "injuries": [
+        "受伤",
+        "小腿骨折"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "掉头碰撞"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 6,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "公交车",
+          "target": "受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "三轮车驾驶人小腿骨折，公交车上无人受伤，三轮车货箱里的水果撒落。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "公交车",
+          "target": "小腿骨折",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "三轮车驾驶人小腿骨折，公交车上无人受伤，三轮车货箱里的水果撒落。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "公交",
+          "target": "逆向行驶",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "电动三轮逆行、违法进入公交专用道并突然掉头负主要责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "逆向行驶",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "电动三轮逆行、违法进入公交专用道并突然掉头负主要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "电动三轮逆行、违法进入公交专用道并突然掉头负主要责任；"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "公交",
+          "target": "电动三轮车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "早高峰公交专用道刚启用不久，路面标线清楚但隔离栏有一处缺口。"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-013",
+      "sampleGroup": "generated-batch2",
+      "title": "冰雾天气高速匝道客车侧滑碰撞清障车",
+      "url": "",
+      "source": "高速救援记录",
+      "documentType": "police-accident-report",
+      "entityCount": 15,
+      "relationCount": 10,
+      "typeCounts": {
+        "road": 1,
+        "weather": 2,
+        "fault_factor": 5,
+        "accident_type": 1,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1,
+        "injury": 1,
+        "property_loss": 1,
+        "violation": 1,
+        "liability": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 6,
+        "report_has_fault_category": 4
+      },
+      "faultCategories": [
+        "道路环境与设施隐患",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [
+        "大雾",
+        "急弯/坡道风险"
+      ],
+      "violations": [
+        "操作不当"
+      ],
+      "injuries": [
+        "腰部扭伤"
+      ],
+      "liabilities": [
+        "主要责任"
+      ],
+      "accidentTypes": [
+        "爆胎二次事故"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 10,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "大雾",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "清晨匝道桥面结了一层薄冰，雾气让能见度只有百米左右。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "清晨匝道桥面结了一层薄冰，雾气让能见度只有百米左右。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "急弯/坡道风险",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "清晨匝道桥面结了一层薄冰，雾气让能见度只有百米左右。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "急弯/坡道风险",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "省际客车下匝道时制动过急，车尾侧滑，右侧车身擦碰清障车左后角，客车内多人惊醒。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "省际客车下匝道时制动过急，车尾侧滑，右侧车身擦碰清障车左后角，客车内多人惊醒。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "操作不当",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "客车驾驶人冰雾天气进入匝道未提前降速、操作不当负主要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "客车驾驶人冰雾天气进入匝道未提前降速、操作不当负主要责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "大雾",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "客车驾驶人冰雾天气进入匝道未提前降速、操作不当负主要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "客车驾驶人冰雾天气进入匝道未提前降速、操作不当负主要责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "急弯/坡道风险",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "客车驾驶人冰雾天气进入匝道未提前降速、操作不当负主要责任；"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-014",
+      "sampleGroup": "generated-batch2",
+      "title": "医院急诊口轮椅横穿被倒车网约车碰倒",
+      "url": "",
+      "source": "现场保安记录",
+      "documentType": "police-accident-report",
+      "entityCount": 17,
+      "relationCount": 13,
+      "typeCounts": {
+        "violation": 4,
+        "vehicle_instance": 5,
+        "accident_type": 2,
+        "property_loss": 2,
+        "injury": 1,
+        "liability": 2,
+        "road": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 4,
+        "behavior_belongs_to_category": 4,
+        "report_has_fault_category": 3,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "操作不当",
+        "倒车未确认安全"
+      ],
+      "injuries": [
+        "老人髋部挫伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "救护车避让引发碰撞",
+        "侧翻"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 13,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_commits_violation",
+          "source": "网约车",
+          "target": "操作不当",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "急诊门前车辆排队，网约车送完病人后倒车调头。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "操作不当",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "急诊门前车辆排队，网约车送完病人后倒车调头。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "急诊门前车辆排队，网约车送完病人后倒车调头。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "网约车",
+          "target": "操作不当",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "网约车倒车影像被后备箱里翘起的行李遮住一角，驾驶人只看左后视镜，车尾轻碰轮椅把手，轮椅侧翻。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "操作不当",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "网约车倒车影像被后备箱里翘起的行李遮住一角，驾驶人只看左后视镜，车尾轻碰轮椅把手，轮椅侧翻。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "网约车倒车影像被后备箱里翘起的行李遮住一角，驾驶人只看左后视镜，车尾轻碰轮椅把手，轮椅侧翻。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "网约车",
+          "target": "老人髋部挫伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "轮椅上老人髋部挫伤，网约车尾门凹陷。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "网约车",
+          "target": "倒车未确认安全",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "网约车倒车未确保安全负主要责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "倒车未确认安全",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "网约车倒车未确保安全负主要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "网约车倒车未确保安全负主要责任；"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "网约车",
+          "target": "操作不当",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "网约车倒车未确保安全负主要责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "操作不当",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "网约车倒车未确保安全负主要责任；"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-015",
+      "sampleGroup": "generated-batch2",
+      "title": "施工便道泥浆带出致骑行人摔入机动车道",
+      "url": "",
+      "source": "施工现场通报",
+      "documentType": "police-accident-report",
+      "entityCount": 22,
+      "relationCount": 6,
+      "typeCounts": {
+        "time": 1,
+        "road": 1,
+        "weather": 2,
+        "accident_type": 1,
+        "vehicle_attr": 5,
+        "vehicle_instance": 5,
+        "injury": 1,
+        "property_loss": 1,
+        "road_condition": 2,
+        "fault_factor": 1,
+        "violation": 1,
+        "liability": 1
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "道路环境与设施隐患",
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [
+        "路面湿滑"
+      ],
+      "violations": [
+        "未按条件降低车速"
+      ],
+      "injuries": [
+        "肩部脱臼"
+      ],
+      "liabilities": [
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 6,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "电动车",
+          "target": "肩部脱臼",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "骑行人肩部脱臼，电动车脚踏断裂，轿车前杠划伤。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "路面湿滑",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "施工单位未及时清理污染路面、未设置湿滑警示，是事故主要诱因；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "施工单位未及时清理污染路面、未设置湿滑警示，是事故主要诱因；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未按条件降低车速",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "骑行人雨天通过工地出口未减速，负次要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "骑行人雨天通过工地出口未减速，负次要责任；"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "电动自行车",
+          "target": "轿车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "骑电动自行车的人经过时前轮打滑摔入旁边机动车道，后方小轿车紧急刹车仍轻碰其车尾。"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-016",
+      "sampleGroup": "generated-batch2",
+      "title": "渡口上船排队时半挂溜车挤压小轿车",
+      "url": "",
+      "source": "港区警情摘录",
+      "documentType": "police-accident-report",
+      "entityCount": 14,
+      "relationCount": 5,
+      "typeCounts": {
+        "road": 1,
+        "vehicle_attr": 3,
+        "vehicle_instance": 3,
+        "road_condition": 1,
+        "fault_factor": 1,
+        "injury": 2,
+        "property_loss": 2,
+        "liability": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1,
+        "person_has_injury": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "道路环境与设施隐患"
+      ],
+      "faultFactors": [
+        "急弯/坡道风险"
+      ],
+      "violations": [],
+      "injuries": [
+        "受伤",
+        "鸣笛后弃车跑开未受伤"
+      ],
+      "liabilities": [
+        "全部责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 5,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "急弯/坡道风险",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "清晨排队上浮桥，重型半挂车停在轻微坡道上等放行。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "清晨排队上浮桥，重型半挂车停在轻微坡道上等放行。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "轿车",
+          "target": "受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "半挂缓慢后溜，挤压后方小轿车车头，小轿车驾驶人鸣笛后弃车跑开未受伤，副驾驶被安全带勒伤。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "轿车",
+          "target": "鸣笛后弃车跑开未受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "半挂缓慢后溜，挤压后方小轿车车头，小轿车驾驶人鸣笛后弃车跑开未受伤，副驾驶被安全带勒伤。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "半挂车",
+          "target": "轿车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "清晨排队上浮桥，重型半挂车停在轻微坡道上等放行。"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-017",
+      "sampleGroup": "generated-batch2",
+      "title": "夜市停车场代驾起步撞倒摊主",
+      "url": "",
+      "source": "询问笔录摘录",
+      "documentType": "single-report",
+      "entityCount": 8,
+      "relationCount": 2,
+      "typeCounts": {
+        "road": 1,
+        "weather": 1,
+        "vehicle_attr": 2,
+        "vehicle_instance": 1,
+        "property_loss": 1,
+        "violation": 1,
+        "liability": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "盲区观察不足"
+      ],
+      "injuries": [],
+      "liabilities": [
+        "主要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 4,
+      "keyRelCount": 2,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "盲区观察不足",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "代驾未熟悉车辆、起步前未充分观察，承担主要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "代驾未熟悉车辆、起步前未充分观察，承担主要责任；"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-018",
+      "sampleGroup": "generated-batch2",
+      "title": "快递三轮车撞上临时打开的消防通道门",
+      "url": "",
+      "source": "社区警情记录",
+      "documentType": "police-accident-report",
+      "entityCount": 16,
+      "relationCount": 4,
+      "typeCounts": {
+        "time": 1,
+        "road": 4,
+        "vehicle_attr": 5,
+        "vehicle_instance": 2,
+        "injury": 1,
+        "property_loss": 1,
+        "violation": 1,
+        "liability": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "未按条件降低车速"
+      ],
+      "injuries": [
+        "快递员手臂擦伤"
+      ],
+      "liabilities": [
+        "主要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 4,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_commits_violation",
+          "source": "快递三轮",
+          "target": "未按条件降低车速",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "快递三轮车速度偏快、未靠右慢行负主要责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未按条件降低车速",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "快递三轮车速度偏快、未靠右慢行负主要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "快递三轮车速度偏快、未靠右慢行负主要责任；"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "快递电动三轮",
+          "target": "快递三轮",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "快递电动三轮车沿通道送件，车厢右侧挂到门角后失控，擦碰停在旁边的私家车。"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-019",
+      "sampleGroup": "generated-batch2",
+      "title": "洒落玉米粒让公交站前两轮车连摔",
+      "url": "",
+      "source": "新闻短讯",
+      "documentType": "police-accident-report",
+      "entityCount": 22,
+      "relationCount": 5,
+      "typeCounts": {
+        "time": 1,
+        "vehicle_attr": 8,
+        "vehicle_instance": 8,
+        "injury": 1,
+        "property_loss": 1,
+        "liability": 2,
+        "violation": 1
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "未保持安全车距"
+      ],
+      "injuries": [
+        "轻伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 5,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "摩托车",
+          "target": "轻伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "两名骑行人轻伤，摩托车转向灯破损。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "公交",
+          "target": "未保持安全车距",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "两名骑行人通过公交站区域未降速、跟车过近分别负次要责任；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未保持安全车距",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "两名骑行人通过公交站区域未降速、跟车过近分别负次要责任；"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "两名骑行人通过公交站区域未降速、跟车过近分别负次要责任；"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "公交",
+          "target": "农用三轮车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "早高峰公交站前辅路有一片玉米粒，疑似前一辆农用三轮车掉落。"
+        }
+      ]
+    },
+    {
+      "id": "GEN-B2-TA-020",
+      "sampleGroup": "generated-batch2",
+      "title": "隧道施工改道处半挂刮倒临时限宽架",
+      "url": "",
+      "source": "认定摘要",
+      "documentType": "police-accident-report",
+      "entityCount": 10,
+      "relationCount": 1,
+      "typeCounts": {
+        "road_condition": 2,
+        "accident_type": 1,
+        "vehicle_attr": 3,
+        "vehicle_instance": 3,
+        "liability": 1
+      },
+      "relCounts": {
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [],
+      "liabilities": [
+        "主要责任"
+      ],
+      "accidentTypes": [
+        "会车刮倒"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 1,
+      "hasChain": false,
+      "weakReason": "无违法/诱因",
+      "topRelations": [
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "半挂车",
+          "target": "轿车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "重型半挂车按导航驶入后，驾驶人认为可以通过，没有等现场指挥员示意，右侧车厢刮倒临时限宽架，限宽架倒下砸到旁边排队的小轿车前机盖，现场工人躲避时脚踝扭伤。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-001",
+      "sampleGroup": "web-batch2",
+      "title": "公安部交通管理局公布货车典型案例：河南开封货车违规左转撞超员面包车",
+      "url": "https://news.cctv.com/2023/05/08/ARTIYTLuQkNolBLWMkP9AVNQ230508.shtml",
+      "source": "央视网（据公安部交通管理局）",
+      "documentType": "single-report",
+      "entityCount": 12,
+      "relationCount": 3,
+      "typeCounts": {
+        "time": 1,
+        "injury": 2,
+        "accident_type": 1,
+        "vehicle_attr": 2,
+        "vehicle_instance": 2,
+        "weather": 1,
+        "road_condition": 2,
+        "road": 1
+      },
+      "relCounts": {
+        "person_has_injury": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "6人死亡",
+        "4人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "相撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 3,
+      "hasChain": false,
+      "weakReason": "无违法/诱因",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "重型货车",
+          "target": "6人死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "公安部交通管理局公布的货车肇事典型案例显示，5月5日凌晨，一名驾驶人驾驶重型货车在河南开封尉氏县一交叉口违反禁令标志左转，与正在直行通过路口的一辆超员载客面包车相撞，造成面包车上6人死亡、4人受伤。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "重型货车",
+          "target": "4人受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "公安部交通管理局公布的货车肇事典型案例显示，5月5日凌晨，一名驾驶人驾驶重型货车在河南开封尉氏县一交叉口违反禁令标志左转，与正在直行通过路口的一辆超员载客面包车相撞，造成面包车上6人死亡、4人受伤。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "货车",
+          "target": "重型货车",
+          "confidence": 0.74,
+          "ruleId": "vehicle-collision-same-sentence",
+          "evidence": "公安部交通管理局公布的货车肇事典型案例显示，5月5日凌晨，一名驾驶人驾驶重型货车在河南开封尉氏县一交叉口违反禁令标志左转，与正在直行通过路口的一辆超员载客面包车相撞，造成面包车上6人死亡、4人受伤。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-002",
+      "sampleGroup": "web-batch2",
+      "title": "公安部交通管理局公布货车典型案例：山东泗水半挂车长下坡制动失效连撞行人与车辆",
+      "url": "https://news.cctv.com/2023/05/08/ARTIYTLuQkNolBLWMkP9AVNQ230508.shtml",
+      "source": "央视网（据公安部交通管理局）",
+      "documentType": "single-report",
+      "entityCount": 16,
+      "relationCount": 7,
+      "typeCounts": {
+        "time": 1,
+        "road": 1,
+        "injury": 2,
+        "accident_type": 2,
+        "vehicle_attr": 2,
+        "vehicle_instance": 2,
+        "road_condition": 4,
+        "fault_factor": 2
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2,
+        "person_has_injury": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "道路环境与设施隐患"
+      ],
+      "faultFactors": [
+        "急弯/坡道风险"
+      ],
+      "violations": [],
+      "injuries": [
+        "造成7人死亡",
+        "10人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 7,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "急弯/坡道风险",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "公安部交通管理局公布的货车肇事典型案例显示，4月19日上午，一名驾驶人驾驶重型半挂车在山东泗水县一村道行经弯道长下坡路段时，车辆制动功能部分失效，导致车速加快并失去控制，随后与另一辆重型半挂车以及行人、路边停放车辆发生碰撞，造成7人死亡、10人受伤。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "公安部交通管理局公布的货车肇事典型案例显示，4月19日上午，一名驾驶人驾驶重型半挂车在山东泗水县一村道行经弯道长下坡路段时，车辆制动功能部分失效，导致车速加快并失去控制，随后与另一辆重型半挂车以及行人、路边停放车辆发生碰撞，造成7人死亡、10人受伤。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "半挂车",
+          "target": "造成7人死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "公安部交通管理局公布的货车肇事典型案例显示，4月19日上午，一名驾驶人驾驶重型半挂车在山东泗水县一村道行经弯道长下坡路段时，车辆制动功能部分失效，导致车速加快并失去控制，随后与另一辆重型半挂车以及行人、路边停放车辆发生碰撞，造成7人死亡、10人受伤。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "半挂车",
+          "target": "10人受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "公安部交通管理局公布的货车肇事典型案例显示，4月19日上午，一名驾驶人驾驶重型半挂车在山东泗水县一村道行经弯道长下坡路段时，车辆制动功能部分失效，导致车速加快并失去控制，随后与另一辆重型半挂车以及行人、路边停放车辆发生碰撞，造成7人死亡、10人受伤。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "货车",
+          "target": "半挂车",
+          "confidence": 0.74,
+          "ruleId": "vehicle-collision-same-sentence",
+          "evidence": "公安部交通管理局公布的货车肇事典型案例显示，4月19日上午，一名驾驶人驾驶重型半挂车在山东泗水县一村道行经弯道长下坡路段时，车辆制动功能部分失效，导致车速加快并失去控制，随后与另一辆重型半挂车以及行人、路边停放车辆发生碰撞，造成7人死亡、10人受伤。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "急弯/坡道风险",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "该事故链路包括长下坡、弯道、重型车辆制动性能异常、速度失控、多目标碰撞和行人暴露风险。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "该事故链路包括长下坡、弯道、重型车辆制动性能异常、速度失控、多目标碰撞和行人暴露风险。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-003",
+      "sampleGroup": "web-batch2",
+      "title": "公安部交通管理局公布货车典型案例：湖北天门半挂车强行超车撞对向小客车致6死",
+      "url": "https://news.cctv.com/2023/05/08/ARTIYTLuQkNolBLWMkP9AVNQ230508.shtml",
+      "source": "央视网（据公安部交通管理局）",
+      "documentType": "single-report",
+      "entityCount": 13,
+      "relationCount": 2,
+      "typeCounts": {
+        "time": 1,
+        "road": 1,
+        "injury": 1,
+        "accident_type": 2,
+        "vehicle_attr": 4,
+        "vehicle_instance": 4
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "6人死亡"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "相撞",
+        "碰撞"
+      ],
+      "chainStepsCovered": 3,
+      "keyRelCount": 2,
+      "hasChain": false,
+      "weakReason": "链路环节不足(3/6); 无违法/诱因",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "半挂车",
+          "target": "6人死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "公安部交通管理局公布的货车肇事典型案例显示，4月18日上午，一名驾驶人驾驶重型半挂车在G234国道湖北天门段强行超车，与对向车道一辆小客车相撞，造成小客车内6人死亡。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "货车",
+          "target": "半挂车",
+          "confidence": 0.74,
+          "ruleId": "vehicle-collision-same-sentence",
+          "evidence": "公安部交通管理局公布的货车肇事典型案例显示，4月18日上午，一名驾驶人驾驶重型半挂车在G234国道湖北天门段强行超车，与对向车道一辆小客车相撞，造成小客车内6人死亡。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-004",
+      "sampleGroup": "web-batch2",
+      "title": "公安部交通管理局公布三轮车典型案例：山西忻州无牌三轮汽车长下坡侧翻",
+      "url": "https://news.cctv.com/2023/06/08/ARTINyPmEFtErQjvAbxFnDD8230608.shtml",
+      "source": "央视网（据公安部交通管理局官微）",
+      "documentType": "single-report",
+      "entityCount": 16,
+      "relationCount": 21,
+      "typeCounts": {
+        "time": 1,
+        "road": 1,
+        "injury": 2,
+        "accident_type": 2,
+        "violation": 7,
+        "road_condition": 2,
+        "fault_factor": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 7,
+        "behavior_belongs_to_category": 8,
+        "report_has_fault_category": 4,
+        "person_has_injury": 2
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错",
+        "道路环境与设施隐患",
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [
+        "急弯/坡道风险"
+      ],
+      "violations": [
+        "无证驾驶",
+        "无牌",
+        "操作不当",
+        "违法载人"
+      ],
+      "injuries": [
+        "3人死亡",
+        "5人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "侧翻"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 21,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_commits_violation",
+          "source": "无牌三轮汽车",
+          "target": "无证驾驶",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，5月22日下午，一名驾驶人无证驾驶无牌三轮汽车，车上违法搭载7人，行驶至山西省忻州市境内一道路长下坡路段时，因操作不当导致车辆侧翻，致三轮汽车驾乘人员3人死亡、5人受伤。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "无证驾驶",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，5月22日下午，一名驾驶人无证驾驶无牌三轮汽车，车上违法搭载7人，行驶至山西省忻州市境内一道路长下坡路段时，因操作不当导致车辆侧翻，致三轮汽车驾乘人员3人死亡、5人受伤。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，5月22日下午，一名驾驶人无证驾驶无牌三轮汽车，车上违法搭载7人，行驶至山西省忻州市境内一道路长下坡路段时，因操作不当导致车辆侧翻，致三轮汽车驾乘人员3人死亡、5人受伤。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "无牌三轮汽车",
+          "target": "无牌",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，5月22日下午，一名驾驶人无证驾驶无牌三轮汽车，车上违法搭载7人，行驶至山西省忻州市境内一道路长下坡路段时，因操作不当导致车辆侧翻，致三轮汽车驾乘人员3人死亡、5人受伤。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "无牌",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，5月22日下午，一名驾驶人无证驾驶无牌三轮汽车，车上违法搭载7人，行驶至山西省忻州市境内一道路长下坡路段时，因操作不当导致车辆侧翻，致三轮汽车驾乘人员3人死亡、5人受伤。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "无牌三轮汽车",
+          "target": "操作不当",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，5月22日下午，一名驾驶人无证驾驶无牌三轮汽车，车上违法搭载7人，行驶至山西省忻州市境内一道路长下坡路段时，因操作不当导致车辆侧翻，致三轮汽车驾乘人员3人死亡、5人受伤。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "操作不当",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，5月22日下午，一名驾驶人无证驾驶无牌三轮汽车，车上违法搭载7人，行驶至山西省忻州市境内一道路长下坡路段时，因操作不当导致车辆侧翻，致三轮汽车驾乘人员3人死亡、5人受伤。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "急弯/坡道风险",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，5月22日下午，一名驾驶人无证驾驶无牌三轮汽车，车上违法搭载7人，行驶至山西省忻州市境内一道路长下坡路段时，因操作不当导致车辆侧翻，致三轮汽车驾乘人员3人死亡、5人受伤。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，5月22日下午，一名驾驶人无证驾驶无牌三轮汽车，车上违法搭载7人，行驶至山西省忻州市境内一道路长下坡路段时，因操作不当导致车辆侧翻，致三轮汽车驾乘人员3人死亡、5人受伤。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "无牌三轮汽车",
+          "target": "3人死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，5月22日下午，一名驾驶人无证驾驶无牌三轮汽车，车上违法搭载7人，行驶至山西省忻州市境内一道路长下坡路段时，因操作不当导致车辆侧翻，致三轮汽车驾乘人员3人死亡、5人受伤。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "无牌三轮汽车",
+          "target": "5人受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，5月22日下午，一名驾驶人无证驾驶无牌三轮汽车，车上违法搭载7人，行驶至山西省忻州市境内一道路长下坡路段时，因操作不当导致车辆侧翻，致三轮汽车驾乘人员3人死亡、5人受伤。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "无牌车",
+          "target": "违法载人",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "事故链路包括无证驾驶、无牌车辆、违法载人、长下坡、操作不当和侧翻。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-005",
+      "sampleGroup": "web-batch2",
+      "title": "公安部交通管理局公布三轮车典型案例：安徽滁州三轮汽车闯红灯与半挂车碰撞",
+      "url": "https://news.cctv.com/2023/06/08/ARTINyPmEFtErQjvAbxFnDD8230608.shtml",
+      "source": "央视网（据公安部交通管理局官微）",
+      "documentType": "single-report",
+      "entityCount": 13,
+      "relationCount": 8,
+      "typeCounts": {
+        "road": 2,
+        "injury": 2,
+        "accident_type": 2,
+        "violation": 3,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1,
+        "road_condition": 2
+      },
+      "relCounts": {
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 2,
+        "person_has_injury": 2
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "无牌",
+        "未按交通信号灯通行",
+        "违法载人"
+      ],
+      "injuries": [
+        "3人死亡",
+        "4人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 8,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_commits_violation",
+          "source": "无牌三轮汽车",
+          "target": "无牌",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，6月3日清晨，一名驾驶人驾驶无牌三轮汽车，车上违法搭载6人，行驶至安徽省滁州市境内一交叉路口时，违反道路交通信号灯通行，与一辆重型半挂车发生碰撞，致三轮汽车驾乘人员3人死亡、4人受伤。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "无牌",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，6月3日清晨，一名驾驶人驾驶无牌三轮汽车，车上违法搭载6人，行驶至安徽省滁州市境内一交叉路口时，违反道路交通信号灯通行，与一辆重型半挂车发生碰撞，致三轮汽车驾乘人员3人死亡、4人受伤。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，6月3日清晨，一名驾驶人驾驶无牌三轮汽车，车上违法搭载6人，行驶至安徽省滁州市境内一交叉路口时，违反道路交通信号灯通行，与一辆重型半挂车发生碰撞，致三轮汽车驾乘人员3人死亡、4人受伤。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "无牌三轮汽车",
+          "target": "3人死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，6月3日清晨，一名驾驶人驾驶无牌三轮汽车，车上违法搭载6人，行驶至安徽省滁州市境内一交叉路口时，违反道路交通信号灯通行，与一辆重型半挂车发生碰撞，致三轮汽车驾乘人员3人死亡、4人受伤。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "无牌三轮汽车",
+          "target": "4人受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "公安部交通管理局公布的三轮车肇事肇祸典型案例显示，6月3日清晨，一名驾驶人驾驶无牌三轮汽车，车上违法搭载6人，行驶至安徽省滁州市境内一交叉路口时，违反道路交通信号灯通行，与一辆重型半挂车发生碰撞，致三轮汽车驾乘人员3人死亡、4人受伤。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未按交通信号灯通行",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "该案例体现路口信号控制、闯红灯、三轮车违法载人和重型车辆碰撞的风险。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "该案例体现路口信号控制、闯红灯、三轮车违法载人和重型车辆碰撞的风险。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "违法载人",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "该案例体现路口信号控制、闯红灯、三轮车违法载人和重型车辆碰撞的风险。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-006",
+      "sampleGroup": "web-batch2",
+      "title": "公安部交通管理局公布典型案例：安徽潜山中型客车越线迎面撞超载自卸货车",
+      "url": "https://news.cctv.com/2021/12/30/ARTIgk0v25QoByMZKkEHczZV211230.shtml",
+      "source": "央视网（据公安部交通管理局微信）",
+      "documentType": "single-report",
+      "entityCount": 15,
+      "relationCount": 12,
+      "typeCounts": {
+        "time": 1,
+        "road": 2,
+        "injury": 2,
+        "accident_type": 2,
+        "vehicle_attr": 2,
+        "vehicle_instance": 2,
+        "violation": 3,
+        "fault_factor": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 3,
+        "behavior_belongs_to_category": 4,
+        "report_has_fault_category": 2,
+        "person_has_injury": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [
+        "车辆超限超载"
+      ],
+      "violations": [
+        "弯道越线",
+        "超载",
+        "未系安全带"
+      ],
+      "injuries": [
+        "造成8人死亡",
+        "3人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "相撞",
+        "碰撞"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 12,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_commits_violation",
+          "source": "货车",
+          "target": "弯道越线",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "2021年12月2日10时18分许，一辆中型班线客车沿安徽省安庆市潜山市境内318国道行驶至596公里加850米处时，越过道路中央分隔线，与对向装载沥青混凝土的重型自卸货车迎面相撞，造成8人死亡、3人受伤。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "弯道越线",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "2021年12月2日10时18分许，一辆中型班线客车沿安徽省安庆市潜山市境内318国道行驶至596公里加850米处时，越过道路中央分隔线，与对向装载沥青混凝土的重型自卸货车迎面相撞，造成8人死亡、3人受伤。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "2021年12月2日10时18分许，一辆中型班线客车沿安徽省安庆市潜山市境内318国道行驶至596公里加850米处时，越过道路中央分隔线，与对向装载沥青混凝土的重型自卸货车迎面相撞，造成8人死亡、3人受伤。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "货车",
+          "target": "造成8人死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "2021年12月2日10时18分许，一辆中型班线客车沿安徽省安庆市潜山市境内318国道行驶至596公里加850米处时，越过道路中央分隔线，与对向装载沥青混凝土的重型自卸货车迎面相撞，造成8人死亡、3人受伤。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "货车",
+          "target": "3人受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "2021年12月2日10时18分许，一辆中型班线客车沿安徽省安庆市潜山市境内318国道行驶至596公里加850米处时，越过道路中央分隔线，与对向装载沥青混凝土的重型自卸货车迎面相撞，造成8人死亡、3人受伤。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "货车",
+          "target": "超载",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "重型自卸货车严重超限超载、中型客车乘客未系安全带加重了伤亡后果，多名乘客在碰撞中被甩出车外或甩离座位。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "超载",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "重型自卸货车严重超限超载、中型客车乘客未系安全带加重了伤亡后果，多名乘客在碰撞中被甩出车外或甩离座位。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "重型自卸货车严重超限超载、中型客车乘客未系安全带加重了伤亡后果，多名乘客在碰撞中被甩出车外或甩离座位。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "货车",
+          "target": "未系安全带",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "重型自卸货车严重超限超载、中型客车乘客未系安全带加重了伤亡后果，多名乘客在碰撞中被甩出车外或甩离座位。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未系安全带",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "重型自卸货车严重超限超载、中型客车乘客未系安全带加重了伤亡后果，多名乘客在碰撞中被甩出车外或甩离座位。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "车辆超限超载",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "重型自卸货车严重超限超载、中型客车乘客未系安全带加重了伤亡后果，多名乘客在碰撞中被甩出车外或甩离座位。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "货车",
+          "target": "货车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "2021年12月2日10时18分许，一辆中型班线客车沿安徽省安庆市潜山市境内318国道行驶至596公里加850米处时，越过道路中央分隔线，与对向装载沥青混凝土的重型自卸货车迎面相撞，造成8人死亡、3人受伤。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-007",
+      "sampleGroup": "web-batch2",
+      "title": "公安部交通管理局公布典型案例：辽宁营口无信号路口小客车未让右方来车与半挂车相撞",
+      "url": "https://news.cctv.com/2021/12/30/ARTIgk0v25QoByMZKkEHczZV211230.shtml",
+      "source": "央视网（据公安部交通管理局微信）",
+      "documentType": "single-report",
+      "entityCount": 19,
+      "relationCount": 10,
+      "typeCounts": {
+        "time": 1,
+        "road": 3,
+        "injury": 1,
+        "accident_type": 1,
+        "vehicle_attr": 4,
+        "vehicle_instance": 4,
+        "road_condition": 2,
+        "violation": 3
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1,
+        "person_commits_violation": 3,
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 2
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "超速行驶",
+        "未按条件降低车速",
+        "操作不当"
+      ],
+      "injuries": [
+        "死亡"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "相撞"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 10,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "小客车",
+          "target": "死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "2021年12月17日8时9分许，一辆重型半挂车沿辽宁省营口市沿海产业基地四号路由北向南行驶至与东海大街交叉路口时，与沿东海大街由东向西驶入路口的小客车相撞，导致小客车上5人全部死亡。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "半挂车",
+          "target": "小客车",
+          "confidence": 0.74,
+          "ruleId": "vehicle-collision-same-sentence",
+          "evidence": "2021年12月17日8时9分许，一辆重型半挂车沿辽宁省营口市沿海产业基地四号路由北向南行驶至与东海大街交叉路口时，与沿东海大街由东向西驶入路口的小客车相撞，导致小客车上5人全部死亡。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "小客车",
+          "target": "超速行驶",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "经查，小客车行经没有交通信号控制的交叉路口未让右方道路来车先行是直接原因，重型半挂车超速行驶、进入交叉路口未减速慢行是另一重要原因。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "超速行驶",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经查，小客车行经没有交通信号控制的交叉路口未让右方道路来车先行是直接原因，重型半挂车超速行驶、进入交叉路口未减速慢行是另一重要原因。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "经查，小客车行经没有交通信号控制的交叉路口未让右方道路来车先行是直接原因，重型半挂车超速行驶、进入交叉路口未减速慢行是另一重要原因。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "小客车",
+          "target": "未按条件降低车速",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "经查，小客车行经没有交通信号控制的交叉路口未让右方道路来车先行是直接原因，重型半挂车超速行驶、进入交叉路口未减速慢行是另一重要原因。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未按条件降低车速",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经查，小客车行经没有交通信号控制的交叉路口未让右方道路来车先行是直接原因，重型半挂车超速行驶、进入交叉路口未减速慢行是另一重要原因。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "经查，小客车行经没有交通信号控制的交叉路口未让右方道路来车先行是直接原因，重型半挂车超速行驶、进入交叉路口未减速慢行是另一重要原因。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "小客车",
+          "target": "操作不当",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "经查，小客车行经没有交通信号控制的交叉路口未让右方道路来车先行是直接原因，重型半挂车超速行驶、进入交叉路口未减速慢行是另一重要原因。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "操作不当",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经查，小客车行经没有交通信号控制的交叉路口未让右方道路来车先行是直接原因，重型半挂车超速行驶、进入交叉路口未减速慢行是另一重要原因。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-008",
+      "sampleGroup": "web-batch2",
+      "title": "公安部交通管理局公布典型案例：包茂高速货车侧翻洒落物后二次事故致3死",
+      "url": "https://news.cctv.com/2021/12/30/ARTIgk0v25QoByMZKkEHczZV211230.shtml",
+      "source": "央视网（据公安部交通管理局微信）",
+      "documentType": "single-report",
+      "entityCount": 15,
+      "relationCount": 10,
+      "typeCounts": {
+        "time": 1,
+        "road": 1,
+        "accident_type": 2,
+        "vehicle_attr": 3,
+        "vehicle_instance": 4,
+        "injury": 1,
+        "violation": 3
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1,
+        "person_commits_violation": 3,
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 2
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "超速行驶",
+        "疲劳驾驶",
+        "操作不当"
+      ],
+      "injuries": [
+        "死亡"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "侧翻",
+        "碰撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 10,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "轿车",
+          "target": "死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "4时许，一辆小轿车经过事故现场时碰撞洒落物，小轿车驾驶人及3名乘客下车查看情况，随后被后方驶来的小客车碰撞，造成小轿车驾驶人及2名乘客死亡。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "轿车",
+          "target": "小客车",
+          "confidence": 0.74,
+          "ruleId": "vehicle-collision-same-sentence",
+          "evidence": "4时许，一辆小轿车经过事故现场时碰撞洒落物，小轿车驾驶人及3名乘客下车查看情况，随后被后方驶来的小客车碰撞，造成小轿车驾驶人及2名乘客死亡。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "小客车",
+          "target": "超速行驶",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "经查，前两起事故后未按规定设置警告标志，后方小客车涉嫌疲劳驾驶和超速行驶。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "超速行驶",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经查，前两起事故后未按规定设置警告标志，后方小客车涉嫌疲劳驾驶和超速行驶。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "经查，前两起事故后未按规定设置警告标志，后方小客车涉嫌疲劳驾驶和超速行驶。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "小客车",
+          "target": "疲劳驾驶",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "经查，前两起事故后未按规定设置警告标志，后方小客车涉嫌疲劳驾驶和超速行驶。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "疲劳驾驶",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经查，前两起事故后未按规定设置警告标志，后方小客车涉嫌疲劳驾驶和超速行驶。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "小客车",
+          "target": "操作不当",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "经查，前两起事故后未按规定设置警告标志，后方小客车涉嫌疲劳驾驶和超速行驶。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "操作不当",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经查，前两起事故后未按规定设置警告标志，后方小客车涉嫌疲劳驾驶和超速行驶。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "经查，前两起事故后未按规定设置警告标志，后方小客车涉嫌疲劳驾驶和超速行驶。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-009",
+      "sampleGroup": "web-batch2",
+      "title": "公安部交通管理局公布典型案例：江西宜春半挂车路口撞三轮摩托车",
+      "url": "https://news.cctv.com/2021/12/30/ARTIgk0v25QoByMZKkEHczZV211230.shtml",
+      "source": "央视网（据公安部交通管理局微信）",
+      "documentType": "single-report",
+      "entityCount": 19,
+      "relationCount": 8,
+      "typeCounts": {
+        "time": 1,
+        "road": 3,
+        "injury": 2,
+        "accident_type": 1,
+        "vehicle_attr": 4,
+        "vehicle_instance": 4,
+        "road_condition": 2,
+        "violation": 2
+      },
+      "relCounts": {
+        "person_has_injury": 2,
+        "vehicle_collides_vehicle": 1,
+        "person_commits_violation": 2,
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 1
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "违法载人",
+        "未按条件降低车速"
+      ],
+      "injuries": [
+        "3人死亡",
+        "2人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 8,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "摩托车",
+          "target": "3人死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "2021年12月21日14时20分许，一辆重型半挂车沿江西宜春境内309省道行驶至147公里加150米处一交叉路口时，与由南向北行驶的三轮摩托车发生碰撞，造成三轮摩托车上3人死亡、2人受伤。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "摩托车",
+          "target": "2人受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "2021年12月21日14时20分许，一辆重型半挂车沿江西宜春境内309省道行驶至147公里加150米处一交叉路口时，与由南向北行驶的三轮摩托车发生碰撞，造成三轮摩托车上3人死亡、2人受伤。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "半挂车",
+          "target": "摩托车",
+          "confidence": 0.74,
+          "ruleId": "vehicle-collision-same-sentence",
+          "evidence": "2021年12月21日14时20分许，一辆重型半挂车沿江西宜春境内309省道行驶至147公里加150米处一交叉路口时，与由南向北行驶的三轮摩托车发生碰撞，造成三轮摩托车上3人死亡、2人受伤。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "半挂车",
+          "target": "违法载人",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "经查，三轮摩托车未让右方来车先行、重型半挂车行经路口未减速是直接原因，三轮摩托车违法载人加重了事故伤亡后果。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "违法载人",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经查，三轮摩托车未让右方来车先行、重型半挂车行经路口未减速是直接原因，三轮摩托车违法载人加重了事故伤亡后果。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "经查，三轮摩托车未让右方来车先行、重型半挂车行经路口未减速是直接原因，三轮摩托车违法载人加重了事故伤亡后果。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "摩托车",
+          "target": "未按条件降低车速",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "经查，三轮摩托车未让右方来车先行、重型半挂车行经路口未减速是直接原因，三轮摩托车违法载人加重了事故伤亡后果。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未按条件降低车速",
+          "target": "非机动车驾驶人违法/过错",
+          "confidence": 0.92,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经查，三轮摩托车未让右方来车先行、重型半挂车行经路口未减速是直接原因，三轮摩托车违法载人加重了事故伤亡后果。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-010",
+      "sampleGroup": "web-batch2",
+      "title": "公安部交通管理局公布典型案例：甘肃张掖重型半挂车避让闯红灯老年代步车侧翻压车",
+      "url": "https://news.cctv.com/2021/12/30/ARTIgk0v25QoByMZKkEHczZV211230.shtml",
+      "source": "央视网（据公安部交通管理局微信）",
+      "documentType": "single-report",
+      "entityCount": 15,
+      "relationCount": 10,
+      "typeCounts": {
+        "time": 1,
+        "road": 3,
+        "injury": 1,
+        "accident_type": 1,
+        "vehicle_attr": 2,
+        "vehicle_instance": 2,
+        "road_condition": 1,
+        "violation": 3,
+        "fault_factor": 1
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "person_commits_violation": 3,
+        "behavior_belongs_to_category": 4,
+        "report_has_fault_category": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [
+        "车辆超限超载"
+      ],
+      "violations": [
+        "未按交通信号灯通行",
+        "无证驾驶",
+        "超载"
+      ],
+      "injuries": [
+        "死亡"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "侧翻"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 10,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "半挂车",
+          "target": "死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "2021年12月25日21时许，一辆重型半挂车从甘肃省酒泉市装载煤粉，实际车货总重远超最大允许总质量，沿张掖市境内312国道由西向东行驶至与301省道相交路口处时，因避让沿301省道由南向北驶入路口的老年代步车而发生侧翻，将老年代步车压在车下，造成老年代步车内5人全部死亡。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "半挂车",
+          "target": "未按交通信号灯通行",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "经查，事故主要原因为老年代步车闯红灯，重型半挂车严重超限超载、驾驶人无证驾驶。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "未按交通信号灯通行",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经查，事故主要原因为老年代步车闯红灯，重型半挂车严重超限超载、驾驶人无证驾驶。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "经查，事故主要原因为老年代步车闯红灯，重型半挂车严重超限超载、驾驶人无证驾驶。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "半挂车",
+          "target": "无证驾驶",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "经查，事故主要原因为老年代步车闯红灯，重型半挂车严重超限超载、驾驶人无证驾驶。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "无证驾驶",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经查，事故主要原因为老年代步车闯红灯，重型半挂车严重超限超载、驾驶人无证驾驶。"
+        },
+        {
+          "type": "person_commits_violation",
+          "source": "半挂车",
+          "target": "超载",
+          "confidence": 0.5,
+          "ruleId": "violation-vehicle-subject-weak",
+          "evidence": "经查，事故主要原因为老年代步车闯红灯，重型半挂车严重超限超载、驾驶人无证驾驶。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "超载",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经查，事故主要原因为老年代步车闯红灯，重型半挂车严重超限超载、驾驶人无证驾驶。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "车辆超限超载",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "经查，事故主要原因为老年代步车闯红灯，重型半挂车严重超限超载、驾驶人无证驾驶。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "半挂车",
+          "target": "半挂车",
+          "confidence": 0.6,
+          "ruleId": "vehicle-collision-fallback",
+          "evidence": "2021年12月25日21时许，一辆重型半挂车从甘肃省酒泉市装载煤粉，实际车货总重远超最大允许总质量，沿张掖市境内312国道由西向东行驶至与301省道相交路口处时，因避让沿301省道由南向北驶入路口的老年代步车而发生侧翻，将老年代步车压在车下，造成老年代步车内5人全部死亡。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-011",
+      "sampleGroup": "web-batch2",
+      "title": "大连发生一起交通事故致5人死亡，警方通报排除酒驾毒驾",
+      "url": "https://news.cctv.com/2026/02/03/ARTINYanxJRZDi4U5iaBOgsw260203.shtml",
+      "source": "央视网（据大连市公安局交通管理支队）",
+      "documentType": "single-report",
+      "entityCount": 14,
+      "relationCount": 4,
+      "typeCounts": {
+        "time": 1,
+        "road": 2,
+        "accident_type": 1,
+        "vehicle_attr": 3,
+        "vehicle_instance": 3,
+        "road_condition": 1,
+        "injury": 3
+      },
+      "relCounts": {
+        "vehicle_collides_vehicle": 1,
+        "person_has_injury": 3
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "死亡",
+        "受伤",
+        "当场死亡"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "相撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 4,
+      "hasChain": false,
+      "weakReason": "无违法/诱因",
+      "topRelations": [
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "小型客车",
+          "target": "货车",
+          "confidence": 0.74,
+          "ruleId": "vehicle-collision-same-sentence",
+          "evidence": "经初步调查，一名驾驶人驾驶小型客车（核定载客6人、实载6人）沿金普新区十七路由南向北行驶至莲付路路口向左转弯时，与由北向南行驶的货车相撞。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "小型客车",
+          "target": "死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "事故造成小型客车内5名乘客当场死亡，双方驾驶员受伤并送医救治，排除双方驾驶员酒驾、毒驾嫌疑，事故原因正在进一步调查中。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "小型客车",
+          "target": "受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "事故造成小型客车内5名乘客当场死亡，双方驾驶员受伤并送医救治，排除双方驾驶员酒驾、毒驾嫌疑，事故原因正在进一步调查中。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "小型客车",
+          "target": "当场死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "事故造成小型客车内5名乘客当场死亡，双方驾驶员受伤并送医救治，排除双方驾驶员酒驾、毒驾嫌疑，事故原因正在进一步调查中。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-012",
+      "sampleGroup": "web-batch2",
+      "title": "四川宜宾交警通报一起交通事故：小轿车人行横道撞倒2名行人致1死1伤",
+      "url": "https://news.cctv.com/2024/04/16/ARTInsRKyMYzaghVRtffCrph240416.shtml",
+      "source": "央视网（据宜宾市公安局交通警察支队）",
+      "documentType": "single-report",
+      "entityCount": 8,
+      "relationCount": 2,
+      "typeCounts": {
+        "time": 1,
+        "road": 2,
+        "road_condition": 1,
+        "injury": 2,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1
+      },
+      "relCounts": {
+        "person_has_injury": 2
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "1人死亡",
+        "1人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [],
+      "chainStepsCovered": 3,
+      "keyRelCount": 2,
+      "hasChain": false,
+      "weakReason": "链路环节不足(3/6); 无违法/诱因",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "小型轿车",
+          "target": "1人死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "一名驾驶人驾驶小型轿车行至该路段人行横道时，将2名行人撞倒，致1人死亡、1人受伤。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "小型轿车",
+          "target": "1人受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "一名驾驶人驾驶小型轿车行至该路段人行横道时，将2名行人撞倒，致1人死亡、1人受伤。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-013",
+      "sampleGroup": "web-batch2",
+      "title": "四川西昌警方通报：男子酒后驾车撞倒人行横道行人致3死",
+      "url": "https://news.cctv.com/2024/12/12/ARTIAKNaYuKcOV7Wq9jFIDHW241212.shtml",
+      "source": "央视网（据西昌公安）",
+      "documentType": "single-report",
+      "entityCount": 9,
+      "relationCount": 4,
+      "typeCounts": {
+        "time": 1,
+        "road": 4,
+        "injury": 1,
+        "road_condition": 1,
+        "violation": 2
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "酒后驾驶",
+        "操作不当"
+      ],
+      "injuries": [
+        "死亡"
+      ],
+      "liabilities": [],
+      "accidentTypes": [],
+      "chainStepsCovered": 4,
+      "keyRelCount": 4,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "酒后驾驶",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经检测鉴定，驾驶人系饮酒后驾驶机动车，血液中酒精含量为25.1mg/100ml，排除毒驾嫌疑，已被依法刑事拘留。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "经检测鉴定，驾驶人系饮酒后驾驶机动车，血液中酒精含量为25.1mg/100ml，排除毒驾嫌疑，已被依法刑事拘留。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "操作不当",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "经检测鉴定，驾驶人系饮酒后驾驶机动车，血液中酒精含量为25.1mg/100ml，排除毒驾嫌疑，已被依法刑事拘留。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人操作不当",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "经检测鉴定，驾驶人系饮酒后驾驶机动车，血液中酒精含量为25.1mg/100ml，排除毒驾嫌疑，已被依法刑事拘留。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-014",
+      "sampleGroup": "web-batch2",
+      "title": "海南陵水发生交通事故致2死5伤：小型越野客车撞非法营运四轮电瓶车后逃逸",
+      "url": "https://news.cctv.com/2026/03/21/ARTI1A0lMBQxsSYRbetSWdEf260321.shtml",
+      "source": "央视网（据陵水黎族自治县公安局）",
+      "documentType": "single-report",
+      "entityCount": 8,
+      "relationCount": 4,
+      "typeCounts": {
+        "time": 1,
+        "road": 2,
+        "injury": 2,
+        "accident_type": 1,
+        "vehicle_attr": 1,
+        "violation": 1
+      },
+      "relCounts": {
+        "person_has_injury": 2,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "酒后驾驶"
+      ],
+      "injuries": [
+        "造成2人死亡",
+        "5人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 4,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "瑚大道某",
+          "target": "造成2人死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "经勘查，一名驾驶人驾驶小型越野客车行驶至珊瑚大道某小区前路段时，与一辆非法营运的四轮电瓶车（非景区观光车）发生碰撞，造成2人死亡、5人受伤；"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "瑚大道某",
+          "target": "5人受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "经勘查，一名驾驶人驾驶小型越野客车行驶至珊瑚大道某小区前路段时，与一辆非法营运的四轮电瓶车（非景区观光车）发生碰撞，造成2人死亡、5人受伤；"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "酒后驾驶",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-behavior-category",
+          "evidence": "驾驶人已被警方抓获，初步调查涉嫌酒后驾驶，排除毒驾嫌疑。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "机动车驾驶人违规驾驶",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "驾驶人已被警方抓获，初步调查涉嫌酒后驾驶，排除毒驾嫌疑。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-015",
+      "sampleGroup": "web-batch2",
+      "title": "安徽广德警方通报一起致1死2伤交通事故：小型客车越过绿化带撞非机动车道电动车",
+      "url": "https://news.cctv.com/2026/06/22/ARTIOnIfXcDrW04NqssIwmmY260622.shtml",
+      "source": "央视网（据广德市公安局）",
+      "documentType": "single-report",
+      "entityCount": 8,
+      "relationCount": 3,
+      "typeCounts": {
+        "time": 1,
+        "road": 1,
+        "injury": 2,
+        "accident_type": 1,
+        "vehicle_attr": 1,
+        "vehicle_instance": 2
+      },
+      "relCounts": {
+        "person_has_injury": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "造成1人死亡",
+        "2人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 3,
+      "keyRelCount": 3,
+      "hasChain": false,
+      "weakReason": "链路环节不足(3/6); 无违法/诱因",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "小型普通客车",
+          "target": "造成1人死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "经调查，一名女性驾驶人驾驶小型普通客车沿太极大道由东向西行驶时，越过绿化带碰撞停在非机动车道上的一辆二轮电动车，造成1人死亡、2人受伤，其中1人伤势较重。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "小型普通客车",
+          "target": "2人受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "经调查，一名女性驾驶人驾驶小型普通客车沿太极大道由东向西行驶时，越过绿化带碰撞停在非机动车道上的一辆二轮电动车，造成1人死亡、2人受伤，其中1人伤势较重。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "小型普通客车",
+          "target": "电动车",
+          "confidence": 0.74,
+          "ruleId": "vehicle-collision-same-sentence",
+          "evidence": "经调查，一名女性驾驶人驾驶小型普通客车沿太极大道由东向西行驶时，越过绿化带碰撞停在非机动车道上的一辆二轮电动车，造成1人死亡、2人受伤，其中1人伤势较重。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-016",
+      "sampleGroup": "web-batch2",
+      "title": "广西柳州警方通报：国道209线两辆大货车碰撞起火致1死1伤",
+      "url": "https://news.cctv.com/2026/04/27/ARTIBzHpeVfizGQGeaSVU8uQ260427.shtml",
+      "source": "央视网（据柳州市公安局交通管理支队）",
+      "documentType": "single-report",
+      "entityCount": 9,
+      "relationCount": 0,
+      "typeCounts": {
+        "time": 2,
+        "road": 1,
+        "accident_type": 1,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1,
+        "injury": 2,
+        "property_loss": 1
+      },
+      "relCounts": {},
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "1人死亡",
+        "1人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 2,
+      "keyRelCount": 0,
+      "hasChain": false,
+      "weakReason": "链路环节不足(2/6); 无关系; 无违法/诱因",
+      "topRelations": []
+    },
+    {
+      "id": "web-b2-017",
+      "sampleGroup": "web-batch2",
+      "title": "西安交警通报：小轿车与左转出租车相撞致1死2伤",
+      "url": "https://news.cctv.com/2026/03/30/ARTILRCvWswCqmmz8Gfzcteh260330.shtml",
+      "source": "央视网（据西安市公安局交通管理支队）",
+      "documentType": "single-report",
+      "entityCount": 12,
+      "relationCount": 3,
+      "typeCounts": {
+        "time": 2,
+        "road": 1,
+        "road_condition": 1,
+        "injury": 2,
+        "property_loss": 1,
+        "accident_type": 1,
+        "vehicle_attr": 2,
+        "vehicle_instance": 2
+      },
+      "relCounts": {
+        "person_has_injury": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "死亡",
+        "受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "相撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 3,
+      "hasChain": false,
+      "weakReason": "无违法/诱因",
+      "topRelations": [
+        {
+          "type": "person_has_injury",
+          "source": "出租车",
+          "target": "死亡",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "一辆直行的小轿车与一辆左转出租车相撞，事故致一名乘客死亡、两名乘客受伤，双方车辆受损。"
+        },
+        {
+          "type": "person_has_injury",
+          "source": "出租车",
+          "target": "受伤",
+          "confidence": 0.5,
+          "ruleId": "injury-context-subject-weak",
+          "evidence": "一辆直行的小轿车与一辆左转出租车相撞，事故致一名乘客死亡、两名乘客受伤，双方车辆受损。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "轿车",
+          "target": "出租车",
+          "confidence": 0.74,
+          "ruleId": "vehicle-collision-same-sentence",
+          "evidence": "一辆直行的小轿车与一辆左转出租车相撞，事故致一名乘客死亡、两名乘客受伤，双方车辆受损。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-018",
+      "sampleGroup": "web-batch2",
+      "title": "黑龙江鹤岗发生车祸致3死3伤：G332公路施工养路工人被撞",
+      "url": "https://news.cctv.com/2023/02/15/ARTIE6ukvFWZfIL5ZbcvrZYd230214.shtml",
+      "source": "央视网（据鹤岗交警）",
+      "documentType": "single-report",
+      "entityCount": 11,
+      "relationCount": 0,
+      "typeCounts": {
+        "time": 1,
+        "road": 5,
+        "injury": 2,
+        "road_condition": 2,
+        "accident_type": 1
+      },
+      "relCounts": {},
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "3人死亡",
+        "3人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 3,
+      "keyRelCount": 0,
+      "hasChain": false,
+      "weakReason": "链路环节不足(3/6); 无关系; 无违法/诱因",
+      "topRelations": []
+    },
+    {
+      "id": "web-b2-019",
+      "sampleGroup": "web-batch2",
+      "title": "河北南和大雾道路结冰引发8起事故31车相撞，4人受伤",
+      "url": "http://news.cctv.com/2019/12/11/ARTILJ2S9RUQ50YTH5iaelb6191211.shtml",
+      "source": "央视网（据河北邢台南和县交警大队通报）",
+      "documentType": "single-report",
+      "entityCount": 26,
+      "relationCount": 10,
+      "typeCounts": {
+        "weather": 4,
+        "fault_factor": 5,
+        "time": 2,
+        "road": 3,
+        "injury": 1,
+        "accident_type": 8,
+        "property_loss": 1,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 5,
+        "report_has_fault_category": 5
+      },
+      "faultCategories": [
+        "道路环境与设施隐患",
+        "不可控/外部诱因"
+      ],
+      "faultFactors": [
+        "大雾",
+        "冰雪"
+      ],
+      "violations": [],
+      "injuries": [
+        "4人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "追尾",
+        "相撞",
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 10,
+      "hasChain": true,
+      "weakReason": "",
+      "topRelations": [
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "大雾",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "近几天大雾天气影响多地。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "近几天大雾天气影响多地。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "大雾",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "2019年12月10日早晨到上午，华北、黄淮一带出现大范围大雾天气，部分地区能见度不足200米。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "2019年12月10日早晨到上午，华北、黄淮一带出现大范围大雾天气，部分地区能见度不足200米。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "大雾",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "当天早上，在河北南和县澧河的两座大桥上，因大雾和道路结冰发生多起车辆追尾事故，共有31辆车相撞、4人受伤。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "道路环境与设施隐患",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "当天早上，在河北南和县澧河的两座大桥上，因大雾和道路结冰发生多起车辆追尾事故，共有31辆车相撞、4人受伤。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "冰雪",
+          "target": "不可控/外部诱因",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "当天早上，在河北南和县澧河的两座大桥上，因大雾和道路结冰发生多起车辆追尾事故，共有31辆车相撞、4人受伤。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "不可控/外部诱因",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "当天早上，在河北南和县澧河的两座大桥上，因大雾和道路结冰发生多起车辆追尾事故，共有31辆车相撞、4人受伤。"
+        },
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "冰雪",
+          "target": "不可控/外部诱因",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "驾驶人反映雾大、路面结冰，发现前方情况时已刹不住。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "不可控/外部诱因",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "驾驶人反映雾大、路面结冰，发现前方情况时已刹不住。"
+        }
+      ]
+    },
+    {
+      "id": "web-b2-020",
+      "sampleGroup": "web-batch2",
+      "title": "雪天路滑致货车追尾半挂车，甘肃张掖国道227线1人被困",
+      "url": "https://news.cctv.com/2023/10/19/ARTIkMzfh1gudT5DuEzI6WNd231019.shtml",
+      "source": "央视网（据消防救援报道员）",
+      "documentType": "single-report",
+      "entityCount": 16,
+      "relationCount": 3,
+      "typeCounts": {
+        "time": 2,
+        "road": 3,
+        "weather": 1,
+        "fault_factor": 1,
+        "road_condition": 1,
+        "property_loss": 2,
+        "accident_type": 2,
+        "vehicle_attr": 2,
+        "vehicle_instance": 2
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "不可控/外部诱因"
+      ],
+      "faultFactors": [
+        "冰雪"
+      ],
+      "violations": [],
+      "injuries": [],
+      "liabilities": [],
+      "accidentTypes": [
+        "追尾",
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 3,
+      "keyRelCount": 3,
+      "hasChain": false,
+      "weakReason": "链路环节不足(3/6)",
+      "topRelations": [
+        {
+          "type": "behavior_belongs_to_category",
+          "source": "冰雪",
+          "target": "不可控/外部诱因",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-factor-category",
+          "evidence": "2023年10月17日至18日，甘肃张掖境内普降大雪，国道227线及部分城区道路积雪、冰凌路段较多。"
+        },
+        {
+          "type": "report_has_fault_category",
+          "source": "report",
+          "target": "不可控/外部诱因",
+          "confidence": 0.9,
+          "ruleId": "fault-taxonomy-report-category",
+          "evidence": "2023年10月17日至18日，甘肃张掖境内普降大雪，国道227线及部分城区道路积雪、冰凌路段较多。"
+        },
+        {
+          "type": "vehicle_collides_vehicle",
+          "source": "货车",
+          "target": "半挂车",
+          "confidence": 0.74,
+          "ruleId": "vehicle-collision-same-sentence",
+          "evidence": "消防救援人员到场后发现，一辆货车追尾半挂车，货车车头因撞击挤压大部分塌陷，驾驶室严重变形，驾驶员被卡无法动弹但生命体征良好。"
+        }
+      ]
+    }
+  ]
+}
