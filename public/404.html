@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>404 · 找不到这个页面</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/theme.css">
+<style>
+.notfound {
+  min-height: calc(100vh - 64px);
+  display: grid;
+  place-items: center;
+  padding: 40px 24px;
+  background: linear-gradient(135deg, #003a70 0%, #1e5aa8 100%);
+  color: #fff;
+}
+.notfound-card {
+  text-align: center;
+  max-width: 640px;
+}
+.notfound .shrimp {
+  font-size: 96px;
+  display: inline-block;
+  animation: swim 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.2));
+}
+@keyframes swim {
+  0%, 100% { transform: translateX(0) rotate(-8deg); }
+  50%       { transform: translateX(24px) rotate(8deg); }
+}
+.notfound h1 {
+  font-size: 96px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  margin: 12px 0 4px;
+  background: linear-gradient(180deg, #ffffff 0%, #b5d0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.notfound h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.notfound p {
+  opacity: .85;
+  margin-bottom: 32px;
+  font-size: 16px;
+}
+.notfound-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.notfound-actions .btn-primary,
+.notfound-actions .btn-secondary {
+  padding: 12px 28px;
+}
+.notfound-url {
+  margin-top: 24px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  opacity: .55;
+  word-break: break-all;
+}
+[data-theme="dark"] .notfound {
+  background: linear-gradient(135deg,#0b1120 0%,#1e293b 100%);
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="brand" style="text-decoration:none">
+      <div class="brand-mark">A</div>
+      <div>
+        <div class="brand-name">Ashley Lab</div>
+        <div class="brand-sub">南京 · 智能系统实验室</div>
+      </div>
+    </a>
+    <div class="nav-menu">
+      <a href="/">首页</a>
+      <a href="/about.html">关于我</a>
+      <a href="/projects.html">项目展示</a>
+      <a href="/feedback.html">Bug 反馈</a>
+    </div>
+    <div class="nav-user" id="navUser"></div>
+  </div>
+</nav>
+
+<section class="notfound">
+  <div class="notfound-card">
+    <div class="shrimp">🦐</div>
+    <h1>404</h1>
+    <h2>这里是空的哦</h2>
+    <p>这只小虾游遍了整个实验室，也没找到你要的这个页面。<br>可能是链接过期了，或者你敲错了地址。</p>
+    <div class="notfound-actions">
+      <a href="/" class="btn-primary">🏠 回首页</a>
+      <a href="/projects.html" class="btn-secondary">👀 逛逛项目</a>
+    </div>
+    <div class="notfound-url" id="badUrl"></div>
+  </div>
+</section>
+
+<script src="/js/app.js"></script>
+<script>
+  document.getElementById('badUrl').textContent = '路径：' + location.pathname;
+  renderNavUser();
+</script>
+<!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "REPLACE_WITH_CF_ANALYTICS_TOKEN"}'></script>
+</body>
+</html>

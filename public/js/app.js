@@ -1,4 +1,36 @@
 // Ashley 个人站 - 通用前端脚本
+
+// === 主题切换（浅/深色）===
+(function initTheme() {
+  const saved = localStorage.getItem('ashley-theme');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('ashley-theme', next);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = next === 'dark' ? '☀️' : '🌙';
+}
+
+function mountThemeToggle() {
+  const host = document.getElementById('navUser');
+  if (!host || document.getElementById('themeToggle')) return;
+  const btn = document.createElement('button');
+  btn.id = 'themeToggle';
+  btn.className = 'theme-toggle';
+  btn.title = '切换深浅色';
+  btn.setAttribute('aria-label', '切换主题');
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  btn.textContent = cur === 'dark' ? '☀️' : '🌙';
+  btn.onclick = toggleTheme;
+  host.insertBefore(btn, host.firstChild);
+}
+
 const api = {
   async get(path) {
     const r = await fetch(path, { credentials: 'same-origin' });
@@ -33,6 +65,7 @@ async function renderNavUser() {
     el.innerHTML = `<a href="/login.html" class="btn-login">登录</a>
       <a href="/register.html" class="btn-outline">注册</a>`;
   }
+  mountThemeToggle();
   return user;
 }
 
