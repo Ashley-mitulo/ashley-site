@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交通知识图谱可视化</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="traffic-knowledge-graph.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; color: #fff; }
+        header { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 600; }
+        .subtitle { font-size: 14px; opacity: 0.7; font-weight: normal; }
+        .container { display: flex; height: calc(100vh - 76px); gap: 20px; padding: 20px; }
+        .legend-panel { width: 220px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+        .panel-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .legend-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(255, 255, 255, 0.03); border-radius: 8px; transition: all 0.3s ease; }
+        .legend-item:hover { background: rgba(255, 255, 255, 0.08); transform: translateX(4px); }
+        .legend-color { width: 24px; height: 24px; border: 2px solid rgba(255, 255, 255, 0.3); }
+        .person { background: #4A90E2; }
+        .vehicle { background: #E74C3C; }
+        .time { background: #F39C12; }
+        .company { background: #2ECC71; }
+        .event { background: #9B59B6; }
+        .road { background: #795548; }
+        .graph-container { flex: 1; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); overflow: hidden; position: relative; }
+        #knowledgeGraph { width: 100%; height: 100%; }
+        .property-panel { width: 280px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); padding: 20px; display: flex; flex-direction: column; }
+        .empty-state { text-align: center; margin-top: 40px; opacity: 0.5; }
+        .empty-icon { font-size: 48px; margin-bottom: 16px; }
+        .entity-info { display: none; }
+        .entity-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .entity-icon { width: 40px; height: 40px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.3); }
+        .entity-name { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+        .entity-type { font-size: 12px; padding: 2px 8px; border-radius: 10px; background: rgba(255, 255, 255, 0.1); display: inline-block; }
+        .properties-list { display: flex; flex-direction: column; gap: 12px; }
+        .property-item { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid var(--prop-color); }
+        .property-name { font-size: 12px; opacity: 0.7; margin-bottom: 4px; }
+        .property-value { font-size: 15px; font-weight: 500; }
+        .toolbar { position: absolute; top: 16px; left: 16px; z-index: 10; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); border-radius: 8px; padding: 8px; display: flex; flex-direction: column; gap: 8px; }
+        .upload-area { position: absolute; top: 16px; right: 16px; z-index: 10; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); border-radius: 8px; padding: 12px; border: 2px dashed rgba(255, 255, 255, 0.2); transition: all 0.2s ease; max-width: 200px; }
+        .upload-area.dragover { border-color: #2ECC71; background: rgba(46, 204, 113, 0.2); }
+        .upload-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; text-align: center; }
+        .upload-btn { width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(46, 204, 113, 0.3); color: #fff; cursor: pointer; font-size: 12px; transition: all 0.2s ease; }
+        .upload-btn:hover { background: rgba(46, 204, 113, 0.5); }
+        .parse-btn { background: rgba(155, 89, 182, 0.3); border-color: rgba(155, 89, 182, 0.5); }
+        .parse-btn:hover { background: rgba(155, 89, 182, 0.5); }
+        .upload-status { font-size: 11px; margin-top: 8px; opacity: 0.7; word-break: break-all; }
+        .file-input { display: none; }
+        .tool-btn { width: 36px; height: 36px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.2s ease; }
+        .tool-btn:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); }
+        .loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.8); padding: 30px 50px; border-radius: 12px; text-align: center; display: none; z-index: 100; }
+        .loading.show { display: block; }
+        .spinner { width: 40px; height: 40px; margin: 0 auto 15px; border: 3px solid rgba(255, 255, 255, 0.2); border-top-color: #2ECC71; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .hint { margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 12px; opacity: 0.6; line-height: 1.6; }
+        .toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-100px); padding: 12px 24px; border-radius: 8px; background: rgba(0, 0, 0, 0.8); color: #fff; font-size: 14px; z-index: 200; opacity: 0; transition: all 0.3s ease; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast.success { background: rgba(46, 204, 113, 0.9); }
+        .toast.error { background: rgba(231, 76, 60, 0.9); }
+    </style>
+<script src="./static-shim.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">🕸️ 交通知识图谱可视化</div>
+        <div class="subtitle">点击实体查看属性 · 支持拖拽缩放 · 上传文件自动解析</div>
+    </header>
+    <div class="container">
+        <div class="legend-panel">
+            <h3 class="panel-title">📋 实体类型图例</h3>
+            <div class="legend-item"><div class="legend-color person"></div>👤 人员</div>
+            <div class="legend-item"><div class="legend-color vehicle"></div>🚗 车辆</div>
+            <div class="legend-item"><div class="legend-color time"></div>⏰ 时间</div>
+            <div class="legend-item"><div class="legend-color company"></div>🏢 企业</div>
+            <div class="legend-item"><div class="legend-color event"></div>📌 事件</div>
+            <div class="legend-item"><div class="legend-color road"></div>🛣️ 道路</div>
+            <div class="hint"><strong>操作提示：</strong><br>• 点击节点查看属性<br>• 拖拽画布移动视角<br>• 滚轮缩放大小<br>• 右侧上传文件解析</div>
+        </div>
+        <div class="graph-container">
+            <div class="toolbar">
+                <button class="tool-btn" onclick="resetView()" title="重置视图">🖱️</button>
+                <button class="tool-btn" onclick="addRandomEntity()" title="添加随机实体">➕</button>
+                <button class="tool-btn" onclick="toggleAnimation()" title="切换动画">🔄</button>
+                <button class="tool-btn" onclick="refreshGraph()" title="刷新图谱">🔃</button>
+            </div>
+            <div id="knowledgeGraph"></div>
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-title">📄 文件操作</div>
+                <input type="file" id="fileInput" class="file-input" accept=".txt,.doc,.docx,.pdf,.xlsx,.xls">
+                <button class="upload-btn" id="uploadFileBtn" onclick="event.stopPropagation(); document.getElementById('fileInput').click()">上传文件</button>
+                <button class="upload-btn parse-btn" id="parseGraphBtn" onclick="event.stopPropagation(); parseFileToGraph()" style="display:none; margin-top:8px;">解析并更新图谱</button>
+                <div class="upload-status" id="uploadStatus">支持 txt/doc/docx/pdf/xlsx</div>
+            </div>
+            <div class="loading" id="loading"><div class="spinner"></div><div>正在解析文件，请稍候...</div></div>
+        </div>
+        <div class="property-panel">
+            <h3 class="panel-title">📋 实体属性信息</h3>
+            <div class="empty-state" id="emptyState"><div class="empty-icon">👆</div><p>点击图谱中的<br>实体查看属性信息</p></div>
+            <div class="entity-info" id="entityInfo">
+                <div class="entity-header">
+                    <div class="entity-icon" id="entityIcon"></div>
+                    <div><div class="entity-name" id="entityName"></div><div class="entity-type" id="entityType"></div></div>
+                </div>
+                <div class="properties-list" id="propertiesList"></div>
+            </div>
+            <div class="hint"><strong>功能说明：</strong><br>上传文件后自动解析文本，识别实体并推断关系，动态添加到知识图谱。</div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+</body>
+</html>

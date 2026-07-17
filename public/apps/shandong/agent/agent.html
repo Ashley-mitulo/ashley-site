@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>山东交通智能体工作台 v1.6-agent-integrated</title>
+  <link rel="stylesheet" href="/agent/css/agent.css" />
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🤖</div>
+        <div>
+          <h1>交通智能体</h1>
+          <span>PRDA Decision Platform</span>
+        </div>
+      </div>
+      <nav id="nav" class="nav"></nav>
+      <div class="side-footer">
+        <div>山东交通流量分析预测系统集成模块</div>
+        <strong>v1.6-agent-integrated</strong>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2 id="pageTitle">交通运行驾驶舱</h2>
+          <p id="pageSubTitle">感知 Perception — 研判 Reasoning — 决策 Decision — 行动 Action</p>
+        </div>
+        <div class="clock" id="clock"></div>
+      </header>
+      <section id="content" class="content"></section>
+    </main>
+  </div>
+
+  <script src="/agent/js/pages/dashboard.js?v=20260609-data-ingest-fix2"></script>
+  <script src="/agent/js/pages/road.js?v=20260609-data-ingest-fix2"></script>
+  <script src="/agent/js/pages/vehicle.js?v=20260609-data-ingest-fix2"></script>
+  <script src="/agent/js/pages/logistics.js?v=20260609-data-ingest-fix2"></script>
+  <script src="/agent/js/pages/enforcement.js?v=20260609-data-ingest-fix2"></script>
+  <script src="/agent/js/pages/credit.js?v=20260609-data-ingest-fix2"></script>
+  <script src="/agent/js/pages/emergency.js?v=20260609-data-ingest-fix2"></script>
+  <script src="/agent/js/pages/qa.js?v=20260609-data-ingest-fix2"></script>
+  <script src="/agent/js/pages/data-ingest.js?v=20260609-data-ingest-fix2"></script>
+  <script src="/agent/js/pages/knowledge.js?v=20260609-data-ingest-fix2"></script>
+  <script src="/agent/js/pages/report.js?v=20260609-data-ingest-fix2"></script>
+  <script src="/agent/js/agent-app.js?v=20260609-data-ingest-fix2"></script>
+</body>
+</html>
