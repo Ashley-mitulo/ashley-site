@@ -1,0 +1,38 @@
+{
+  "iteration": {
+    "best_cost": 538.7086774018397,
+    "best_plan_indices": [
+      77,
+      108,
+      127,
+      154,
+      287
+    ],
+    "current_best_cost": 538.7086774018397,
+    "iteration": 44,
+    "mean_cost": 964.9500755868535,
+    "station_distances": [
+      28230816.37558605,
+      22477875.525529023,
+      29895980.956968028,
+      23501237.24837704,
+      20016731.04422801
+    ],
+    "station_populations": [
+      3071.0,
+      13044.0,
+      16371.0,
+      13766.0,
+      8724.0
+    ],
+    "stats": {
+      "avg_distance_per_person": 2257.7604982299213,
+      "avg_population_per_station": 10995.2,
+      "distance_std": 3679544.0861496464,
+      "population_std": 4663.162763618701,
+      "total_distance": 124122641.15068814,
+      "total_population": 54976.0
+    }
+  },
+  "success": true
+}

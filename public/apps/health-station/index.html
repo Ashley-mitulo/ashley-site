@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卫生站选址优化系统</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="./static/css/style.css" />
+<script src="./static-shim.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1>🏥 卫生站选址优化系统</h1>
+            <p class="subtitle">基于遗传算法的公共服务设施智能选址平台</p>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <!-- 左侧：参数配置和结果 -->
+            <div class="left-panel">
+                <!-- 步骤1：参数配置 -->
+                <section class="card">
+                    <h2>📋 步骤1：参数配置</h2>
+                    <div class="form-group">
+                        <label for="n_stations">站点数量:</label>
+                        <input type="number" id="n_stations" value="5" min="1" max="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="population_size">种群大小:</label>
+                        <input type="number" id="population_size" value="30" min="10" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="max_iterations">迭代次数:</label>
+                        <input type="number" id="max_iterations" value="50" min="10" max="200">
+                    </div>
+                    <div class="form-group">
+                        <label for="crossover_rate">交叉概率:</label>
+                        <input type="number" id="crossover_rate" value="0.7" min="0" max="1" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="mutation_rate">变异概率:</label>
+                        <input type="number" id="mutation_rate" value="0.2" min="0" max="1" step="0.1">
+                    </div>
+                    <button id="startBtn" class="btn btn-primary">🚀 开始优化</button>
+                </section>
+
+                <!-- 步骤2：执行过程 -->
+                <section class="card">
+                    <h2>📊 步骤2：执行过程</h2>
+                    <div id="statusText" class="status-text">等待开始...</div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                        <span id="progressText">0/0</span>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="costChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- 步骤3：结果展示 -->
+                <section class="card">
+                    <h2>📍 步骤3：优化结果</h2>
+                    <div id="resultStats" class="result-stats">
+                        <div class="stat-item">
+                            <span class="label">总优化时间:</span>
+                            <span id="totalTime" class="value">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">最优成本:</span>
+                            <span id="bestCost" class="value">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">总服务人口:</span>
+                            <span id="totalPopulation" class="value">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">平均服务距离:</span>
+                            <span id="avgDistance" class="value">-</span>
+                        </div>
+                    </div>
+                    
+                    <div id="stationsList" class="stations-list">
+                        <p class="hint">运行优化后将显示站点详情</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 右侧：地图可视化 -->
+            <div class="right-panel">
+                <section class="card map-card">
+                    <h2>🗺️ 地图可视化</h2>
+                    <div id="map" class="map-container"></div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <span class="legend-color building"></span>
+                            <span>居民点/建筑物</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color candidate"></span>
+                            <span>候选站点</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color station"></span>
+                            <span>最优站点</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- 底部说明 -->
+        <footer class="footer">
+            <p>💡 提示：系统使用遗传算法进行选址优化，可扩展应用于配电站等其他设施选址场景</p>
+        </footer>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- 主逻辑 -->
+    <script src="./static/js/main.js"></script>
+</body>
+</html>
