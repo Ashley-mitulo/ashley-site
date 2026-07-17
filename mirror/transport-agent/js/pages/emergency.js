@@ -1,0 +1,7 @@
+async function renderEmergency(root) {
+  const [incidents, resources] = await Promise.all([api('/emergency/incidents'), api('/emergency/resources')]);
+  root.innerHTML = `
+    <div class="grid grid-4">${metric('重点事件',incidents.length,'中高等级','red')}${metric('应急资源',resources.length,'可联动单位','cyan')}${metric('出动中',resources.filter(r=>r.status==='出动中').length,'正在处置','yellow')}${metric('可调度',resources.filter(r=>r.status==='可调度').length,'待命资源','green')}</div>
+    <div class="grid grid-2" style="margin-top:16px"><div class="card"><h3>事件列表 / 影响范围</h3><div class="list">${incidents.map(i=>`<div class="item"><div class="item-title">${tag(i.level,i.level)} ${i.title}</div><div class="muted">${i.prda.perception}</div>${prda(i.prda)}</div>`).join('')}</div></div><div class="card"><h3>应急资源</h3>${table(['资源','类型','位置','能力','状态'], resources.map(r=>`<tr><td>${r.name}</td><td>${r.type}</td><td>${r.location}</td><td>${r.capacity}</td><td>${tag(r.status,r.status==='出动中'?'中':'低')}</td></tr>`))}</div></div>
+    <div class="card" style="margin-top:16px"><h3>调度建议</h3><div class="list"><div class="item"><div class="item-title">G15沈海高速事故</div><div class="muted">调度青岛海湾应急联动站，实施事故清障和分流诱导。</div></div><div class="item"><div class="item-title">鲁西南强降雨积水</div><div class="muted">调度鲁西南防汛抢险队，优先保障G105济宁段桥下通行。</div></div><div class="item"><div class="item-title">滨州危化管制</div><div class="muted">联动危化专家组，对危化运输车辆实施临时停车和绕行指引。</div></div></div></div>`;
+}

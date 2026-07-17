@@ -1,0 +1,610 @@
+{
+  "summary": {
+    "sampleCount": 40,
+    "withGap": 30,
+    "strong": 10,
+    "partial": 30,
+    "weak": 0,
+    "gapLabels": {
+      "责任待认定": 23,
+      "伤亡后果待确认": 8,
+      "原因待查": 12,
+      "违法事实缺失": 12,
+      "主体身份不明": 6,
+      "事故形态待补证": 4
+    },
+    "byGroup": {
+      "generated-batch2": {
+        "count": 20,
+        "withGap": 10,
+        "strong": 10,
+        "partial": 10,
+        "weak": 0
+      },
+      "web-batch2": {
+        "count": 20,
+        "withGap": 20,
+        "strong": 0,
+        "partial": 20,
+        "weak": 0
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "GEN-B2-TA-001",
+      "group": "generated-batch2",
+      "title": "地下车库坡道会车时电动车被挤倒",
+      "entityCount": 31,
+      "relationCount": 14,
+      "gapCount": 1,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定"
+      ],
+      "weakRelations": 2
+    },
+    {
+      "id": "GEN-B2-TA-002",
+      "group": "generated-batch2",
+      "title": "黄昏收割机尾灯损坏被小客车追撞",
+      "entityCount": 13,
+      "relationCount": 4,
+      "gapCount": 1,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "伤亡后果待确认"
+      ],
+      "weakRelations": 2
+    },
+    {
+      "id": "GEN-B2-TA-003",
+      "group": "generated-batch2",
+      "title": "救护车执行任务中与左转轿车相撞",
+      "entityCount": 22,
+      "relationCount": 5,
+      "gapCount": 0,
+      "chainStatus": "strong",
+      "chainQuality": "强链路",
+      "gapLabels": [],
+      "weakRelations": 2
+    },
+    {
+      "id": "GEN-B2-TA-004",
+      "group": "generated-batch2",
+      "title": "校车雨后制动异常冲入路边浅沟",
+      "entityCount": 16,
+      "relationCount": 2,
+      "gapCount": 3,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "原因待查",
+        "违法事实缺失",
+        "责任待认定"
+      ],
+      "weakRelations": 2
+    },
+    {
+      "id": "GEN-B2-TA-005",
+      "group": "generated-batch2",
+      "title": "危化品罐车下桥时与网约车连环追尾",
+      "entityCount": 9,
+      "relationCount": 1,
+      "gapCount": 3,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "原因待查",
+        "违法事实缺失",
+        "伤亡后果待确认"
+      ],
+      "weakRelations": 1
+    },
+    {
+      "id": "GEN-B2-TA-006",
+      "group": "generated-batch2",
+      "title": "物流园叉车倒车撞上园区电瓶车",
+      "entityCount": 13,
+      "relationCount": 14,
+      "gapCount": 0,
+      "chainStatus": "strong",
+      "chainQuality": "强链路",
+      "gapLabels": [],
+      "weakRelations": 5
+    },
+    {
+      "id": "GEN-B2-TA-007",
+      "group": "generated-batch2",
+      "title": "外卖骑手闯入无信号T形口被轻卡撞倒",
+      "entityCount": 14,
+      "relationCount": 6,
+      "gapCount": 1,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "伤亡后果待确认"
+      ],
+      "weakRelations": 1
+    },
+    {
+      "id": "GEN-B2-TA-008",
+      "group": "generated-batch2",
+      "title": "山路落石后旅游大巴急避撞护栏",
+      "entityCount": 17,
+      "relationCount": 13,
+      "gapCount": 3,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定",
+        "主体身份不明",
+        "伤亡后果待确认"
+      ],
+      "weakRelations": 0
+    },
+    {
+      "id": "GEN-B2-TA-009",
+      "group": "generated-batch2",
+      "title": "皮卡货厢梯子掉落引发快速路三车事故",
+      "entityCount": 15,
+      "relationCount": 8,
+      "gapCount": 0,
+      "chainStatus": "strong",
+      "chainQuality": "强链路",
+      "gapLabels": [],
+      "weakRelations": 4
+    },
+    {
+      "id": "GEN-B2-TA-010",
+      "group": "generated-batch2",
+      "title": "小区环路无人配送车与儿童滑板车相撞",
+      "entityCount": 7,
+      "relationCount": 0,
+      "gapCount": 4,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "原因待查",
+        "违法事实缺失",
+        "主体身份不明",
+        "事故形态待补证"
+      ],
+      "weakRelations": 0
+    },
+    {
+      "id": "GEN-B2-TA-011",
+      "group": "generated-batch2",
+      "title": "夜间垃圾清运车无尾部警示被摩托车追撞",
+      "entityCount": 16,
+      "relationCount": 6,
+      "gapCount": 1,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "伤亡后果待确认"
+      ],
+      "weakRelations": 2
+    },
+    {
+      "id": "GEN-B2-TA-012",
+      "group": "generated-batch2",
+      "title": "公交专用道内电动三轮突然掉头",
+      "entityCount": 24,
+      "relationCount": 6,
+      "gapCount": 0,
+      "chainStatus": "strong",
+      "chainQuality": "强链路",
+      "gapLabels": [],
+      "weakRelations": 4
+    },
+    {
+      "id": "GEN-B2-TA-013",
+      "group": "generated-batch2",
+      "title": "冰雾天气高速匝道客车侧滑碰撞清障车",
+      "entityCount": 15,
+      "relationCount": 10,
+      "gapCount": 0,
+      "chainStatus": "strong",
+      "chainQuality": "强链路",
+      "gapLabels": [],
+      "weakRelations": 0
+    },
+    {
+      "id": "GEN-B2-TA-014",
+      "group": "generated-batch2",
+      "title": "医院急诊口轮椅横穿被倒车网约车碰倒",
+      "entityCount": 17,
+      "relationCount": 13,
+      "gapCount": 0,
+      "chainStatus": "strong",
+      "chainQuality": "强链路",
+      "gapLabels": [],
+      "weakRelations": 6
+    },
+    {
+      "id": "GEN-B2-TA-015",
+      "group": "generated-batch2",
+      "title": "施工便道泥浆带出致骑行人摔入机动车道",
+      "entityCount": 22,
+      "relationCount": 6,
+      "gapCount": 0,
+      "chainStatus": "strong",
+      "chainQuality": "强链路",
+      "gapLabels": [],
+      "weakRelations": 2
+    },
+    {
+      "id": "GEN-B2-TA-016",
+      "group": "generated-batch2",
+      "title": "渡口上船排队时半挂溜车挤压小轿车",
+      "entityCount": 14,
+      "relationCount": 5,
+      "gapCount": 0,
+      "chainStatus": "strong",
+      "chainQuality": "强链路",
+      "gapLabels": [],
+      "weakRelations": 3
+    },
+    {
+      "id": "GEN-B2-TA-017",
+      "group": "generated-batch2",
+      "title": "夜市停车场代驾起步撞倒摊主",
+      "entityCount": 8,
+      "relationCount": 2,
+      "gapCount": 2,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "伤亡后果待确认",
+        "事故形态待补证"
+      ],
+      "weakRelations": 0
+    },
+    {
+      "id": "GEN-B2-TA-018",
+      "group": "generated-batch2",
+      "title": "快递三轮车撞上临时打开的消防通道门",
+      "entityCount": 16,
+      "relationCount": 4,
+      "gapCount": 0,
+      "chainStatus": "strong",
+      "chainQuality": "强链路",
+      "gapLabels": [],
+      "weakRelations": 2
+    },
+    {
+      "id": "GEN-B2-TA-019",
+      "group": "generated-batch2",
+      "title": "洒落玉米粒让公交站前两轮车连摔",
+      "entityCount": 22,
+      "relationCount": 5,
+      "gapCount": 0,
+      "chainStatus": "strong",
+      "chainQuality": "强链路",
+      "gapLabels": [],
+      "weakRelations": 3
+    },
+    {
+      "id": "GEN-B2-TA-020",
+      "group": "generated-batch2",
+      "title": "隧道施工改道处半挂刮倒临时限宽架",
+      "entityCount": 10,
+      "relationCount": 1,
+      "gapCount": 3,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "原因待查",
+        "违法事实缺失",
+        "伤亡后果待确认"
+      ],
+      "weakRelations": 1
+    },
+    {
+      "id": "web-b2-001",
+      "group": "web-batch2",
+      "title": "公安部交通管理局公布货车典型案例：河南开封货车违规左转撞超员面包车",
+      "entityCount": 12,
+      "relationCount": 3,
+      "gapCount": 3,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "原因待查",
+        "违法事实缺失",
+        "责任待认定"
+      ],
+      "weakRelations": 2
+    },
+    {
+      "id": "web-b2-002",
+      "group": "web-batch2",
+      "title": "公安部交通管理局公布货车典型案例：山东泗水半挂车长下坡制动失效连撞行人与车辆",
+      "entityCount": 16,
+      "relationCount": 7,
+      "gapCount": 1,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定"
+      ],
+      "weakRelations": 2
+    },
+    {
+      "id": "web-b2-003",
+      "group": "web-batch2",
+      "title": "公安部交通管理局公布货车典型案例：湖北天门半挂车强行超车撞对向小客车致6死",
+      "entityCount": 13,
+      "relationCount": 2,
+      "gapCount": 3,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "原因待查",
+        "违法事实缺失",
+        "责任待认定"
+      ],
+      "weakRelations": 1
+    },
+    {
+      "id": "web-b2-004",
+      "group": "web-batch2",
+      "title": "公安部交通管理局公布三轮车典型案例：山西忻州无牌三轮汽车长下坡侧翻",
+      "entityCount": 16,
+      "relationCount": 21,
+      "gapCount": 2,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定",
+        "主体身份不明"
+      ],
+      "weakRelations": 9
+    },
+    {
+      "id": "web-b2-005",
+      "group": "web-batch2",
+      "title": "公安部交通管理局公布三轮车典型案例：安徽滁州三轮汽车闯红灯与半挂车碰撞",
+      "entityCount": 13,
+      "relationCount": 8,
+      "gapCount": 1,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定"
+      ],
+      "weakRelations": 3
+    },
+    {
+      "id": "web-b2-006",
+      "group": "web-batch2",
+      "title": "公安部交通管理局公布典型案例：安徽潜山中型客车越线迎面撞超载自卸货车",
+      "entityCount": 15,
+      "relationCount": 12,
+      "gapCount": 1,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定"
+      ],
+      "weakRelations": 6
+    },
+    {
+      "id": "web-b2-007",
+      "group": "web-batch2",
+      "title": "公安部交通管理局公布典型案例：辽宁营口无信号路口小客车未让右方来车与半挂车相撞",
+      "entityCount": 19,
+      "relationCount": 10,
+      "gapCount": 1,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定"
+      ],
+      "weakRelations": 4
+    },
+    {
+      "id": "web-b2-008",
+      "group": "web-batch2",
+      "title": "公安部交通管理局公布典型案例：包茂高速货车侧翻洒落物后二次事故致3死",
+      "entityCount": 15,
+      "relationCount": 10,
+      "gapCount": 1,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定"
+      ],
+      "weakRelations": 4
+    },
+    {
+      "id": "web-b2-009",
+      "group": "web-batch2",
+      "title": "公安部交通管理局公布典型案例：江西宜春半挂车路口撞三轮摩托车",
+      "entityCount": 19,
+      "relationCount": 8,
+      "gapCount": 1,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定"
+      ],
+      "weakRelations": 4
+    },
+    {
+      "id": "web-b2-010",
+      "group": "web-batch2",
+      "title": "公安部交通管理局公布典型案例：甘肃张掖重型半挂车避让闯红灯老年代步车侧翻压车",
+      "entityCount": 15,
+      "relationCount": 10,
+      "gapCount": 1,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定"
+      ],
+      "weakRelations": 5
+    },
+    {
+      "id": "web-b2-011",
+      "group": "web-batch2",
+      "title": "大连发生一起交通事故致5人死亡，警方通报排除酒驾毒驾",
+      "entityCount": 14,
+      "relationCount": 4,
+      "gapCount": 3,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "原因待查",
+        "违法事实缺失",
+        "责任待认定"
+      ],
+      "weakRelations": 3
+    },
+    {
+      "id": "web-b2-012",
+      "group": "web-batch2",
+      "title": "四川宜宾交警通报一起交通事故：小轿车人行横道撞倒2名行人致1死1伤",
+      "entityCount": 8,
+      "relationCount": 2,
+      "gapCount": 4,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "原因待查",
+        "违法事实缺失",
+        "责任待认定",
+        "事故形态待补证"
+      ],
+      "weakRelations": 2
+    },
+    {
+      "id": "web-b2-013",
+      "group": "web-batch2",
+      "title": "四川西昌警方通报：男子酒后驾车撞倒人行横道行人致3死",
+      "entityCount": 9,
+      "relationCount": 4,
+      "gapCount": 3,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定",
+        "主体身份不明",
+        "事故形态待补证"
+      ],
+      "weakRelations": 0
+    },
+    {
+      "id": "web-b2-014",
+      "group": "web-batch2",
+      "title": "海南陵水发生交通事故致2死5伤：小型越野客车撞非法营运四轮电瓶车后逃逸",
+      "entityCount": 8,
+      "relationCount": 4,
+      "gapCount": 2,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定",
+        "主体身份不明"
+      ],
+      "weakRelations": 2
+    },
+    {
+      "id": "web-b2-015",
+      "group": "web-batch2",
+      "title": "安徽广德警方通报一起致1死2伤交通事故：小型客车越过绿化带撞非机动车道电动车",
+      "entityCount": 8,
+      "relationCount": 3,
+      "gapCount": 3,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "原因待查",
+        "违法事实缺失",
+        "责任待认定"
+      ],
+      "weakRelations": 2
+    },
+    {
+      "id": "web-b2-016",
+      "group": "web-batch2",
+      "title": "广西柳州警方通报：国道209线两辆大货车碰撞起火致1死1伤",
+      "entityCount": 9,
+      "relationCount": 0,
+      "gapCount": 3,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "原因待查",
+        "违法事实缺失",
+        "责任待认定"
+      ],
+      "weakRelations": 0
+    },
+    {
+      "id": "web-b2-017",
+      "group": "web-batch2",
+      "title": "西安交警通报：小轿车与左转出租车相撞致1死2伤",
+      "entityCount": 12,
+      "relationCount": 3,
+      "gapCount": 3,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "原因待查",
+        "违法事实缺失",
+        "责任待认定"
+      ],
+      "weakRelations": 2
+    },
+    {
+      "id": "web-b2-018",
+      "group": "web-batch2",
+      "title": "黑龙江鹤岗发生车祸致3死3伤：G332公路施工养路工人被撞",
+      "entityCount": 11,
+      "relationCount": 0,
+      "gapCount": 4,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "原因待查",
+        "违法事实缺失",
+        "责任待认定",
+        "主体身份不明"
+      ],
+      "weakRelations": 0
+    },
+    {
+      "id": "web-b2-019",
+      "group": "web-batch2",
+      "title": "河北南和大雾道路结冰引发8起事故31车相撞，4人受伤",
+      "entityCount": 26,
+      "relationCount": 10,
+      "gapCount": 1,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定"
+      ],
+      "weakRelations": 0
+    },
+    {
+      "id": "web-b2-020",
+      "group": "web-batch2",
+      "title": "雪天路滑致货车追尾半挂车，甘肃张掖国道227线1人被困",
+      "entityCount": 16,
+      "relationCount": 3,
+      "gapCount": 2,
+      "chainStatus": "partial",
+      "chainQuality": "待补证链路",
+      "gapLabels": [
+        "责任待认定",
+        "伤亡后果待确认"
+      ],
+      "weakRelations": 0
+    }
+  ]
+}

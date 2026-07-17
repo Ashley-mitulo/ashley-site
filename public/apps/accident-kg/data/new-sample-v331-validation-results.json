@@ -1,0 +1,2271 @@
+{
+  "summary": {
+    "combinedCount": 50,
+    "parsedCount": 50,
+    "withRelations": 46,
+    "withChain": 35,
+    "withFaultCategory": 41,
+    "withFaultFactor": 12,
+    "withViolation": 36,
+    "withInjury": 39,
+    "withLiability": 30,
+    "avgEntities": 14.9,
+    "avgRelations": 6.4,
+    "relationTypes": {
+      "behavior_belongs_to_category": 106,
+      "report_has_fault_category": 88,
+      "person_commits_violation": 56,
+      "person_has_injury": 38,
+      "vehicle_collides_vehicle": 33,
+      "person_bears_liability": 1
+    },
+    "weakSamples": [
+      {
+        "id": "web-003",
+        "group": "web",
+        "title": "南宁交警通报“3死11伤货车相撞事故”：未发现酒驾",
+        "reason": "链路环节不足(3/6); 无违法/诱因",
+        "entities": 9,
+        "relations": 4,
+        "steps": 3
+      },
+      {
+        "id": "web-004",
+        "group": "web",
+        "title": "突发：一人当场身亡！京哈高速运粮河段货车相撞！",
+        "reason": "链路环节不足(2/6); 无违法/诱因",
+        "entities": 8,
+        "relations": 1,
+        "steps": 2
+      },
+      {
+        "id": "web-005",
+        "group": "web",
+        "title": "山西曲沃县一货车发生交通事故致3死6伤，警方：初步分析系司机分心驾驶造成",
+        "reason": "链路环节不足(3/6)",
+        "entities": 6,
+        "relations": 4,
+        "steps": 3
+      },
+      {
+        "id": "web-006",
+        "group": "web",
+        "title": "疲劳驾驶加超速 大货车冲进超市",
+        "reason": "链路环节不足(3/6)",
+        "entities": 6,
+        "relations": 8,
+        "steps": 3
+      },
+      {
+        "id": "web-009",
+        "group": "web",
+        "title": "沈海高速发生客车与两货车相撞交通事故 致8死17伤",
+        "reason": "无违法/诱因",
+        "entities": 10,
+        "relations": 4,
+        "steps": 4
+      },
+      {
+        "id": "web-010",
+        "group": "web",
+        "title": "苏州市工业园区一高架发生多车追尾交通事故 致9人受伤",
+        "reason": "链路环节不足(2/6); 无关系; 无违法/诱因",
+        "entities": 5,
+        "relations": 0,
+        "steps": 2
+      },
+      {
+        "id": "web-011",
+        "group": "web",
+        "title": "大雾引发安徽阜阳境内高速多车追尾",
+        "reason": "链路环节不足(3/6)",
+        "entities": 7,
+        "relations": 2,
+        "steps": 3
+      },
+      {
+        "id": "web-012",
+        "group": "web",
+        "title": "滁新高速颍上段昨发生多车追尾 安徽 数十车追尾 致18人遇难",
+        "reason": "链路环节不足(1/6); 无关系; 无违法/诱因",
+        "entities": 5,
+        "relations": 0,
+        "steps": 1
+      },
+      {
+        "id": "web-013",
+        "group": "web",
+        "title": "河南二广高速鲁山四棵树段18车追尾致2死31伤",
+        "reason": "链路环节不足(3/6); 无关系; 无违法/诱因",
+        "entities": 13,
+        "relations": 0,
+        "steps": 3
+      },
+      {
+        "id": "web-014",
+        "group": "web",
+        "title": "甘肃临夏：货车雪天追尾司机被卡 深夜救援",
+        "reason": "链路环节不足(3/6)",
+        "entities": 15,
+        "relations": 4,
+        "steps": 3
+      },
+      {
+        "id": "web-015",
+        "group": "web",
+        "title": "男子酒驾撞人致死毫无察觉？ 民警：你在睡梦中吗？",
+        "reason": "链路环节不足(2/6); 无关系; 无违法/诱因",
+        "entities": 3,
+        "relations": 0,
+        "steps": 2
+      },
+      {
+        "id": "web-016",
+        "group": "web",
+        "title": "公安部交管局公布近期路口事故案例 提醒行经路口要“减速、观察、让行”",
+        "reason": "无违法/诱因",
+        "entities": 16,
+        "relations": 3,
+        "steps": 4
+      },
+      {
+        "id": "web-017",
+        "group": "web",
+        "title": "行人被撞卷入车底 众人合力抬车救人",
+        "reason": "链路环节不足(2/6)",
+        "entities": 4,
+        "relations": 2,
+        "steps": 2
+      },
+      {
+        "id": "web-019",
+        "group": "web",
+        "title": "大连一公交车失控与多车碰撞，致4人受伤",
+        "reason": "无违法/诱因",
+        "entities": 8,
+        "relations": 2,
+        "steps": 4
+      },
+      {
+        "id": "web-020",
+        "group": "web",
+        "title": "货车刹车失灵 追尾又撞上收费站",
+        "reason": "链路环节不足(3/6)",
+        "entities": 12,
+        "relations": 4,
+        "steps": 3
+      }
+    ]
+  },
+  "results": [
+    {
+      "id": "GEN-TA-001",
+      "sampleGroup": "generated",
+      "title": "雨天高架入口三车追尾",
+      "documentType": "police-accident-report",
+      "entityCount": 30,
+      "relationCount": 11,
+      "typeCounts": {
+        "time": 1,
+        "road": 1,
+        "weather": 2,
+        "road_condition": 1,
+        "fault_factor": 2,
+        "accident_type": 3,
+        "violation": 2,
+        "vehicle_attr": 5,
+        "vehicle_instance": 8,
+        "injury": 1,
+        "property_loss": 2,
+        "liability": 2
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 4,
+        "report_has_fault_category": 3,
+        "person_commits_violation": 2,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "道路环境与设施隐患",
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [
+        "积水",
+        "急弯/坡道风险"
+      ],
+      "violations": [
+        "未保持安全车距",
+        "盲区观察不足"
+      ],
+      "injuries": [
+        "和网约车乘客轻微擦伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "急刹追尾",
+        "碰撞",
+        "爆胎二次事故"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 11,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-002",
+      "sampleGroup": "generated",
+      "title": "外卖电动车与闯红灯轿车相撞",
+      "documentType": "single-report",
+      "entityCount": 18,
+      "relationCount": 10,
+      "typeCounts": {
+        "road_condition": 1,
+        "vehicle_attr": 6,
+        "vehicle_instance": 6,
+        "violation": 3,
+        "property_loss": 1,
+        "liability": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 3,
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 3,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人操作不当",
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "分心驾驶",
+        "未按交通信号灯通行"
+      ],
+      "injuries": [],
+      "liabilities": [
+        "主要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 10,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-003",
+      "sampleGroup": "generated",
+      "title": "夜间乡道会车刮碰后货车侧翻",
+      "documentType": "police-accident-report",
+      "entityCount": 27,
+      "relationCount": 8,
+      "typeCounts": {
+        "time": 2,
+        "road": 1,
+        "weather": 2,
+        "road_condition": 2,
+        "fault_factor": 2,
+        "accident_type": 3,
+        "vehicle_attr": 5,
+        "vehicle_instance": 5,
+        "injury": 1,
+        "property_loss": 1,
+        "violation": 1,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_bears_liability": 1,
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 2,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "道路环境与设施隐患",
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [
+        "照明不足",
+        "急弯/坡道风险"
+      ],
+      "violations": [
+        "弯道越线"
+      ],
+      "injuries": [
+        "货车驾驶人胸部挫伤"
+      ],
+      "liabilities": [
+        "主要过错",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "会车刮倒",
+        "侧翻"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 8,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-004",
+      "sampleGroup": "generated",
+      "title": "出租车开门碰倒共享电单车",
+      "documentType": "police-accident-report",
+      "entityCount": 12,
+      "relationCount": 6,
+      "typeCounts": {
+        "vehicle_attr": 3,
+        "vehicle_instance": 2,
+        "injury": 1,
+        "property_loss": 2,
+        "violation": 2,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人操作不当",
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "盲区观察不足",
+        "未按条件降低车速"
+      ],
+      "injuries": [
+        "手腕骨折"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 6,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-005",
+      "sampleGroup": "generated",
+      "title": "施工围挡遮挡视线左转撞摩托",
+      "documentType": "single-report",
+      "entityCount": 27,
+      "relationCount": 5,
+      "typeCounts": {
+        "road_condition": 3,
+        "road": 1,
+        "accident_type": 1,
+        "vehicle_attr": 8,
+        "vehicle_instance": 8,
+        "injury": 1,
+        "property_loss": 2,
+        "violation": 1,
+        "liability": 2
+      },
+      "relCounts": {
+        "vehicle_collides_vehicle": 1,
+        "person_has_injury": 1,
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "未让行"
+      ],
+      "injuries": [
+        "戴头盔但左肩脱臼"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "相撞"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 5,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-006",
+      "sampleGroup": "generated",
+      "title": "大雾中客车追撞低速三轮车",
+      "documentType": "police-accident-report",
+      "entityCount": 11,
+      "relationCount": 4,
+      "typeCounts": {
+        "accident_type": 1,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1,
+        "injury": 2,
+        "property_loss": 1,
+        "violation": 1,
+        "liability": 2,
+        "weather": 1,
+        "fault_factor": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2
+      },
+      "faultCategories": [
+        "机动车驾驶人操作不当",
+        "道路环境与设施隐患"
+      ],
+      "faultFactors": [
+        "大雾"
+      ],
+      "violations": [
+        "盲区观察不足"
+      ],
+      "injuries": [
+        "重伤",
+        "轻伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 4,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-007",
+      "sampleGroup": "generated",
+      "title": "酒后逆行皮卡迎面撞网约车",
+      "documentType": "single-report",
+      "entityCount": 11,
+      "relationCount": 9,
+      "typeCounts": {
+        "vehicle_instance": 3,
+        "accident_type": 1,
+        "violation": 4,
+        "injury": 1,
+        "property_loss": 1,
+        "liability": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 4,
+        "report_has_fault_category": 3,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "酒后驾驶",
+        "操作不当",
+        "逆向行驶"
+      ],
+      "injuries": [
+        "鼻骨骨折"
+      ],
+      "liabilities": [
+        "主要责任"
+      ],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 9,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-008",
+      "sampleGroup": "generated",
+      "title": "学校门口斑马线未礼让行人",
+      "documentType": "police-accident-report",
+      "entityCount": 15,
+      "relationCount": 8,
+      "typeCounts": {
+        "accident_type": 1,
+        "violation": 2,
+        "vehicle_attr": 4,
+        "vehicle_instance": 4,
+        "injury": 1,
+        "property_loss": 2,
+        "liability": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 2,
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "行人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "未让行"
+      ],
+      "injuries": [
+        "学生左小腿骨折"
+      ],
+      "liabilities": [
+        "主要责任"
+      ],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 8,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-009",
+      "sampleGroup": "generated",
+      "title": "高速服务区入口连续变道侧碰半挂",
+      "documentType": "police-accident-report",
+      "entityCount": 22,
+      "relationCount": 10,
+      "typeCounts": {
+        "traffic_place": 1,
+        "accident_type": 1,
+        "vehicle_attr": 6,
+        "vehicle_instance": 6,
+        "injury": 1,
+        "property_loss": 2,
+        "violation": 3,
+        "liability": 2
+      },
+      "relCounts": {
+        "vehicle_collides_vehicle": 1,
+        "person_has_injury": 1,
+        "person_commits_violation": 3,
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 2
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "疲劳驾驶",
+        "违法变道",
+        "操作不当"
+      ],
+      "injuries": [
+        "2人轻伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "侧碰"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 10,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-010",
+      "sampleGroup": "generated",
+      "title": "农贸市场倒车撞伤老人",
+      "documentType": "police-accident-report",
+      "entityCount": 17,
+      "relationCount": 16,
+      "typeCounts": {
+        "violation": 6,
+        "vehicle_attr": 3,
+        "vehicle_instance": 3,
+        "injury": 1,
+        "property_loss": 2,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_commits_violation": 5,
+        "behavior_belongs_to_category": 6,
+        "report_has_fault_category": 3,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "行人违法/过错",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "盲区观察不足",
+        "操作不当",
+        "倒车未确认安全"
+      ],
+      "injuries": [
+        "老人髋部骨裂"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 16,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-011",
+      "sampleGroup": "generated",
+      "title": "公交急刹致站立乘客摔伤",
+      "documentType": "police-accident-report",
+      "entityCount": 26,
+      "relationCount": 17,
+      "typeCounts": {
+        "time": 1,
+        "road": 1,
+        "violation": 6,
+        "vehicle_attr": 7,
+        "vehicle_instance": 5,
+        "property_loss": 2,
+        "accident_type": 2,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_commits_violation": 4,
+        "behavior_belongs_to_category": 6,
+        "report_has_fault_category": 6,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "违法变道",
+        "起步未确认盲区",
+        "未按条件降低车速",
+        "操作不当"
+      ],
+      "injuries": [],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "碰撞",
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 17,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-012",
+      "sampleGroup": "generated",
+      "title": "环岛入口大巴未让行轿车",
+      "documentType": "police-accident-report",
+      "entityCount": 17,
+      "relationCount": 7,
+      "typeCounts": {
+        "road": 1,
+        "accident_type": 1,
+        "vehicle_attr": 5,
+        "vehicle_instance": 5,
+        "injury": 1,
+        "violation": 2,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2,
+        "person_commits_violation": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "未让行",
+        "盲区观察不足"
+      ],
+      "injuries": [
+        "头皮裂伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "相撞"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 7,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-013",
+      "sampleGroup": "generated",
+      "title": "夜间无牌电动自行车逆行擦碰轿车",
+      "documentType": "police-accident-report",
+      "entityCount": 18,
+      "relationCount": 10,
+      "typeCounts": {
+        "violation": 3,
+        "vehicle_attr": 7,
+        "vehicle_instance": 6,
+        "injury": 1,
+        "liability": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 3,
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 2,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "逆向行驶",
+        "无牌"
+      ],
+      "injuries": [
+        "膝部擦伤"
+      ],
+      "liabilities": [
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 10,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-014",
+      "sampleGroup": "generated",
+      "title": "凌晨冷藏货车疲劳驾驶撞隔离护栏",
+      "documentType": "single-report",
+      "entityCount": 11,
+      "relationCount": 4,
+      "typeCounts": {
+        "time": 1,
+        "road": 1,
+        "vehicle_instance": 1,
+        "weather": 1,
+        "injury": 1,
+        "property_loss": 2,
+        "accident_type": 1,
+        "violation": 2,
+        "liability": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "疲劳驾驶",
+        "操作不当"
+      ],
+      "injuries": [
+        "轻伤"
+      ],
+      "liabilities": [
+        "全部责任"
+      ],
+      "accidentTypes": [
+        "单方事故"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 4,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-015",
+      "sampleGroup": "generated",
+      "title": "冰雪坡道转弯失控撞对向小货车",
+      "documentType": "police-accident-report",
+      "entityCount": 23,
+      "relationCount": 12,
+      "typeCounts": {
+        "road": 1,
+        "weather": 2,
+        "violation": 2,
+        "vehicle_attr": 5,
+        "vehicle_instance": 5,
+        "road_condition": 2,
+        "injury": 1,
+        "property_loss": 1,
+        "liability": 2,
+        "fault_factor": 2
+      },
+      "relCounts": {
+        "person_commits_violation": 2,
+        "behavior_belongs_to_category": 4,
+        "report_has_fault_category": 4,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "不可控/外部诱因",
+        "道路环境与设施隐患"
+      ],
+      "faultFactors": [
+        "冰雪",
+        "路面湿滑"
+      ],
+      "violations": [
+        "弯道越线"
+      ],
+      "injuries": [
+        "面部擦伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 6,
+      "keyRelCount": 12,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-016",
+      "sampleGroup": "generated",
+      "title": "右转货车内轮差挤碰自行车",
+      "documentType": "single-report",
+      "entityCount": 18,
+      "relationCount": 13,
+      "typeCounts": {
+        "vehicle_attr": 3,
+        "vehicle_instance": 6,
+        "road_condition": 1,
+        "injury": 1,
+        "accident_type": 1,
+        "violation": 4,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_commits_violation": 4,
+        "behavior_belongs_to_category": 4,
+        "report_has_fault_category": 3,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "盲区观察不足",
+        "未让行",
+        "违法横穿"
+      ],
+      "injuries": [
+        "腿部擦伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "挤碰"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 13,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-017",
+      "sampleGroup": "generated",
+      "title": "网约车临时掉头撞上直行摩托",
+      "documentType": "police-accident-report",
+      "entityCount": 16,
+      "relationCount": 5,
+      "typeCounts": {
+        "road": 1,
+        "accident_type": 2,
+        "vehicle_attr": 3,
+        "vehicle_instance": 6,
+        "injury": 1,
+        "violation": 1,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "无证驾驶"
+      ],
+      "injuries": [
+        "腰部扭伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "掉头碰撞"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 5,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-018",
+      "sampleGroup": "generated",
+      "title": "货车遗撒砂石致后车滑倒追尾",
+      "documentType": "single-report",
+      "entityCount": 24,
+      "relationCount": 16,
+      "typeCounts": {
+        "road": 1,
+        "accident_type": 2,
+        "violation": 2,
+        "vehicle_attr": 5,
+        "vehicle_instance": 3,
+        "fault_factor": 7,
+        "injury": 1,
+        "property_loss": 1,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 9,
+        "report_has_fault_category": 4,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "车辆状态/装载问题",
+        "道路环境与设施隐患"
+      ],
+      "faultFactors": [
+        "路面湿滑",
+        "急弯/坡道风险",
+        "路面遗撒",
+        "货物固定不足"
+      ],
+      "violations": [
+        "货物固定不足"
+      ],
+      "injuries": [
+        "轻伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "追尾",
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 16,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-019",
+      "sampleGroup": "generated",
+      "title": "红绿灯停电路口未让右方车",
+      "documentType": "police-accident-report",
+      "entityCount": 19,
+      "relationCount": 4,
+      "typeCounts": {
+        "time": 1,
+        "road": 1,
+        "road_condition": 3,
+        "person": 5,
+        "accident_type": 1,
+        "violation": 1,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1,
+        "injury": 1,
+        "property_loss": 1,
+        "liability": 3
+      },
+      "relCounts": {
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1,
+        "person_has_injury": 1
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "未按条件降低车速"
+      ],
+      "injuries": [
+        "轻伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任",
+        "无责任"
+      ],
+      "accidentTypes": [
+        "侧碰"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 4,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-020",
+      "sampleGroup": "generated",
+      "title": "隧道内低速停车引发追尾",
+      "documentType": "police-accident-report",
+      "entityCount": 17,
+      "relationCount": 5,
+      "typeCounts": {
+        "accident_type": 2,
+        "vehicle_attr": 4,
+        "vehicle_instance": 4,
+        "injury": 1,
+        "property_loss": 1,
+        "time": 1,
+        "road": 1,
+        "violation": 1,
+        "liability": 1,
+        "weather": 1
+      },
+      "relCounts": {
+        "vehicle_collides_vehicle": 1,
+        "person_has_injury": 1,
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "盲区观察不足"
+      ],
+      "injuries": [
+        "颈部扭伤"
+      ],
+      "liabilities": [
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "追尾",
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 5,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-021",
+      "sampleGroup": "generated",
+      "title": "雨夜无灯电动三轮横穿省道",
+      "documentType": "police-accident-report",
+      "entityCount": 18,
+      "relationCount": 5,
+      "typeCounts": {
+        "road": 2,
+        "weather": 2,
+        "vehicle_attr": 5,
+        "vehicle_instance": 5,
+        "injury": 1,
+        "violation": 1,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "未让行"
+      ],
+      "injuries": [
+        "肋骨骨折"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 6,
+      "keyRelCount": 5,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-022",
+      "sampleGroup": "generated",
+      "title": "快递面包车占用应急车道刮碰故障车",
+      "documentType": "police-accident-report",
+      "entityCount": 17,
+      "relationCount": 7,
+      "typeCounts": {
+        "accident_type": 2,
+        "vehicle_attr": 6,
+        "vehicle_instance": 3,
+        "injury": 2,
+        "violation": 2,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_has_injury": 2,
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "违法停车",
+        "未按规定开启警示灯"
+      ],
+      "injuries": [
+        "受伤",
+        "站在护栏外未受伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "爆胎二次事故",
+        "刮擦"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 7,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-023",
+      "sampleGroup": "generated",
+      "title": "临时公交站前行人从车头窜出",
+      "documentType": "police-accident-report",
+      "entityCount": 27,
+      "relationCount": 9,
+      "typeCounts": {
+        "time": 1,
+        "vehicle_attr": 8,
+        "vehicle_instance": 8,
+        "road": 2,
+        "injury": 1,
+        "property_loss": 2,
+        "violation": 3,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 2,
+        "person_commits_violation": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "行人违法/过错",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "违法横穿",
+        "盲区观察不足",
+        "未按条件降低车速"
+      ],
+      "injuries": [
+        "肩部脱臼"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 9,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-024",
+      "sampleGroup": "generated",
+      "title": "危化品空罐车未按导向车道右转",
+      "documentType": "police-accident-report",
+      "entityCount": 7,
+      "relationCount": 6,
+      "typeCounts": {
+        "accident_type": 1,
+        "violation": 3,
+        "property_loss": 2,
+        "liability": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 3
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "违法变道",
+        "盲区观察不足"
+      ],
+      "injuries": [],
+      "liabilities": [
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "挤碰"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 6,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-025",
+      "sampleGroup": "generated",
+      "title": "共享单车骑行人低头看手机撞上开出小区车辆",
+      "documentType": "single-report",
+      "entityCount": 18,
+      "relationCount": 8,
+      "typeCounts": {
+        "vehicle_attr": 5,
+        "vehicle_instance": 6,
+        "road_condition": 1,
+        "violation": 2,
+        "injury": 1,
+        "property_loss": 1,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_commits_violation": 2,
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "违法横穿"
+      ],
+      "injuries": [
+        "手肘骨裂"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 6,
+      "keyRelCount": 8,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-026",
+      "sampleGroup": "generated",
+      "title": "山路弯道客车越线避坑碰撞货车",
+      "documentType": "police-accident-report",
+      "entityCount": 21,
+      "relationCount": 10,
+      "typeCounts": {
+        "road": 2,
+        "accident_type": 3,
+        "vehicle_attr": 3,
+        "vehicle_instance": 3,
+        "road_condition": 2,
+        "injury": 1,
+        "property_loss": 2,
+        "violation": 3,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_commits_violation": 2,
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 3,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "未系安全带",
+        "弯道越线",
+        "未按条件降低车速"
+      ],
+      "injuries": [
+        "轻伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "会车刮倒",
+        "相撞"
+      ],
+      "chainStepsCovered": 6,
+      "keyRelCount": 10,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-027",
+      "sampleGroup": "generated",
+      "title": "重型货车超载制动失效追尾排队车辆",
+      "documentType": "police-accident-report",
+      "entityCount": 15,
+      "relationCount": 8,
+      "typeCounts": {
+        "vehicle_attr": 5,
+        "vehicle_instance": 6,
+        "injury": 1,
+        "violation": 2,
+        "liability": 1
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "person_commits_violation": 2,
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "超载"
+      ],
+      "injuries": [
+        "重伤"
+      ],
+      "liabilities": [
+        "主要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 8,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-028",
+      "sampleGroup": "generated",
+      "title": "早市路口电动轮椅与右转轿车碰撞",
+      "documentType": "police-accident-report",
+      "entityCount": 11,
+      "relationCount": 6,
+      "typeCounts": {
+        "road": 1,
+        "vehicle_attr": 2,
+        "vehicle_instance": 2,
+        "injury": 1,
+        "property_loss": 1,
+        "violation": 2,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "行人违法/过错",
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "未让行",
+        "弯道越线"
+      ],
+      "injuries": [
+        "老人摔倒造成髋部挫伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 5,
+      "keyRelCount": 6,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-029",
+      "sampleGroup": "generated",
+      "title": "洒水车作业未设提示导致摩托滑倒",
+      "documentType": "police-accident-report",
+      "entityCount": 22,
+      "relationCount": 16,
+      "typeCounts": {
+        "violation": 3,
+        "vehicle_attr": 5,
+        "vehicle_instance": 5,
+        "road_condition": 3,
+        "fault_factor": 3,
+        "injury": 1,
+        "liability": 2
+      },
+      "relCounts": {
+        "person_commits_violation": 3,
+        "behavior_belongs_to_category": 6,
+        "report_has_fault_category": 5,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错",
+        "道路环境与设施隐患"
+      ],
+      "faultFactors": [
+        "积水",
+        "路面湿滑"
+      ],
+      "violations": [
+        "违法变道",
+        "盲区观察不足"
+      ],
+      "injuries": [
+        "膝盖挫裂伤"
+      ],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [],
+      "chainStepsCovered": 6,
+      "keyRelCount": 16,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "GEN-TA-030",
+      "sampleGroup": "generated",
+      "title": "限高架前急停引发两车追尾",
+      "documentType": "police-accident-report",
+      "entityCount": 24,
+      "relationCount": 7,
+      "typeCounts": {
+        "violation": 2,
+        "vehicle_attr": 8,
+        "vehicle_instance": 8,
+        "accident_type": 2,
+        "property_loss": 1,
+        "liability": 3
+      },
+      "relCounts": {
+        "person_commits_violation": 2,
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "操作不当"
+      ],
+      "injuries": [],
+      "liabilities": [
+        "主要责任",
+        "次要责任"
+      ],
+      "accidentTypes": [
+        "追尾",
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 7,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "web-001",
+      "sampleGroup": "web",
+      "title": "河北承德警方通报：面包车、大货车相撞 造成8死1伤",
+      "documentType": "single-report",
+      "entityCount": 10,
+      "relationCount": 6,
+      "typeCounts": {
+        "road": 1,
+        "accident_type": 2,
+        "injury": 2,
+        "vehicle_attr": 2,
+        "vehicle_instance": 2,
+        "violation": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1,
+        "person_has_injury": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "弯道越线"
+      ],
+      "injuries": [
+        "造成8人死亡",
+        "1人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "相撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 6,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "web-002",
+      "sampleGroup": "web",
+      "title": "重庆合川发生一起客货车相撞事故 已致5人死亡",
+      "documentType": "single-report",
+      "entityCount": 7,
+      "relationCount": 2,
+      "typeCounts": {
+        "accident_type": 1,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1,
+        "road_condition": 1,
+        "fault_factor": 1,
+        "injury": 2
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1
+      },
+      "faultCategories": [
+        "道路环境与设施隐患"
+      ],
+      "faultFactors": [
+        "急弯/坡道风险"
+      ],
+      "violations": [],
+      "injuries": [
+        "造成5人死亡",
+        "12人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "相撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 2,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "web-003",
+      "sampleGroup": "web",
+      "title": "南宁交警通报“3死11伤货车相撞事故”：未发现酒驾",
+      "documentType": "single-report",
+      "entityCount": 9,
+      "relationCount": 4,
+      "typeCounts": {
+        "road": 2,
+        "injury": 3,
+        "accident_type": 1,
+        "vehicle_attr": 1,
+        "vehicle_instance": 2
+      },
+      "relCounts": {
+        "person_has_injury": 3,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "3人死亡",
+        "3人重伤",
+        "8人不同程度受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "相撞"
+      ],
+      "chainStepsCovered": 3,
+      "keyRelCount": 4,
+      "hasChain": false,
+      "weakReason": "链路环节不足(3/6); 无违法/诱因"
+    },
+    {
+      "id": "web-004",
+      "sampleGroup": "web",
+      "title": "突发：一人当场身亡！京哈高速运粮河段货车相撞！",
+      "documentType": "single-report",
+      "entityCount": 8,
+      "relationCount": 1,
+      "typeCounts": {
+        "road": 1,
+        "accident_type": 1,
+        "vehicle_attr": 2,
+        "vehicle_instance": 3,
+        "property_loss": 1
+      },
+      "relCounts": {
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [],
+      "liabilities": [],
+      "accidentTypes": [
+        "相撞"
+      ],
+      "chainStepsCovered": 2,
+      "keyRelCount": 1,
+      "hasChain": false,
+      "weakReason": "链路环节不足(2/6); 无违法/诱因"
+    },
+    {
+      "id": "web-005",
+      "sampleGroup": "web",
+      "title": "山西曲沃县一货车发生交通事故致3死6伤，警方：初步分析系司机分心驾驶造成",
+      "documentType": "single-report",
+      "entityCount": 6,
+      "relationCount": 4,
+      "typeCounts": {
+        "road": 1,
+        "injury": 2,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1,
+        "violation": 1
+      },
+      "relCounts": {
+        "person_has_injury": 2,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "分心驾驶"
+      ],
+      "injuries": [
+        "3人死亡",
+        "6人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [],
+      "chainStepsCovered": 3,
+      "keyRelCount": 4,
+      "hasChain": false,
+      "weakReason": "链路环节不足(3/6)"
+    },
+    {
+      "id": "web-006",
+      "sampleGroup": "web",
+      "title": "疲劳驾驶加超速 大货车冲进超市",
+      "documentType": "single-report",
+      "entityCount": 6,
+      "relationCount": 8,
+      "typeCounts": {
+        "violation": 3,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1,
+        "injury": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 3,
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 2
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "超速行驶",
+        "疲劳驾驶",
+        "操作不当"
+      ],
+      "injuries": [
+        "受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [],
+      "chainStepsCovered": 3,
+      "keyRelCount": 8,
+      "hasChain": false,
+      "weakReason": "链路环节不足(3/6)"
+    },
+    {
+      "id": "web-007",
+      "sampleGroup": "web",
+      "title": "云南华宁5死1伤交通事故为大货车超限超载所致",
+      "documentType": "single-report",
+      "entityCount": 10,
+      "relationCount": 6,
+      "typeCounts": {
+        "injury": 1,
+        "accident_type": 4,
+        "violation": 1,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1,
+        "fault_factor": 2
+      },
+      "relCounts": {
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 3,
+        "report_has_fault_category": 2
+      },
+      "faultCategories": [
+        "机动车驾驶人违规驾驶",
+        "车辆状态/装载问题"
+      ],
+      "faultFactors": [
+        "车辆制动失效",
+        "车辆超限超载"
+      ],
+      "violations": [
+        "超载"
+      ],
+      "injuries": [
+        "5死1伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "追尾",
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 5,
+      "keyRelCount": 6,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "web-008",
+      "sampleGroup": "web",
+      "title": "官方通报黑龙江9人死亡交通事故：货车雨天侧滑系诱因",
+      "documentType": "single-report",
+      "entityCount": 14,
+      "relationCount": 4,
+      "typeCounts": {
+        "road": 2,
+        "injury": 3,
+        "road_condition": 2,
+        "fault_factor": 1,
+        "vehicle_attr": 2,
+        "vehicle_instance": 2,
+        "weather": 1,
+        "accident_type": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1,
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "道路环境与设施隐患"
+      ],
+      "faultFactors": [
+        "急弯/坡道风险"
+      ],
+      "violations": [],
+      "injuries": [
+        "造成9人死亡",
+        "13人受伤",
+        "重伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "侧翻"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 4,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "web-009",
+      "sampleGroup": "web",
+      "title": "沈海高速发生客车与两货车相撞交通事故 致8死17伤",
+      "documentType": "single-report",
+      "entityCount": 10,
+      "relationCount": 4,
+      "typeCounts": {
+        "time": 1,
+        "road": 1,
+        "injury": 4,
+        "accident_type": 1,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1,
+        "weather": 1
+      },
+      "relCounts": {
+        "person_has_injury": 4
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "造成8人死亡",
+        "17人受伤",
+        "1人重伤",
+        "16人轻微伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "相撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 4,
+      "hasChain": false,
+      "weakReason": "无违法/诱因"
+    },
+    {
+      "id": "web-010",
+      "sampleGroup": "web",
+      "title": "苏州市工业园区一高架发生多车追尾交通事故 致9人受伤",
+      "documentType": "single-report",
+      "entityCount": 5,
+      "relationCount": 0,
+      "typeCounts": {
+        "road": 1,
+        "injury": 1,
+        "accident_type": 3
+      },
+      "relCounts": {},
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "3人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "多车追尾",
+        "追尾",
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 2,
+      "keyRelCount": 0,
+      "hasChain": false,
+      "weakReason": "链路环节不足(2/6); 无关系; 无违法/诱因"
+    },
+    {
+      "id": "web-011",
+      "sampleGroup": "web",
+      "title": "大雾引发安徽阜阳境内高速多车追尾",
+      "documentType": "single-report",
+      "entityCount": 7,
+      "relationCount": 2,
+      "typeCounts": {
+        "time": 1,
+        "accident_type": 3,
+        "weather": 1,
+        "fault_factor": 1,
+        "property_loss": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1
+      },
+      "faultCategories": [
+        "道路环境与设施隐患"
+      ],
+      "faultFactors": [
+        "大雾"
+      ],
+      "violations": [],
+      "injuries": [],
+      "liabilities": [],
+      "accidentTypes": [
+        "多车追尾",
+        "追尾",
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 3,
+      "keyRelCount": 2,
+      "hasChain": false,
+      "weakReason": "链路环节不足(3/6)"
+    },
+    {
+      "id": "web-012",
+      "sampleGroup": "web",
+      "title": "滁新高速颍上段昨发生多车追尾 安徽 数十车追尾 致18人遇难",
+      "documentType": "single-report",
+      "entityCount": 5,
+      "relationCount": 0,
+      "typeCounts": {
+        "time": 1,
+        "road": 1,
+        "accident_type": 3
+      },
+      "relCounts": {},
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [],
+      "liabilities": [],
+      "accidentTypes": [
+        "多车追尾",
+        "追尾",
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 1,
+      "keyRelCount": 0,
+      "hasChain": false,
+      "weakReason": "链路环节不足(1/6); 无关系; 无违法/诱因"
+    },
+    {
+      "id": "web-013",
+      "sampleGroup": "web",
+      "title": "河南二广高速鲁山四棵树段18车追尾致2死31伤",
+      "documentType": "single-report",
+      "entityCount": 13,
+      "relationCount": 0,
+      "typeCounts": {
+        "time": 1,
+        "road": 3,
+        "accident_type": 4,
+        "weather": 3,
+        "injury": 2
+      },
+      "relCounts": {},
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "造成2人死亡",
+        "31人受伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "追尾",
+        "相撞",
+        "急刹追尾",
+        "连环刮碰"
+      ],
+      "chainStepsCovered": 3,
+      "keyRelCount": 0,
+      "hasChain": false,
+      "weakReason": "链路环节不足(3/6); 无关系; 无违法/诱因"
+    },
+    {
+      "id": "web-014",
+      "sampleGroup": "web",
+      "title": "甘肃临夏：货车雪天追尾司机被卡 深夜救援",
+      "documentType": "single-report",
+      "entityCount": 15,
+      "relationCount": 4,
+      "typeCounts": {
+        "road": 3,
+        "weather": 4,
+        "fault_factor": 2,
+        "time": 2,
+        "accident_type": 2,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2
+      },
+      "faultCategories": [
+        "不可控/外部诱因"
+      ],
+      "faultFactors": [
+        "冰雪"
+      ],
+      "violations": [],
+      "injuries": [],
+      "liabilities": [],
+      "accidentTypes": [
+        "追尾",
+        "急刹追尾"
+      ],
+      "chainStepsCovered": 3,
+      "keyRelCount": 4,
+      "hasChain": false,
+      "weakReason": "链路环节不足(3/6)"
+    },
+    {
+      "id": "web-015",
+      "sampleGroup": "web",
+      "title": "男子酒驾撞人致死毫无察觉？ 民警：你在睡梦中吗？",
+      "documentType": "single-report",
+      "entityCount": 3,
+      "relationCount": 0,
+      "typeCounts": {
+        "accident_type": 1,
+        "injury": 2
+      },
+      "relCounts": {},
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "死亡",
+        "老人因伤势过重死亡"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 2,
+      "keyRelCount": 0,
+      "hasChain": false,
+      "weakReason": "链路环节不足(2/6); 无关系; 无违法/诱因"
+    },
+    {
+      "id": "web-016",
+      "sampleGroup": "web",
+      "title": "公安部交管局公布近期路口事故案例 提醒行经路口要“减速、观察、让行”",
+      "documentType": "single-report",
+      "entityCount": 16,
+      "relationCount": 3,
+      "typeCounts": {
+        "road_condition": 2,
+        "road": 4,
+        "injury": 2,
+        "accident_type": 2,
+        "vehicle_attr": 4,
+        "vehicle_instance": 2
+      },
+      "relCounts": {
+        "person_has_injury": 2,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "5死1伤",
+        "造成4人死亡"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 3,
+      "hasChain": false,
+      "weakReason": "无违法/诱因"
+    },
+    {
+      "id": "web-017",
+      "sampleGroup": "web",
+      "title": "行人被撞卷入车底 众人合力抬车救人",
+      "documentType": "single-report",
+      "entityCount": 4,
+      "relationCount": 2,
+      "typeCounts": {
+        "vehicle_attr": 1,
+        "road": 1,
+        "property_loss": 1,
+        "violation": 1
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1
+      },
+      "faultCategories": [
+        "机动车驾驶人操作不当"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "分心驾驶"
+      ],
+      "injuries": [],
+      "liabilities": [],
+      "accidentTypes": [],
+      "chainStepsCovered": 2,
+      "keyRelCount": 2,
+      "hasChain": false,
+      "weakReason": "链路环节不足(2/6)"
+    },
+    {
+      "id": "web-018",
+      "sampleGroup": "web",
+      "title": "惊险现场：大货车转弯碾轧直行电动自行车",
+      "documentType": "single-report",
+      "entityCount": 16,
+      "relationCount": 4,
+      "typeCounts": {
+        "vehicle_attr": 5,
+        "vehicle_instance": 5,
+        "road_condition": 1,
+        "property_loss": 1,
+        "accident_type": 3,
+        "violation": 1
+      },
+      "relCounts": {
+        "person_commits_violation": 1,
+        "behavior_belongs_to_category": 1,
+        "report_has_fault_category": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [
+        "非机动车驾驶人违法/过错"
+      ],
+      "faultFactors": [],
+      "violations": [
+        "盲区观察不足"
+      ],
+      "injuries": [],
+      "liabilities": [],
+      "accidentTypes": [
+        "碾轧",
+        "碰撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 4,
+      "hasChain": true,
+      "weakReason": ""
+    },
+    {
+      "id": "web-019",
+      "sampleGroup": "web",
+      "title": "大连一公交车失控与多车碰撞，致4人受伤",
+      "documentType": "single-report",
+      "entityCount": 8,
+      "relationCount": 2,
+      "typeCounts": {
+        "road": 1,
+        "injury": 1,
+        "accident_type": 1,
+        "vehicle_attr": 2,
+        "vehicle_instance": 2,
+        "road_condition": 1
+      },
+      "relCounts": {
+        "person_has_injury": 1,
+        "vehicle_collides_vehicle": 1
+      },
+      "faultCategories": [],
+      "faultFactors": [],
+      "violations": [],
+      "injuries": [
+        "轻微伤"
+      ],
+      "liabilities": [],
+      "accidentTypes": [
+        "碰撞"
+      ],
+      "chainStepsCovered": 4,
+      "keyRelCount": 2,
+      "hasChain": false,
+      "weakReason": "无违法/诱因"
+    },
+    {
+      "id": "web-020",
+      "sampleGroup": "web",
+      "title": "货车刹车失灵 追尾又撞上收费站",
+      "documentType": "single-report",
+      "entityCount": 12,
+      "relationCount": 4,
+      "typeCounts": {
+        "road": 3,
+        "accident_type": 5,
+        "vehicle_attr": 1,
+        "vehicle_instance": 1,
+        "fault_factor": 2
+      },
+      "relCounts": {
+        "behavior_belongs_to_category": 2,
+        "report_has_fault_category": 2
+      },
+      "faultCategories": [
+        "车辆状态/装载问题"
+      ],
+      "faultFactors": [
+        "车辆制动失效"
+      ],
+      "violations": [],
+      "injuries": [],
+      "liabilities": [],
+      "accidentTypes": [
+        "追尾",
+        "急刹追尾",
+        "碰撞"
+      ],
+      "chainStepsCovered": 3,
+      "keyRelCount": 4,
+      "hasChain": false,
+      "weakReason": "链路环节不足(3/6)"
+    }
+  ]
+}

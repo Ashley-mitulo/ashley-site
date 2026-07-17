@@ -1,0 +1,26 @@
+{
+  "evaluatedAt": "2026-07-15T04:53:53.306Z",
+  "generated": {
+    "count": 30,
+    "factorRecall": 1,
+    "factorHit": "14/14",
+    "violationRecall": 1,
+    "violationHit": "42/42",
+    "subjectPrecision": 1,
+    "subjectForbiddenViolations": "0/33 处错绑",
+    "violationSubjectMapAccuracy": 1,
+    "violationSubjectMapHit": "5/5"
+  },
+  "news": {
+    "count": 10,
+    "gapRecall": 1,
+    "gapHit": "10/10",
+    "explicitFactorRecall": 1,
+    "explicitFactorHit": "6/6",
+    "explicitViolationRecall": 1,
+    "explicitViolationHit": "4/4",
+    "negativeSignalRespect": 1,
+    "negativeViolated": "0/2"
+  },
+  "errors": []
+}
