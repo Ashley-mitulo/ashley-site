@@ -1,0 +1,68 @@
+/* ========== 深色模式（覆盖 style.css 中的 :root 颜色） ========== */
+[data-theme="dark"] {
+  --primary: #4a9eff;
+  --primary-light: #6bb0ff;
+  --accent: #ffd166;
+  --text: #e2e8f0;
+  --text-light: #94a3b8;
+  --bg: #0b1120;
+  --border: #1e293b;
+}
+
+[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+[data-theme="dark"] .navbar { background: #0f172a; border-bottom-color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+[data-theme="dark"] .brand-name { color: var(--primary); }
+[data-theme="dark"] .brand-sub { color: var(--text-light); }
+[data-theme="dark"] .nav-menu a { color: var(--text); }
+[data-theme="dark"] .nav-menu a:hover,
+[data-theme="dark"] .nav-menu a.active { background: var(--primary); color: #0b1120; }
+[data-theme="dark"] .btn-outline { background: #0f172a; color: var(--primary) !important; border-color: var(--primary); }
+
+[data-theme="dark"] .hero { background: linear-gradient(135deg,#0b1120 0%,#1e293b 100%); }
+[data-theme="dark"] .hero .subtitle { opacity: .85; }
+
+[data-theme="dark"] .section-title { color: var(--primary); }
+[data-theme="dark"] .section-subtitle { color: var(--text-light); }
+
+[data-theme="dark"] .project-card,
+[data-theme="dark"] .about-card,
+[data-theme="dark"] .form-card,
+[data-theme="dark"] .feedback-list li,
+[data-theme="dark"] .feedback-form,
+[data-theme="dark"] .feedback-card {
+  background: #0f172a; border-color: var(--border); color: var(--text);
+}
+[data-theme="dark"] .project-card:hover { box-shadow: 0 12px 32px rgba(74,158,255,.15); border-color: var(--primary-light); }
+[data-theme="dark"] .project-tag { background: #1e293b; color: var(--primary-light); }
+[data-theme="dark"] .project-desc,
+[data-theme="dark"] .project-meta { color: var(--text-light); }
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: #0f172a; color: var(--text); border-color: var(--border);
+}
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder { color: #475569; }
+[data-theme="dark"] .msg.error { background: #451a1a; color: #fca5a5; border-color: #7f1d1d; }
+[data-theme="dark"] .msg.success { background: #0f2e1f; color: #86efac; border-color: #14532d; }
+
+[data-theme="dark"] .footer,
+[data-theme="dark"] footer { background: #0f172a; color: var(--text-light); border-color: var(--border); }
+
+/* ========== 主题切换按钮 ========== */
+.theme-toggle {
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text);
+  transition: .2s;
+  margin-right: 8px;
+}
+.theme-toggle:hover { border-color: var(--primary); transform: rotate(15deg); }
+[data-theme="dark"] .theme-toggle { color: var(--accent); border-color: #334155; }
+[data-theme="dark"] .theme-toggle:hover { border-color: var(--primary); }
