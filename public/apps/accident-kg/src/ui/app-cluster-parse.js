@@ -1236,7 +1236,9 @@ function renderReportForm() {
   var wrap = document.getElementById('reportFormFields');
   if (!wrap) return;
   var liabOpts = ['全部', '主要', '次要', '同等', '无', '百分之七十', '百分之六十', '百分之四十', '百分之三十'];
-  var accForms = ['相撞', '追尾', '刮擦', '碰撞', '碾压', '侧翻', '撞护栏', '撞树', '开门碰撞'];
+  var accForms = ['相撞', '追尾', '刮擦', '碰撞', '碾压', '侧翻', '撞护栏', '撞树', '开门碰撞', '撞倒', '剐蹭'];
+  var dirOpts = ['由东向西', '由西向东', '由南向北', '由北向南', '由东北向西南', '由西南向东北', '由西北向东南', '由东南向西北'];
+  var posOpts = ['前部', '后部', '左侧部', '右侧部', '左前部', '右前部', '左后部', '右后部', '侧部'];
   var violOpts = getViolationOptions();
   var optHtml = function (arr) { return arr.map(function (v) { return '<option value="' + v + '">' + v + '</option>'; }).join(''); };
   var inp = function (id, ph) { return '<input id="rf_' + id + '" placeholder="' + ph + '" style="padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:13px;width:100%;box-sizing:border-box;">'; };
@@ -1248,6 +1250,9 @@ function renderReportForm() {
     cell('当事人一(甲) *', inp('p1', '如 张某')) +
     cell('甲车牌号', inp('v1', '如 鲁A12345')) +
     cell('甲车型', inp('vt1', '如 小型轿车')) +
+    cell('行驶方向', sel('dir', dirOpts, true)) +
+    cell('碰撞部位（甲）', sel('pos1', posOpts, true)) +
+    cell('碰撞部位（乙）', sel('pos2', posOpts, true)) +
     cell('甲违法行为 *', sel('viol', violOpts, true)) +
     cell('当事人二(乙)', inp('p2', '如 王某（单方事故可空）')) +
     cell('乙车牌号', inp('v2', '如 鲁A67890')) +
@@ -1265,15 +1270,22 @@ function buildTextFromForm() {
   var dt = rfVal('datetime'), road = rfVal('road'), p1 = rfVal('p1'), v1 = rfVal('v1'), vt1 = rfVal('vt1') || '小型轿车';
   var viol = rfVal('viol'), p2 = rfVal('p2'), v2 = rfVal('v2'), vt2 = rfVal('vt2') || '小型轿车';
   var accform = rfVal('accform') || '相撞', injury = rfVal('injury'), liab1 = rfVal('liab1') || '全部', liab2 = rfVal('liab2');
+  var dir = rfVal('dir'), pos1 = rfVal('pos1'), pos2 = rfVal('pos2');
   if (!p1 || !road) { alert('请至少填写：事故地点道路、当事人一。'); return; }
   var s = '';
   if (dt) s += dt + '，';
-  s += '当事人' + p1 + '驾驶' + (v1 ? v1 + '号' : '') + vt1 + '，沿' + road + '行驶';
+  s += '当事人' + p1 + '驾驶' + (v1 ? v1 + '号' : '') + vt1 + '，沿' + road + (dir ? dir : '') + '行驶';
   if (viol) s += '，因' + viol;
   if (p2) {
-    s += '，与' + p2 + '驾驶的' + (v2 ? v2 + '号' : '') + vt2 + '发生' + accform;
+    if (pos1 && pos2) {
+      s += '，其车' + pos1 + '与' + p2 + '驾驶的' + (v2 ? v2 + '号' : '') + vt2 + pos2 + accform;
+    } else if (pos1) {
+      s += '，其车' + pos1 + '与' + p2 + '驾驶的' + (v2 ? v2 + '号' : '') + vt2 + '发生' + accform;
+    } else {
+      s += '，与' + p2 + '驾驶的' + (v2 ? v2 + '号' : '') + vt2 + '发生' + accform;
+    }
   } else {
-    s += '，车辆发生' + accform;
+    s += (pos1 ? '，其车' + pos1 + accform : '，车辆发生' + accform);
   }
   if (injury) s += '，造成' + injury; else s += '，造成车辆受损';
   s += '。经认定，' + p1 + '负本次事故的' + (/责任$/.test(liab1) ? liab1 : liab1 + '责任');

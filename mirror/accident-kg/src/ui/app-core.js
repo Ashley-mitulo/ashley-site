@@ -23,6 +23,11 @@ const entityColors = {
   injury: { name: '🩹 具体伤亡', color: '#dc2626' },
   liability_category: { name: '📋 责任分类', color: '#047857' },
   liability: { name: '⚖️ 具体责任', color: '#10b981' },
+  // v3.4.7 Bug5: 标准报告模板扩充 4 类实体
+  city: { name: '🏙️ 市', color: '#0891b2' },
+  district: { name: '🗺️ 区/县', color: '#0e7490' },
+  direction: { name: '🧭 行驶方向', color: '#059669' },
+  collision_position: { name: '💥 碰撞部位', color: '#e11d48' },
   chain_gap: { name: '🕳️ 链路缺口', color: '#f97316' },
   insurance: { name: '🏦 保险信息', color: '#8b5cf6' }
 };

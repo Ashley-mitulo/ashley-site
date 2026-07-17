@@ -23,6 +23,9 @@
       .replace(/[Ａ-Ｚａ-ｚ０-９]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0))
       .replace(/＋/g, '+')
       .replace(/([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z])\s+([A-Z0-9*×X]{1,6})/g, '$1$2')
+      // v3.4.7 Bug7 P0-1: 公安实报常见中点车牌归一化：鲁A·12345 / 苏A•12345 / 鲁A·12345 → 鲁A12345。
+      // 仅删除“省份简称[+A-Z]”与“[A-Z0-9]{4,6}”之间的分隔符，避免伤及其他中点用途。
+      .replace(/([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z])[·•・.．･]+([A-Z0-9]{4,6})/g, '$1$2')
       .replace(/(20\d{2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/g, '$1年$2月$3日')
       // 测试阶段修（F·中文数字伤亡）：将“十二人受伤/三人死亡/两人重伤”等中文数字伤亡计数转阿拉伯，
       // 仅限“(数)人/名 + 死亡/受伤/重伤/轻伤/轻微伤”上下文，避免误改其他中文数字。
@@ -42,6 +45,13 @@
         return '案例' + (cn[c] || c) + '：';
       })
       .replace(/[\t\r]+/g, ' ')
+      // v3.4.7 Bug4：剥除从聘聊应用拷贝时残留的 Markdown 强调下划线 `_中文_` ——
+      // 仅当下划线紧贴汉字时才删（不伤及车牌、英文、标识符），避免联想中断。
+      .replace(/(?<=[\u4e00-\u9fa5])_+(?=[\u4e00-\u9fa5\uff08\uff09\uff0c\u3002\u3001\uff1a\uff1b])/g, '')
+      .replace(/(?<=[\uff08\uff09\uff0c\u3002\u3001\uff1a\uff1b])_+(?=[\u4e00-\u9fa5])/g, '')
+      // 数字/英文与汉字之间的强调下划线（如 `_2026_年`、`_苏 A33333_`）同样剥除（内容保留）。
+      .replace(/(?<=[\u4e00-\u9fa5])_+(?=[0-9A-Za-z])/g, '')
+      .replace(/(?<=[0-9A-Za-z])_+(?=[\u4e00-\u9fa5])/g, '')
       .replace(/\n{3,}/g, '\n\n')
       .replace(/[ ]{2,}/g, ' ')
       .trim();
@@ -301,13 +311,21 @@
     if (!normalizedName || normalizedName.length < 1) return;
     if (entity.type === 'road' && !isValidRoadName(normalizedName)) return;
     if (entity.type === 'traffic_place' && (!normalizedName || isRoadNoiseText(normalizedName) || /^(?:衣架留在门前|跟随导航驶入窄巷)$/.test(normalizedName))) return;
-    if (entity.type === 'person' && !/^(?:[A-Z]某|[\u4e00-\u9fa5]{1,3}某某?|[甲乙丙丁戊己庚辛壬癸])$/.test(normalizedName)) return;
+    // v3.4.7 Bug1: 支持"真实姓名"（非"某"式匿名），仅当 entity.isRealName===true 时放行；其他人名依旧白名单。
+    if (entity.type === 'person' && !entity.isRealName && !/^(?:[A-Z]某?|[\u4e00-\u9fa5]{1,3}某某?|[甲乙丙丁戊己庚辛壬癸])$/.test(normalizedName)) return;
     if (['事故', '事件', '情况', '本次事故', '该事故'].includes(normalizedName)) return;
     const roleKey = entity.type === 'person' && entity.role ? '|' + entity.role : '';
-    // v3.4.4 Bug8: liability 去重键纳入 relatedPerson，否则“同等责任”等多主体共享同一句会互相覆盖。
+    // v3.4.4 Bug8: liability 去重键纳入 relatedPerson，否则"同等责任"等多主体共享同一句会互相覆盖。
     const liabKey = entity.type === 'liability' && entity.relatedPerson ? '|' + entity.relatedPerson : '';
-    const key = entity.type + '|' + normalizedName + '|' + entity.sentenceIndex + roleKey + liabKey;
+    // v3.4.7 Bug2: person 去重键不纳入 sentenceIndex，避免同一人名在多句重复创建（"郑某某"双份现象）；其他类型保留句级去重。
+    const sentKey = entity.type === 'person' ? '' : '|' + entity.sentenceIndex;
+    const key = entity.type + '|' + normalizedName + sentKey + roleKey + liabKey;
     if (seen.has(key)) return;
+    // v3.4.7 Bug2b: 若已存在同名"X某某"，其前缀子串"X某"不再单独入库。
+    if (entity.type === 'person' && /^[\u4e00-\u9fa5]某$/.test(normalizedName)) {
+      const longer = normalizedName + '某';
+      if (out.some(e => e.type === 'person' && e.normalizedName === longer)) return;
+    }
     seen.add(key);
     const idName = entity.type === 'person' && entity.role ? normalizedName + '_' + entity.role : normalizedName;
     out.push({ id: entity.type + '_' + idName, ...entity, normalizedName, confidence: entity.confidence == null ? confidenceFor(entity.type, normalizedName, entity.evidence) : entity.confidence, extractor: entity.extractor || 'traffic-parser-v2.8' });
@@ -531,7 +549,8 @@
   }
 
   function personTokenRegex() {
-    return '(?:[A-Z]某|[\u4e00-\u9fa5]{1,3}某某?|[甲乙丙丁戊己庚辛壬癸])';
+    // v3.4.7 P0 C3-NEWBUG-01: 支持单字母匿名主体 X/Y。为避免车牌/SUV 误命中，单字母后面不能接[A-Z0-9·‧・]，并且需在主体相关上下文里（前面非字母/汉字长串）。
+    return '(?:(?<![A-Z0-9·‧・])[A-Z](?![A-Z0-9·‧・])(?=[\\s、和与及。，,]|负|承担|相撞|驾驶|骑|均|同等|同责|全责|主责|次责|无责|未|因|$)|[A-Z]某|[\u4e00-\u9fa5]{1,3}某某?|[甲乙丙丁戊己庚辛壬癸])';
   }
 
   function normalizeRole(role) {
@@ -559,17 +578,43 @@
   // r32 L12（臆造零容忍）："系某物流公司""该某"等——"系/该/其/属/为/于/等/被/由/在"是动词/虚词非姓氏，
   // 若"X某"的X落在此黑名单，且非真实"X某某"复姓名，则不作为人名候选，杜绝臆造错主体。
   // 非姓氏字尾判定："超载系某""该某""其某"等——姓氏核心其实是动词/虚词，非真人名。用尾部"X某"的X是否黑名单字判定。
-  const NON_SURNAME_TAIL = /(?:系|该|其|属|被|因|另|均|据|即|则|将|已|是|或|了|载|致|反|含|再|又|且|亦|在|从|往|朝|把|对|给|让|使|此|皆|凡|各|区|县|镇|乡)某$/;
+  const NON_SURNAME_TAIL = /(?:系|该|其|属|被|因|另|均|据|即|则|将|已|是|或|了|载|致|反|含|再|又|且|亦|在|从|往|朝|把|对|给|让|使|此|皆|凡|各|区|县|镇|乡|造成|引发|导致|还致)某$/;
+  const NON_SURNAME_HEADS_LIST = ['造', '成', '引', '发', '导', '致', '还', '把', '将', '使', '对', '向', '与', '和', '及', '因'];
   function isSpuriousPerson(name) {
     const n = String(name || '');
     // 真"X某某"复名(如"欧阳某某")不误杀；仅对末位"X某"结构做黑名单尾判。
-    if (/某某$/.test(n)) return false;
+    if (/某某$/.test(n)) {
+      // v3.4.7 P1-3: "造成孙某某"三字名，首字为动词/虚词则拒。
+      if (n.length >= 3 && NON_SURNAME_HEADS_LIST.indexOf(n.charAt(0)) >= 0) return true;
+      return false;
+    }
     return NON_SURNAME_TAIL.test(n);
   }
-  function firstPersonInText(text) {
+  function firstPersonInText(text, opts) {
+    // v3.4.7 P1-3: 支持真名（opts.realNames 传入已知真名列表），避免开往任意 2-3 字抽取。
+    const realNames = (opts && Array.isArray(opts.realNames)) ? opts.realNames : null;
+    if (realNames && realNames.length) {
+      const src = String(text || '');
+      let earliest = null;
+      for (const nm of realNames) {
+        const idx = src.indexOf(nm);
+        if (idx >= 0 && (earliest === null || idx < earliest.idx)) earliest = { idx, name: nm };
+      }
+      if (earliest) return earliest.name;
+    }
     const re = /(?:驾驶人|驾驶员|司机|骑行人|行人|乘客|乘坐人|押运员|押车员|快递员|学生|儿童|装卸工|调度员|保安员|照管员|看护员|导游|证人)?\s*([A-Z]某|[\u4e00-\u9fa5]{1,3}某某?|[甲乙丙丁戊己庚辛壬癸])/g;
     let m;
-    while ((m = re.exec(String(text || '')))) { if (!isSpuriousPerson(m[1])) return m[1]; }
+    while ((m = re.exec(String(text || '')))) {
+      if (!isSpuriousPerson(m[1])) return m[1];
+      // v3.4.7 P1-3: 当前三字名包含动词前缀（造成孙某某），尝试滑一字重新匹配后缀
+      const raw = m[1];
+      if (raw.length >= 3) {
+        const tail = raw.slice(1);
+        if (/某/.test(tail) && !isSpuriousPerson(tail)) return tail;
+        const tail2 = raw.slice(2);
+        if (/某/.test(tail2) && !isSpuriousPerson(tail2)) return tail2;
+      }
+    }
     return '';
   }
 
@@ -610,6 +655,50 @@
       }
     };
     sentences.forEach(sentence => {
+      // v3.4.7 Bug1: 标准事故报告里的"真实姓名"识别通道。
+      // 仅锚定标准模板里的三个明确位置抽真名（当事人X驾驶 / X负…责任 / X无责任），2-3 字纯汉字、
+      // 不含"某/甲乙丙丁"、不属常见非人名词汇。放行标志：isRealName=true。
+      const NAME_BLOCK = /^(?:交警|车辆|事故|轿车|货车|客车|某某|双方|两方|各方|其他|其余|所有|全部|部分|无关|不明|不详|安全|车距|全车|全车距|全路|全人|自己|自行车|电动车|骑车|小车|大车)$/;
+      // v3.4.7 fix：真名首字必须是常见百家姓，避免从"保持安全车距负事故全部责任"里错抽"全车距"。
+      const SURNAMES = '赵钱孙李周吴郑王冯陈褚卫蒋沈韩杨朱秦尤许何吕施张孔曹严华金魏陶姜戚谢邹喻柏水窦章云苏潘葛奚范彭郎鲁韦昌马苗凤花方俞任袁柳酆鲍史唐费廉岑薛雷贺倪汤滕殷罗毕郝邬安常乐于时傅皮卞齐康伍余元卜顾孟平黄和穆萧尹姚邵湛汪祁米贝明臧计伏成戴谈宋茅庞熊纪舒屈项祝董梁杜阮蓝闵席季麻强贾路娄危江童颜郭梅盛林刁丘骆狄丘官盖内段内官都阴李闫刘胡丁邓霍宿万丰上官司马欧阳夏侯诸葛令狐塾孙长孙宇文司徒司空钭鲍王欧尹云雷骆向易共发苞图俶廪陆彭惠蒋萎邢蒯芹钻宕宝封牛方新钟唐易柯甄赫连';
+      const collectRealName = (raw) => {
+        const nm = String(raw || '').trim();
+        if (!nm) return null;
+        if (nm.length < 2 || nm.length > 3) return null;
+        if (/某|甲|乙|丙|丁|戊|己|庚|辛|壬|癸|\d|[A-Za-z]/.test(nm)) return null;
+        if (!/^[\u4e00-\u9fa5]+$/.test(nm)) return null;
+        if (NAME_BLOCK.test(nm)) return null;
+        if (SURNAMES.indexOf(nm.charAt(0)) < 0) return null;
+        return nm;
+      };
+      const realNameAnchors = [
+        /(?:当事人|驾驶人|驾驶员|司机)\s*([\u4e00-\u9fa5]{2,3})\s*(?:驾驶|驾|开着?|骑|骑行)/g,
+        /([\u4e00-\u9fa5]{2,3})\s*(?:负|承担)\s*(?:本次|本起)?(?:事故)?(?:的)?\s*(?:全部责任|主要责任|次要责任|同等责任|全责|主责|次责|同责)/g,
+        /([\u4e00-\u9fa5]{2,3})\s*无责任/g,
+        /与\s*([\u4e00-\u9fa5]{2,3})\s*驾驶的/g,
+        // v3.4.7 P0-2: 三方事故多角色——行人/乘客/副驾驶/乘坐人/骑行人 X（真名）
+        /(?:行人|乘客|副驾驶(?:乘客|人员|座)?|乘坐人|后座乘客|骑行人)\s*([\u4e00-\u9fa5]{2,3})(?=(?:受伤|重伤|轻伤|轻微伤|死亡|被|跟|与|和|在|乘|撞|倒|跌|蒦|坠|、|，|。|；|$))/g,
+        // v3.4.7 P0-2: 并列责任句 “A 负…，B 负…，C 负…” 中的中间与尾部主体（重提行人名）
+        /[，,、]\s*([\u4e00-\u9fa5]{2,3})\s*负(?:本次|本起)?(?:事故)?(?:的)?\s*(?:百分之|\d+%|[０-９])/g,
+        // v3.4.7 P0-2: 将行人/乘客 X 撞倒——行人/乘客受害者作为真名人员抽取
+        /将\s*(?:行人|乘客|骑行人|非机动车驾驶人|背面行人)([\u4e00-\u9fa5]{2,3})(?=撞倒|撞|碾压|剔|撞飞|撞伤|撞行|吹飞)/g
+      ];
+      realNameAnchors.forEach(re => {
+        let rn;
+        while ((rn = re.exec(sentence.text))) {
+          const nm = collectRealName(rn[1]);
+          if (!nm) continue;
+          addEntity(entities, seen, {
+            type: 'person', name: nm, isRealName: true,
+            sentenceIndex: sentence.index,
+            start: sentence.start + rn.index,
+            end: sentence.start + rn.index + rn[0].length,
+            evidence: sentence.text,
+            extractor: 'person-real-name-anchor-regex',
+            confidence: 0.85
+          });
+        }
+      });
       // 人员角色：驾驶人甲、乘客甲等以 role 区分，legacy 仍按 normalizedName 去重。
       let rm;
       const rolePersonRegex = /(驾驶人|驾驶员|司机|骑行人|行人|乘客|乘坐人|公交乘客|押运员|押车员|快递员|学生|儿童|未成年人|装卸工|调度员|保安员|保洁员|照管员|校车照管员|看护员|安全员|导游|证人)\s*([A-Z]某|[\u4e00-\u9fa5]{1,3}某某?|[甲乙丙丁戊己庚辛壬癸])/g;
@@ -633,14 +722,21 @@
       scan(sentence, /(?:与|和|及)([\u4e00-\u9fa5]{1,3}某某?)(?=驾驶|乘坐|骑行|步行|受伤|死亡|负|诉|相撞|发生)/g, 'person', 'person-context-regex');
       // r32 N03："(经)?认定X因…负事故全部责任"——责任认定句的当事人 X 在"认定"后、"因/负/承担"前，补抽为 person，供责任回填绑定。
       scan(sentence, /(?:经?认定|认定为|据此认定|综合认定)\s*([\u4e00-\u9fa5]{1,3}某某?)(?=因|负|承担|应负|系|存在|驾驶)/g, 'person', 'person-liability-context-regex');
-      scan(sentence, /(?:驾驶人|驾驶员|司机|骑行人|行人|未成年人|乘客|乘坐人|员工|公交乘客)?([A-Z]某|[甲乙丙丁戊己庚辛壬癸])(?=驾驶|骑|携|推|下车|搭载|乘坐|步行|受伤|死亡|全责|主责|次责|无责|同责|负|承担|未|也|按|右转|抢|连续|低速|酒后|分心|逆行|违反|违法|超载|疲劳|绕|遇|车|、|，|。|和|与|$)/g, 'person', 'person-code-context-regex');
+      scan(sentence, /(?:驾驶人|驾驶员|司机|骑行人|行人|未成年人|乘客|乘坐人|员工|公交乘客)?([A-Z]某|(?<![A-Z0-9·‧・])[A-Z](?![A-Z0-9·‧・])|[甲乙丙丁戊己庚辛壬癸])(?=驾驶|骑|携|推|下车|搭载|乘坐|步行|受伤|死亡|全责|主责|次责|无责|同责|负|承担|未|也|按|右转|抢|连续|低速|酒后|分心|逆行|违反|违法|超载|疲劳|绕|遇|车|、|，|。|和|与|$)/g, 'person', 'person-code-context-regex');
       scan(sentence, /([A-Z]{0,3}\d{1,4}国道|[A-Z]{0,3}\d{1,4}省道|(?<![京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼A-Z·•・])[GS][A-Z]{0,3}\d{1,4}(?!\d)|(?<![A-Za-z0-9·•・京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼])K\d+(?:\+\d+(?:米|[mM])?)?(?![A-Za-z\d]))/g, 'road', 'road-code-regex');
+      // v3.4.7 Bug5: 标准报告模板“氟□□市□□区□□路由□向□行驶”——抽 市/区/方向。
+      scan(sentence, /(?:在|于|沿|位于|行驶在|行至)?([\u4e00-\u9fa5]{2,6}?市)(?=[\u4e00-\u9fa5]{1,10}区|[\u4e00-\u9fa5]{1,10}县|[\u4e00-\u9fa5]{1,10}新区|[\u4e00-\u9fa5]{1,20}(?:路|街|大道|公路|高速|国道|省道|快速路|区中))/g, 'city', 'city-template-regex');
+      scan(sentence, /(?:[\u4e00-\u9fa5]{2,8}市)?([\u4e00-\u9fa5]{2,8}(?:区|县|新区|开发区|高新区))(?=[\u4e00-\u9fa5]{1,20}(?:路|街|大道|公路|高速|国道|省道|快速路))/g, 'district', 'district-template-regex');
+      // 方向：“由东向西行驶”/“由南向北行驶”——只取方向本体，去掉“行驶”尾巴。
+      scan(sentence, /(由[\u4e1c\u5357\u897f\u5317]{1,2}向[\u4e1c\u5357\u897f\u5317]{1,2}|[\u4e1c\u5357\u897f\u5317]{1,2}向[\u4e1c\u5357\u897f\u5317]{1,2}|自[\u4e1c\u5357\u897f\u5317]{1,2}至[\u4e1c\u5357\u897f\u5317]{1,2})(?=行驶|方向)/g, 'direction', 'direction-template-regex');
       if (!isSuggestionSentence(sentence.text)) {
         scan(sentence, /(?:在|于|行驶至|驶至|沿|位于|事故地点为|地点为)([\u4e00-\u9fa5A-Za-z0-9+]{2,50}(?:交叉口|高速公路|高速|国道|省道|县道|乡道|村道|快速路|辅路|主路|支路|公路|大道|路口|街|桥|隧道|匝道|路|通道|人行横道|公交港湾站|公交站台|停车场出口|环岛东出口|环岛|桥头|东头|西头|弯道|坡道|路侧树木|公交港湾站北侧|公交站台北侧|公交港湾站南侧|公交站台南侧|停靠点|改造点|右转口|中心区域|急弯上坡路段)(?:[\u4e00-\u9fa5A-Za-z0-9+]{0,12})?)(?=发生|行驶|处|旁|东|西|南|北|，|。)/g, 'road', 'road-location-priority-regex');
         scan(sentence, /([\u4e00-\u9fa5A-Za-z0-9]{2,24}(?:夜市东门|仓库门前|物流仓\d*号门前|商场地库|厂区\d*号门内|成品库转角处|学校门口|小区坡道|地下车库出口坡道|窄巷|小区门前|服务区入口|南门|西门|门前|地库B\d|B\d区|巷口|湿地公园南门外|公交站附近|施工段))(?:[，。；;、 ]|$)/g, 'traffic_place', 'traffic-place-regex');
         if (!/^(标题|报告编号|文书风格)/.test(sentence.text)) scan(sentence, /([\u4e00-\u9fa5A-Za-z0-9]{2,20}(?:快速路|辅路|主路|支路|路|街|大道|公路|国道|省道)与[\u4e00-\u9fa5A-Za-z0-9]{2,20}(?:(?:快速路|辅路|主路|支路|路|街|大道|公路|国道|省道)(?:交叉口|路口)|(?:巷|桥)(?:路口|交叉口))|[A-Z]{0,3}\d{1,4}国道|[A-Z]{0,3}\d{1,4}省道|(?<![A-Z鲁苏京津沪渝冀豫云辽黑湘皖新浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼·•・])[XYZ]\d{1,4}(?:县道|乡道)?(?!\d)|(?<![\u4eac\u6d25\u6caa\u6e1d\u5180\u8c6b\u4e91\u8fbd\u9ed1\u6e58\u7696\u9c81\u65b0\u82cf\u6d59\u8d63\u9102\u6842\u7518\u664b\u8499\u9655\u5409\u95fd\u8d35\u7ca4\u9752\u85cf\u5ddd\u5b81\u743cA-Z\u00b7\u2022\u30fb])[GS][A-Z]{0,3}\d{1,4}|[\u4e00-\u9fa5A-Za-z0-9]{1,24}(?:交叉口|高速公路|高速|国道|省道|县道|乡道|村道|快速路|辅路|主路|支路|公路|大道|路口|街|桥|隧道|匝道|路|通道|人行横道|公交港湾站|公交站台|停车场出口|环岛东出口|环岛|桥头|东头|西头|弯道|坡道|路侧树木)|(?<![A-Za-z0-9·•・京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼])K\d+(?:\+\d+(?:米|[mM])?)?(?![A-Za-z\d]))/g, 'road', 'road-regex');
       }
       scan(sentence, /(\d+人死亡|造成\d+人死亡|死亡\d*人?|\d+死\d+伤|\d+人受伤|\d+人不同程度受伤|轻微伤(?!标准)\d*人?|\d+人轻微伤|轻伤(?!标准)\d*人?|\d+人轻伤|重伤(?!标准)\d*人?|\d+人重伤|\d+名?乘客受伤|(?<![未无没人一])(?<!人员)受伤\d*人?|人身损害)/g, 'injury', 'injury-regex');
+      // v3.4.7 Bug5: 标准模板“造成两车受损、无受伤（伤情：/）”，先补抽 casualty_status = “无受伤”。
+      scan(sentence, /(无受伤|无人受伤|无伤情|未受伤|伤情：?\s*[\/无无无])/g, 'casualty_status', 'casualty-none-template-regex');
       // r28 X7（臆造零容忍）：明确“无伤亡/无人受伤/均未受伤”等，抽为独立的“无伤亡结论”实体(casualty_status)，
       // 不进 injury 列表(避免图谱误读为有伤亡记录)，同时用于消除 missing-injury 缺口(原文已明确后果)。
       // 统一两种历史写法：“无人员伤亡”与“均未受伤/双方均未受伤/人员均无受伤/无人受伤/无人伤”。
@@ -667,8 +763,12 @@
         if (roleName) injName = injName.slice(injName.indexOf(roleName[1]));
         // 剔除人名与伤情词之间的副词/虚词（如“卫某某仅轻微伤”→卫某某轻微伤、“王某当场死亡”保留）
         injName = injName.replace(/^((?:[A-Z]某|[一-龥]{1,2}某某?|[甲乙丙丁戊己庚辛壬癸]))(?:仅|只|共|约|均|都|已|也|则|据称|经诊断|经诊|当場)+(?=[一-龥]{0,6}(?:撞伤|碰伤|压伤|刮伤|撞飞|挫伤|擦伤|骨裂|受惊|脑震荡|骨折|脱臼|脱位|扭伤|划伤|裂伤|不适|轻微伤|轻伤|重伤|受伤|死亡))/, '$1');
-        // 回退用 firstPersonInText 提取干净主体重构
-        const cleanPerson = firstPersonInText(injName) || firstPersonInText(im[1]);
+        // 回退用 firstPersonInText 提取干净主体重构（v3.4.7 P1-3：优先命中已抽取的真名，避免“造成孙某某”串字东存入）
+        const knownRealNames = entities.filter(e => e.type === 'person' && e.isRealName).map(e => e.normalizedName || e.name).filter(Boolean);
+        const cleanPerson = firstPersonInText(injName, { realNames: knownRealNames })
+          || firstPersonInText(im[1], { realNames: knownRealNames })
+          || firstPersonInText(injName)
+          || firstPersonInText(im[1]);
         if (!personHeadRe.test(injName)) {
           if (!cleanPerson) continue;
           const inj = injName.match(injWordRe);
@@ -698,6 +798,13 @@
         /((?:轮胎|前杠|后杠|保险杠|前保险杠|后保险杠|灯组|雾灯罩|大灯|尾灯|门板|车门|后视镜|水箱|机盖|护栏|前篮|脚踏板|前叉|轮毂|柱面|行道树|路缘石|眼镜|菜篮)[\u4e00-\u9fa5A-Za-z0-9、，及和两三四五\-]{0,20}(?:受损|破损|变形|凹陷|脱落|折断|断裂|裂开|翘起|松动|破裂|擦痕|划痕|损坏|剥落|摔坏|损毁))/g
       ];
       propertyRegexes.forEach(re => { while ((pm = re.exec(sentence.text))) addEntity(entities, seen, { type: 'property_loss', name: pm[1], sentenceIndex: sentence.index, start: sentence.start + pm.index, end: sentence.start + pm.index + pm[0].length, evidence: sentence.text, extractor: 'property-loss-flex-regex' }); });
+      // v3.4.7 Bug5: 碰撞部位——标准报告模板“其车X部与Y驾驶的…号…车Z部相撞”。
+      // 支持 前/后/左/右/左前/右前/左后/右后/侧/左侧/右侧 等常见组合，组后尾“部”。
+      const POSTOK = '(?:左前|右前|左后|右后|左侧|右侧|前侧|后侧|前|后|左|右|侧)';
+      scan(sentence, new RegExp('其车(' + POSTOK + '部)', 'g'), 'collision_position', 'collision-position-a-regex');
+      scan(sentence, new RegExp('(?:号小型轿车|号小客车|号轿车|号客车|号货车|号小车|号摩托车|号电动车|号电动自行车|号三轮车|号面包车|号大巴|号皮卡|号SUV|普通二轮摩托车|二轮摩托车|三轮摩托车|电动自行车|二轮电动车|三轮电动车|自行车|面包车|皮卡车|小型客车|小型面包车|小型小车|重型卡车|中型卡车|小型卡车|手抨车|電動三轮车|商务车)(' + POSTOK + '部)(?:追尾|碰撞|剔撞|撞撞|)?相撞', 'g'), 'collision_position', 'collision-position-b-regex');
+      // 兼容先前写法：侧部/左侧部/右侧部。
+      scan(sentence, /(?:其车|号小型轿车|号轿车)((?:左侧|右侧|前侧|后侧)部)/g, 'collision_position', 'collision-position-side-regex');
       accidentTypes.forEach(term => { const idx = sentence.text.indexOf(term); const isSpecificType = term.length > 2 && term !== '开门碰撞'; if (idx >= 0 && !isNegatedAccident(sentence.text, term, idx) && (isSpecificType || !/(碰撞部位|碰撞痕迹|碰撞点|碰撞形态检验|车辆轨迹、碰撞形态|碰撞部位模板)/.test(sentence.text))) addEntity(entities, seen, { type: 'accident_type', name: term, mainType: /追尾/.test(term) ? '追尾' : /刮|侧碰|擦碰/.test(term) ? '刮擦/侧碰' : /侧翻/.test(term) ? '侧翻' : /坠/.test(term) ? '坠落' : '碰撞', subType: term, sentenceIndex: sentence.index, start: sentence.start + idx, end: sentence.start + idx + term.length, evidence: sentence.text, extractor: 'accident-type-dictionary' }); });
       const semanticAccidents = [
         [/外卖车|骑行人乙|右转半径偏大|压入非机动车过街区域/, '右转盲区碰撞'],
@@ -712,8 +819,14 @@
       semanticAccidents.forEach(([re, name]) => { if (re.test(sentence.text) && !/(碰撞部位|碰撞痕迹|碰撞点|碰撞形态检验|碰撞部位模板)/.test(sentence.text) && !/(未发生(?:碰撞|相撞|接触|事故)|未与[\u4e00-\u9fa5]{0,10}(?:发生)?(?:碰撞|相撞|接触)|未接触|避免了?(?:碰撞|相撞|事故)|幸未(?:碰撞|相撞|发生))/.test(sentence.text)) addEntity(entities, seen, { type: 'accident_type', name, mainType: /追尾/.test(name) ? '追尾' : /刮|擦/.test(name) ? '刮擦/侧碰' : /爆胎|单方/.test(name) ? '单方/二次事故' : '碰撞', subType: name, sentenceIndex: sentence.index, start: sentence.start, end: sentence.start + Math.min(sentence.text.length, name.length), evidence: sentence.text, extractor: 'accident-type-semantic-regex' }); });
       let lm;
       const CPX = '(?:欧阳|上官|司马|诸葛|夏侯|皇甫|尉迟|公孙|慕容|端木|独孤|长孙|宇文|司徒|令狐|濮阳|东方|赫连|轩辕|毌丘|万俟)';
-      const PTOK = '(?:[甲乙丙丁戊己庚辛壬癸]|[A-Z]某|' + CPX + '某某?|' + CPX + '[一-龥]某某?|[一-龥]某某?)';
-      const liabilityRegex = new RegExp('((?:驾驶人|驾驶员|骑行人|行人|乘客|快递员|货车|客车|轿车|槽罐车|公交|皮卡|摩托车|三轮车|出租车)?\\s*' + PTOK + '(?:[、和与及]' + PTOK + ')*|乙和A某|三名乘员|临停车|小客车|校车方|施工单位|项目部|园区|物业|养护单位|道路管理)\\s*(?:对[\u4e00-\u9fa5]{1,8})?(?:均|皆|各自?|分别|一律|都|共同?)?\\s*(负同等责任|负主要责任|负次要责任|负全部责任|负全责|负主责|负次责|承担主要责任|承担次要责任|负全部责任|承担全部责任|均无责任|无责任|全责|主责|次责|无责|同责|轻微责任|管理责任|整改责任|诱发过错|有责任|管理过错)', 'g');
+      // v3.4.7 Bug3: RNAME 为真实姓名分支——首字必须是常见百家姓（2-3 汉字、不含“某/甲乙丙丁…”），
+      // 后接“负/承担/无责任/驾驶/骑/因/与/和/、/，/。/；”作为右边界。
+      // 避免把 “货车/校车/驾驶员/安全车距/全车距”等描述性主体误归真名。
+      const SURNAME_ALT = '[赵钱孙李周吴郑王冯陈胐卫蒋沈韩杨朱秦尤许何吕施张孔曹严华金魏陶姜戚谢邹喻柏水窦章云苏潘葛奚范彭郎鲁韦昌马苗凤花方俞任袁柳酆鲍史唐费廗岑薛雷贺倪汤滕殷罗毕郝邬安常乐于时傅皮卞齐康伍余元卜顾孟平黄和穆萧尹姚邵湛汪祁米贝明臧计伏成戴谈宋茅庞熊纪舒屈项祝董梁杜阮蓝闵席季麻强贾路娄危江童颜郭梅盛林刁丘官盖内段叶阎雷刘胡丁邓霍宿万丰上万风夏侯诸葛令狐塾孙宇文钭王欧尹雷骆向易共发苞图俶廪陆彭惠蒋葳邢蒯芹钻宕宝封牛新钟唐易柯甄]';
+      const RNAME = SURNAME_ALT + '(?![某甲乙丙丁戊己庚辛壬癸])[一-龥]{1,2}(?=(?:负|承担|无责任|驾驶|骑|因|与|和|及|、|，|。|；|;|$))';
+      // v3.4.7 P0 C3-NEWBUG-01: PTOK 支持单字母匿名 X/Y（防车牌/SUV 污染：单字母前后不接[A-Z0-9·‧・]）。
+      const PTOK = '(?:[甲乙丙丁戊己庚辛壬癸]|[A-Z]某|(?<![A-Z0-9·‧・])[A-Z](?![A-Z0-9·‧・])|' + CPX + '某某?|' + CPX + '[一-龥]某某?|[一-龥]某某?|' + RNAME + ')';
+      const liabilityRegex = new RegExp('((?:驾驶人|驾驶员|骑行人|行人|乘客|快递员|货车|客车|轿车|槽罐车|公交|皮卡|摩托车|三轮车|出租车)?\\s*' + PTOK + '(?:[、和与及]' + PTOK + ')*|乙和A某|三名乘员|临停车|小客车|校车方|施工单位|项目部|园区|物业|养护单位|道路管理)\\s*(?:对[\u4e00-\u9fa5]{1,8})?(?:均|皆|各自?|分别|一律|都|共同?)?\\s*(?:(?:负|承担)\\s*(?:本次|本起)?(?:事故)?(?:的)?\\s*)?(同等责任|主要责任|次要责任|全部责任|全责|主责|次责|无责任|同责|无责|轻微责任|管理责任|整改责任|诱发过错|有责任|管理过错)', 'g');
       while ((lm = liabilityRegex.exec(sentence.text))) {
         // v3.4.4 Bug8: “A与/和/及/、B 负X责任”并列主体，逐个拆出责任人，不能只留最后一个。
         // 测试阶段修（D·整句污染）：主体含“X驾驶+车”/前缀“事故中”等时，先剔到真人名。
@@ -721,7 +834,21 @@
         const drivePollute = new RegExp('(?:[\\u4e00-\\u9fa5]{0,4})?(' + PTOK + ')驾驶(?:[\\u4e00-\\u9fa5]{0,6}(?:车|大巴|客车|货车|轿车|面包车|摩托车|电动车|三轮车))?');
         const dp = drivePollute.exec(subj);
         if (dp && dp[1]) subj = dp[1];
-        const namesInSubj = (subj.match(new RegExp('[A-Z]某|' + CPX + '某某?|' + CPX + '[\\u4e00-\\u9fa5]某某?|[\\u4e00-\\u9fa5]某某?|[甲乙丙丁戊己庚辛壬癸]', 'g')) || [subj.trim()]);
+        let namesInSubj = (subj.match(new RegExp('[A-Z]某|[A-Z](?![A-Z0-9·‧・])|' + CPX + '某某?|' + CPX + '[\\u4e00-\\u9fa5]某某?|[\\u4e00-\\u9fa5]某某?|[甲乙丙丁戊己庚辛壬癸]', 'g')) || [subj.trim()]);
+        // v3.4.7 P2 A2-NEWBUG-01: 真名并列同等责——PTOK 拿不到"林建国/陈志强"，若拆得<2条且 subj 含并列符，退回按并列符 split 再兜真名，剔常见前缀停用词。
+        if (namesInSubj.length < 2 && /[、和与及]/.test(subj)) {
+          const parts = subj.split(/[、和与及]/).map(s => s.trim()).filter(Boolean);
+          const stopSubjPrefix = /^(?:当事人|驾驶人|驾驶员|司机|当事方|肇事者|肇事方|行人|乘客|快递员|其中|事故中|本起|本次)/;
+          const collected = [];
+          parts.forEach(p => {
+            const cleaned = p.replace(stopSubjPrefix, '');
+            const anon = cleaned.match(new RegExp('[A-Z]某|' + CPX + '某某?|' + CPX + '[\\u4e00-\\u9fa5]某某?|[\\u4e00-\\u9fa5]某某?|[甲乙丙丁戊己庚辛壬癸]'));
+            if (anon) { collected.push(anon[0]); return; }
+            const real = cleaned.match(/([\u4e00-\u9fa5]{2,4})$/);
+            if (real && !/^(?:事故|方|事人|驾驶员|驾驶人|行人|乘客|其中|本次|本起|已方|方向|一则|均|双方|该方|一方|该车|该人)$/.test(real[1])) collected.push(real[1]);
+          });
+          if (collected.length >= 2) namesInSubj = collected;
+        }
         namesInSubj.forEach(nm => addEntity(entities, seen, { type: 'liability', name: lm[2], relatedPerson: nm, sentenceIndex: sentence.index, start: sentence.start + lm.index, end: sentence.start + lm.index + lm[0].length, evidence: sentence.text, extractor: 'liability-person-regex' }));
       }
       // r37 F04: “X某(某)?[行为短语，]负/承担(事故)?X责任”——主体与责任词被一个逗号短从句隔开，主 liabilityRegex(主体紧接)不命中，
@@ -768,7 +895,7 @@
         if (str.length === 1 && cnNum[str] != null) return cnNum[str];
         return null;
       };
-      const ratioCnRegex = /([甲乙丙丁戊己庚辛壬癸]|[A-Z]某|[一-龥]某某?)\s*(?:承担|负)\s*(?:本次|本起)?(?:事故)?\s*百分之([零一二三四五六七八九十百]{1,4})(?:的?责任)?/g;
+      const ratioCnRegex = /([甲乙丙丁戊己庚辛壬癸]|[A-Z]某|[一-龥]{2,3}某某?|[一-龥]{2,3})\s*(?:承担|负)\s*(?:本次|本起)?(?:事故)?(?:的)?\s*百分之([零一二三四五六七八九十百]{1,4})(?:的?责任)?/g;
       while ((lm = ratioCnRegex.exec(sentence.text))) { const v = cnToNum(lm[2]); if (v != null && v >= 0 && v <= 100) addEntity(entities, seen, { type: 'liability', name: v + '%责任', relatedPerson: lm[1], ratio: v, sentenceIndex: sentence.index, start: sentence.start + lm.index, end: sentence.start + lm.index + lm[0].length, evidence: sentence.text, extractor: 'liability-ratio-cn-regex' }); }
       // 测试阶段修（E·公司/单位主体责任）：公司/厂/部/院等单位作责任主体（含连带/比例/等级）。
       // 命中 r20-2/26/27/34：“顺达物流公司负连带责任”“某公路养护公司承担次要责任”。
@@ -901,6 +1028,20 @@
         }
       }
       for (const [canonical, aliases] of Object.entries(violationAliases)) [canonical, ...aliases].forEach(term => { const idx = sentence.text.indexOf(term); if (idx >= 0 && !isNegatedViolation(sentence.text, term, idx, canonical)) addEntity(entities, seen, { type: 'violation', name: canonical, sentenceIndex: sentence.index, start: sentence.start + idx, end: sentence.start + idx + term.length, evidence: sentence.text, extractor: 'violation-dictionary' }); });
+      // v3.4.7 Bug6: 标准报告模板“当事人 X 驾驶…因 Y（违法行为）”——
+      // 将 violation 强绑主体为句头“当事人/驾驶人/司机”后的真名/匹名，避免被 “部与某某”、“事人某某某” 等串位干扰。
+      // 策略：只处理 evidence 含“当事人/驾驶人/司机”锤头句式，将本句已存 violation 的 relatedPerson 重写为句头主体。
+      {
+        const subjMatch = sentence.text.match(/(?:当事人|驾驶人|驾驶员|司机|胇事人|胇事司机)([\u4e00-\u9fa5]{2,4})(?=驾驶|骑|推|携|乘坐)/);
+        const subj = subjMatch ? subjMatch[1] : '';
+        if (subj) {
+          entities.forEach(e => {
+            if (e.type === 'violation' && e.sentenceIndex === sentence.index && (e.extractor === 'violation-dictionary' || !e.extractor)) {
+              e.relatedPerson = subj;
+            }
+          });
+        }
+      }
       const vehicleLiabilityRegex = /((?:[\u4e00-\u9fa5A-Za-z0-9]{1,12}(?:车|公交|大巴|客车|货车|轿车|面包车|渣土车|罐车|槽罐车|自行车|电动车|电动自行车|出租车|网约车)|骑行人|行人|驾驶人|司机|临停车|故障车|校车方|施工单位|项目部|园区|物业|养护单位|道路管理))(?:(?:对[^，。；;]{0,10})|(?:[^，。；;]{0,8}))?(负主要责任|承担主要责任|负全部责任|承担全部责任|负次要责任|承担次要责任|负同等责任|承担同等责任|负相应次责|承担相应次要责任|无明显过错|无明显违法|无责|全责|主责|次责|同责|有责任|管理责任|整改责任|主要过错|诱发过错)/g;
       while ((lm = vehicleLiabilityRegex.exec(sentence.text))) {
         const target = lm[1].trim().replace(/^(?:事故中|本次事故中|本次|本起|经查明|经查|经认定|查明|如|其中|号|又|则)/, '');
@@ -925,6 +1066,7 @@
       // 仅当本句该责任类别尚无任何带主体条目时才补。测试阶段修（B·长从句回填）：
       // 若本句内违法词前有唯一/最近 person、且该人与责任词之间不隔另一个 person，则回填为其主体，
       // 消除“驾驶人 X 因…负责任”长因果从句造成的 ?→责任。
+      // v3.4.7 Bug3: 补丁——若本句无 person，尝试跨句回填：取本句之前最后一个 person（兼容“经认定，X负全责”式报告模板）。
       for (const [canonical, aliases] of Object.entries(liabilityAliases)) [canonical, ...aliases].forEach(term => {
         if (!sentence.text.includes(term)) return;
         if (entities.some(x => x.type === 'liability' && x.sentenceIndex === sentence.index && x.normalizedName === canonical && x.relatedPerson)) return;
@@ -935,10 +1077,34 @@
         if (priors.length) {
           priors.sort((p, q) => q.start - p.start);
           rp = priors[0].normalizedName || '';
+        } else {
+          // 跨句回填：取本句之前最后一个 person，并确保该 person 与本句之间无其他 liability 已绑定不同主体。
+          const before = entities.filter(x => x.type === 'person' && x.sentenceIndex < sentence.index);
+          if (before.length) {
+            before.sort((p, q) => (q.sentenceIndex - p.sentenceIndex) || (q.start - p.start));
+            rp = before[0].normalizedName || '';
+          }
         }
         addEntity(entities, seen, { type: 'liability', name: canonical, relatedPerson: rp || undefined, sentenceIndex: sentence.index, start: sentence.start + termIdx, end: sentence.start + termIdx + term.length, evidence: sentence.text, extractor: rp ? 'liability-dictionary-backfill' : 'liability-dictionary' });
       });
-      for (const [canonical, aliases] of Object.entries(vehicleTypes)) [canonical, ...aliases].forEach(term => { if (sentence.text.includes(term)) addEntity(entities, seen, { type: 'vehicle_attr', name: canonical, sentenceIndex: sentence.index, start: sentence.start + sentence.text.indexOf(term), end: sentence.start + sentence.text.indexOf(term) + term.length, evidence: sentence.text, extractor: 'vehicle-type-dictionary' }); });
+      // v3.4.7 P2 B2-NEWBUG-01: 原字典以“包含则命中”方式把小型客车误命中大型客车（子串）。
+      // 改为：所有（canonical + aliases）重新展平，按长度降序摆 mask。
+      const _vtFlat = [];
+      for (const [canonical, aliases] of Object.entries(vehicleTypes)) [canonical, ...aliases].forEach(term => _vtFlat.push({ term, canonical }));
+      _vtFlat.sort((a, b) => b.term.length - a.term.length);
+      const _vtMask = new Array(sentence.text.length).fill(false);
+      _vtFlat.forEach(({ term, canonical }) => {
+        let idx = 0;
+        while ((idx = sentence.text.indexOf(term, idx)) !== -1) {
+          let masked = false;
+          for (let i = idx; i < idx + term.length; i++) if (_vtMask[i]) { masked = true; break; }
+          if (!masked) {
+            addEntity(entities, seen, { type: 'vehicle_attr', name: canonical, sentenceIndex: sentence.index, start: sentence.start + idx, end: sentence.start + idx + term.length, evidence: sentence.text, extractor: 'vehicle-type-dictionary' });
+            for (let i = idx; i < idx + term.length; i++) _vtMask[i] = true;
+          }
+          idx += term.length;
+        }
+      });
       let vim;
       const vehicleInstanceRegex = new RegExp('((?:无牌|无号牌)?(?:' + VEHICLE_EXT_ALT + '))', 'g');
       while ((vim = vehicleInstanceRegex.exec(sentence.text))) addEntity(entities, seen, { type: 'vehicle_instance', name: vim[1], vehicleType: canonicalFromAliases(vim[1], vehicleTypes), sentenceIndex: sentence.index, start: sentence.start + vim.index, end: sentence.start + vim.index + vim[0].length, evidence: sentence.text, extractor: 'vehicle-instance-regex' });

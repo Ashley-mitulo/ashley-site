@@ -154,7 +154,7 @@ function getReportId(report, index) {
 // 异步加载文档小虾生成的100篇报告；文件未生成时静默保留当前10篇
 function loadExtraReports() {
   if (typeof fetch !== 'function') return;
-  fetch('./data/accident-reports-extra-100.json?v=' + Date.now())
+  fetch('/data/accident-reports-extra-100.json?v=' + Date.now())
     .then(res => res.ok ? res.json() : [])
     .then(extra => {
       if (!Array.isArray(extra) || !extra.length) return;
