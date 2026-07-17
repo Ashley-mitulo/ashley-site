@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ashley 的项目实验室 · 首页</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <div>
+        <div class="brand-name">Ashley Lab</div>
+        <div class="brand-sub">南京 · 智能系统实验室</div>
+      </div>
+    </div>
+    <div class="nav-menu">
+      <a href="/" class="active">首页</a>
+      <a href="/about.html">关于我</a>
+      <a href="/projects.html">项目展示</a>
+      <a href="/feedback.html">Bug 反馈</a>
+    </div>
+    <div class="nav-user" id="navUser"></div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>用工程与算法<br>把复杂问题变成可点击的界面</h1>
+    <p class="subtitle">
+      这里是 Ashley 的个人项目实验室，集中放着我这些年折腾出来的产品和小工具。
+      欢迎朋友们进来玩、体验，找出 bug —— 每一条反馈都会被认真收下。
+    </p>
+    <div class="hero-cta">
+      <a href="/projects.html" class="btn-primary">看看我的项目 →</a>
+      <a href="/about.html" class="btn-secondary">关于我</a>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <h2 class="section-title">精选项目</h2>
+  <p class="section-subtitle">三个正在维护中的独立项目 · 登录后可访问完整功能</p>
+
+  <div class="project-grid">
+    <div class="project-card">
+      <div class="project-cover c1">🚗</div>
+      <div class="project-body">
+        <span class="project-tag">知识图谱 · v3.4.6</span>
+        <h3 class="project-title">交通事故分析知识图谱</h3>
+        <p class="project-desc">
+          面向新闻短讯和正规事故报告的双通道文本解析引擎，输出因果链路、责任主体、违法行为、
+          诱因缺口等结构化图谱，配 ECharts 力导向图与热力图可视化。
+        </p>
+        <div class="project-meta">
+          <span>📊 知识图谱</span><span>🔬 NLP</span><span>📈 可视化</span>
+        </div>
+        <div class="project-actions">
+          <a class="btn btn-open" href="/apps/accident-kg/">在线体验</a>
+          <a class="btn btn-bug" href="/feedback.html?project=accident-kg">找 Bug</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-cover c2">🏘️</div>
+      <div class="project-body">
+        <span class="project-tag">评估工具 · v1.6</span>
+        <h3 class="project-title">老年人友好社区研判工具</h3>
+        <p class="project-desc">
+          针对南京仙林片区 81 个真实 POI 的老龄友好评估：10 分钟生活圈可达性、5 维度雷达图、
+          A-E 评级、A* 步行路径估算，一键给出社区短板与改进建议。
+        </p>
+        <div class="project-meta">
+          <span>🗺️ GIS</span><span>👴 城市适老化</span><span>📍 OSM 路网</span>
+        </div>
+        <div class="project-actions">
+          <a class="btn btn-open" href="/apps/elderly/">在线体验</a>
+          <a class="btn btn-bug" href="/feedback.html?project=elderly">找 Bug</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-cover c3">🚦</div>
+      <div class="project-body">
+        <span class="project-tag">智能问答 · v1.2</span>
+        <h3 class="project-title">交通智能体独立版</h3>
+        <p class="project-desc">
+          为交通事故数据集打造的智能问答工作台：自然语言查询、多维度筛选、图表联动展示，
+          与知识图谱共享底层数据同步，帮朋友们把海量事故数据一句话问清楚。
+        </p>
+        <div class="project-meta">
+          <span>🤖 AI Agent</span><span>💬 NL2SQL</span><span>📊 数据分析</span>
+        </div>
+        <div class="project-actions">
+          <a class="btn btn-open" href="/apps/transport/">在线体验</a>
+          <a class="btn btn-bug" href="/feedback.html?project=transport">找 Bug</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div>© 2026 Ashley · 南京 · 用 <a href="/">Cloudflare Pages</a> 免费部署</div>
+  <div style="margin-top:8px;opacity:.7;font-size:12px;">仅供个人展示与朋友测试，非商业用途</div>
+</footer>
+
+<script src="/js/app.js"></script>
+<script>renderNavUser();</script>
+</body>
+</html>

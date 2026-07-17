@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>项目展示 · Ashley Lab</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="brand"><div class="brand-mark">A</div>
+      <div><div class="brand-name">Ashley Lab</div><div class="brand-sub">南京 · 智能系统实验室</div></div></div>
+    <div class="nav-menu">
+      <a href="/">首页</a><a href="/about.html">关于我</a>
+      <a href="/projects.html" class="active">项目展示</a><a href="/feedback.html">Bug 反馈</a>
+    </div>
+    <div class="nav-user" id="navUser"></div>
+  </div>
+</nav>
+
+<section class="hero" style="padding:60px 24px;">
+  <div class="hero-inner">
+    <h1>项目展示</h1>
+    <p class="subtitle">登录后可以在线体验，找到 bug 直接点右上「找 Bug」提交给我</p>
+  </div>
+</section>
+
+<section class="container">
+  <div id="loginTip" class="msg info" style="display:none;">
+    ⚠️ 你还没登录，只能看到项目简介。<a href="/login.html?next=/projects.html">点这里登录</a> 后即可在线体验。
+  </div>
+
+  <div class="project-grid" id="projectGrid"></div>
+</section>
+
+<footer class="footer">© 2026 Ashley · 南京</footer>
+
+<script src="/js/app.js"></script>
+<script>
+const PROJECTS = [
+  {
+    id: 'accident-kg', cover: '🚗', coverClass: 'c1', tag: '知识图谱 · v3.4.6',
+    title: '交通事故分析知识图谱',
+    desc: '双通道文本解析引擎（新闻短讯 + 正规报告），输出因果链、责任主体、违法行为、诱因缺口，配 ECharts 力导向图与热力图。npm test 15 组全绿。',
+    meta: ['📊 图谱', '🔬 NLP', '📈 可视化'],
+    url: '/apps/accident-kg/',
+  },
+  {
+    id: 'elderly', cover: '🏘️', coverClass: 'c2', tag: '评估工具 · v1.6',
+    title: '老年人友好社区研判工具',
+    desc: '南京仙林 81 个真实 POI · 10 分钟生活圈可达性 · 5 维度雷达图 · A-E 评级 · A* 步行路径估算，一键给出社区短板与改进建议。',
+    meta: ['🗺️ GIS', '👴 适老化', '📍 OSM'],
+    url: '/apps/elderly/',
+  },
+  {
+    id: 'transport', cover: '🚦', coverClass: 'c3', tag: '智能问答 · v1.2',
+    title: '交通智能体独立版',
+    desc: '交通事故数据集的智能问答工作台：自然语言查询、多维度筛选、图表联动，与知识图谱共享底层数据同步。',
+    meta: ['🤖 Agent', '💬 NL2SQL', '📊 分析'],
+    url: '/apps/transport/',
+  },
+];
+
+async function render() {
+  const user = await renderNavUser();
+  const grid = document.getElementById('projectGrid');
+  const tip = document.getElementById('loginTip');
+  if (!user) tip.style.display = 'block';
+
+  grid.innerHTML = PROJECTS.map(p => `
+    <div class="project-card">
+      <div class="project-cover ${p.coverClass}">${p.cover}</div>
+      <div class="project-body">
+        <span class="project-tag">${p.tag}</span>
+        <h3 class="project-title">${p.title}</h3>
+        <p class="project-desc">${p.desc}</p>
+        <div class="project-meta">${p.meta.map(m => `<span>${m}</span>`).join('')}</div>
+        <div class="project-actions">
+          ${user
+            ? `<a class="btn btn-open" href="${p.url}" target="_blank">在线体验 ↗</a>
+               <a class="btn btn-bug" href="/feedback.html?project=${p.id}">找 Bug</a>`
+            : `<span class="btn-locked">🔒 登录后体验</span>
+               <a class="btn btn-bug" href="/login.html?next=/projects.html">登录</a>`}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+render();
+</script>
+</body></html>
