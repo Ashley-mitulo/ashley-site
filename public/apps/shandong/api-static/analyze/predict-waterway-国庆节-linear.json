@@ -1,0 +1,1 @@
+{"success":true,"result":{"yearlyData":[{"year":2022,"total":16.180600000000002},{"year":2023,"total":104.63699999999999},{"year":2024,"total":85.36699999999999}],"slope":34.59320000004178,"intercept":-69913.31540008452,"prediction":138,"r2":0.553057383658031,"algorithm":"linear","algorithmName":"线性回归"}}

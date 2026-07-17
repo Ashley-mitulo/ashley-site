@@ -1,0 +1,1 @@
+{"success":true,"result":{"yearlyData":[{"year":2023,"total":1896.1,"smoothed":1896.1},{"year":2024,"total":2207,"smoothed":1989.37},{"year":2025,"total":2430.9,"smoothed":2121.8289999999997}],"prediction":2122,"alpha":0.3,"algorithm":"exponential","algorithmName":"指数平滑（时间序列）"}}

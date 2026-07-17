@@ -18,16 +18,26 @@
     const url = typeof input === 'string' ? input : (input && input.url) || '';
     if (!url.includes('/api/')) return _fetch(input, init);
 
-    // POST /api/analyze/predict → 依据 body 找对应 predict-<type>-<holiday>.json
+    // POST /api/analyze/predict → 依据 body 找对应 predict-<type>-<holiday>-<algo>.json
     if ((init.method||'GET').toUpperCase() === 'POST' && url.includes('/api/analyze/predict')){
       try {
         const b = JSON.parse(init.body || '{}');
-        const key = `analyze/predict-${b.trafficType||b.type||'highway'}-${b.holiday||'元旦'}.json`;
+        const type = b.traffic_type || b.trafficType || 'highway';
+        const holiday = b.holiday || 'null';
+        const algo = b.algorithm || 'linear';
+        const key = `analyze/predict-${type}-${holiday}-${algo}.json`;
         const r = await _fetch(`${STATIC_BASE}/${key}`);
-        if (r.ok) return new Response(await r.text(), { status: 200, headers: {'Content-Type':'application/json'} });
-      } catch(e){}
-      // fallback
-      return new Response(JSON.stringify({success:false,message:'静态展示未预置该预测组合',static:true}), {status:200, headers:{'Content-Type':'application/json'}});
+        if (r.ok) {
+          const raw = await r.json();
+          // 如果传入 target_year != 2026, 需重新计算 prediction 值
+          if (raw && raw.result && raw.result.slope != null && b.target_year && b.target_year !== 2026){
+            const y = Number(b.target_year);
+            raw.result.prediction = Math.round(raw.result.slope * y + raw.result.intercept);
+          }
+          return new Response(JSON.stringify(raw), {status:200, headers:{'Content-Type':'application/json'}});
+        }
+      } catch(e){ console.warn('predict shim', e); }
+      return new Response(JSON.stringify({success:false,error:'静态展示未预置该预测组合',static:true}), {status:200, headers:{'Content-Type':'application/json'}});
     }
 
     // 其他 POST 写操作(upload/knowledge 等)返回静态提示
