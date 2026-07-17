@@ -2,11 +2,10 @@ name = "ashley-site"
 compatibility_date = "2026-01-01"
 pages_build_output_dir = "public"
 
-# D1 数据库（登录/反馈用）— 建好数据库后取消下面注释并填入真实 database_id
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "ashley-site"
-# database_id = "填入真实的-uuid"
+[[d1_databases]]
+binding = "DB"
+database_name = "ashley-site"
+database_id = "4edfec79-d05d-4c73-91dd-119113f2ebc9"
 
 [vars]
-JWT_SECRET = "change-me-after-deploy-please-use-random-64-chars"
+JWT_SECRET = "change…hars"
