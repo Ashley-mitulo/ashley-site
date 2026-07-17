@@ -57,6 +57,13 @@ async function renderDataIngest(root) {
     fd.append('sourceType', root.querySelector('#ingestSourceType').value);
     root.querySelector('#ingestMsg').innerHTML = '<span class="cyan">上传解析中，请稍候...</span>';
     root.querySelector('#ingestResult').innerHTML = '';
+    // [静态部署] 本地演示环境：模拟一个失败结果，提示用户本地部署
+    if (typeof STATIC_API_MAP !== 'undefined') {
+      setTimeout(() => {
+        root.querySelector('#ingestMsg').innerHTML = '<div class="card" style="border:1px solid #f6c85f;background:rgba(246,200,95,.08);padding:12px"><b>静态展示环境不支持文件解析入库</b><br><span class="muted">此页为 Cloudflare Pages 静态部署，处于展示模式，无法写 SQLite。<br>如需体验完整数据接入：下载独立版 <code>transport-agent-system</code>，本地 <code>npm start</code> 后访问 <code>http://localhost:3009</code> 同页上传即可。</span></div>';
+      }, 400);
+      return;
+    }
     try {
       const res = await fetch(`${API}/data-ingest/upload`, { method: 'POST', body: fd });
       const json = await res.json();
