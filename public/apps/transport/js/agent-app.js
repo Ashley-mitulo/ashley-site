@@ -1,5 +1,6 @@
+window.__TRANSPORT_STATIC__ = true; // v2.0 镜像标记
 // ⚠️ Cloudflare Pages 静态部署：所有 GET API 已冻结为 ./api-static/*.json；写操作降级为演示提示。
-// 后端源：/mnt/d/openclaw/workspace/transport-agent-system (v1.3-prda-intelligent-qa, 端口 3009)
+// 后端源：/mnt/d/openclaw/workspace/transport-agent-system (v2.0-ai-enhanced，端口 3009)
 const API = '/api/agent';
 const STATIC_API_BASE = './api-static';
 const STATIC_API_MAP = {
