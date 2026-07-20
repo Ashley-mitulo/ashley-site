@@ -20,6 +20,7 @@ function renderAiAskTab() {
   h += '<div style="font-size:28px;font-weight:800;background:linear-gradient(135deg,#7c3aed,#2563eb);-webkit-background-clip:text;background-clip:text;color:transparent;">🧠 智能问答</div>';
   h += '<div style="color:#64748b;font-size:14px;margin-top:6px;">用自然语言直接查询报告库；AI 把问题翻译成 DSL 在本地执行，答案基于真实数据，不联网、不编数字。</div>';
   h += '</div>';
+  h += '<div id="aiSuggestBox" style="margin-bottom:14px;"></div>';
   h += '<div style="display:flex;gap:10px;margin-bottom:14px;">';
   h += '<input id="aiAskInput" placeholder="例如：疲劳驾驶事故都发生在什么时段？" style="flex:1;padding:12px 16px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px;outline:none;" onkeydown="if(event.key===&quot;Enter&quot;){submitAiAsk();return false;}">';
   h += '<button id="aiAskBtn" onclick="submitAiAsk()" style="padding:12px 24px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;box-shadow:0 2px 8px rgba(124,58,237,0.3);">🚀 提问</button>';
@@ -31,6 +32,8 @@ function renderAiAskTab() {
   h += '</div></div><div id="aiAskResult"></div><div id="aiAskHistory" style="margin-top:24px;"></div></div>';
   c.innerHTML = h;
   renderAiAskHistory();
+  // v3.5.1：首次进入问答页自动拉取 AI 推荐问题
+  if (typeof loadAiSuggestions === 'function') loadAiSuggestions(false);
 }
 
 function useAiAskExample(el) {

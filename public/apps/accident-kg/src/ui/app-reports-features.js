@@ -361,6 +361,8 @@ function showReportDetail(reportId) {
   html += '<div class="detail-kv"><strong>责任认定：</strong>' + escapeHtml(report.liability || '') + '</div>';
   html += '</div>';
   html += '<div style="background:#f8fafc;border-radius:10px;padding:14px;color:#334155;line-height:1.8;font-size:14px;"><strong>报告正文：</strong><br>' + escapeHtml(report.description || '') + '</div>';
+  // v3.5.1 P1-④: AI 事实一致性质检入口
+  if (typeof renderAiAuditButton === 'function') html += renderAiAuditButton(reportId);
   html += renderReportRelationsPanel(report);
   panel.innerHTML = html;
   panel.style.display = 'block';

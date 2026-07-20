@@ -1,17 +1,24 @@
 /**
- * static-shim.js —— 交通事故 KG 静态镜像 (Cloudflare Pages 版)
+ * static-shim.js —— 交通事故 KG 静态镜像 (Cloudflare Pages 版) · v3.5.1 适配
  * 目的：拦截 window.fetch 到 /api/... 的调用，路由到静态 JSON 或返回优雅降级提示。
  *
  * 覆盖 API：
- *   GET  /api/reports              → data/reports.json
- *   POST /api/reports              → 拒绝：静态镜像不支持写入
- *   PUT/DELETE /api/reports/:id    → 拒绝：静态镜像不支持写入
+ *   GET  /api/reports              → data/reports.json（数据）
+ *   GET  /api/reports/export       → data/reports.json（下载）
+ *   POST/PUT/DELETE /api/reports*  → 拒绝
  *   POST /api/reports/import       → 拒绝
- *   GET  /api/reports/export       → 直接跳到静态 data/reports.json
- *   POST /api/llm/ask              → 降级：AI 服务不可用
- *   POST /api/llm/relate           → 降级
- *   POST /api/llm/parse            → 降级
- *   POST /api/relations/find       → 空命中兜底 {count:0, reports:[]}
+ *   POST /api/reports/audit        → 拒绝
+ *   POST /api/llm/ask              → AI 降级
+ *   POST /api/llm/relate           → AI 降级（含语义扩展）
+ *   POST /api/llm/parse            → AI 降级
+ *   POST /api/llm/suggest-questions → AI 降级（提示条空返回）
+ *   POST /api/llm/governance-report → AI 降级
+ *   POST /api/llm/audit-report     → AI 降级
+ *   POST /api/relations/find       → 空命中兜底
+ *   GET  /api/relations/top        → 空数组兜底
+ *   GET  /api/stats                → 空统计兜底
+ *   GET  /api/corrections          → 空数组兜底
+ *   POST /api/corrections          → 拒绝
  *
  * 加载时机：index.html 中所有业务 script 之前先引入本文件。
  */
@@ -27,7 +34,7 @@
 
   const AI_UNAVAILABLE = {
     success: false,
-    error: 'AI 服务不可用：本页面为静态镜像（Cloudflare Pages）。AI 智能问答、跨报告 AI 关联分析、AI 报告解析等能力需连接本地全量后端。请访问本地版 http://127.0.0.1:3003 体验完整 AI 功能。'
+    error: 'AI 服务不可用：本页面为静态镜像（Cloudflare Pages）。AI 智能问答、跨报告 AI 关联、语义扩展、治理专题报告、AI 事实质检等能力需连接本地全量后端。请访问本地版 http://127.0.0.1:3003 体验完整 AI 功能。'
   };
 
   const WRITE_DISABLED = {
@@ -61,10 +68,10 @@
     const method = (init && init.method || 'GET').toUpperCase();
     const path = pathOf(url);
 
-    // 读：报告列表 → 静态 JSON（服务端格式：{success:true, data:[...]}）
+    // ============ 报告 ============
+    // 读：报告列表
     if (path === '/api/reports' && method === 'GET') {
       return origFetch('./data/reports.json').then(r => r.json()).then(raw => {
-        // reports.json 可能是数组或 {reports:[]} 之类；兼容处理
         let list = [];
         if (Array.isArray(raw)) list = raw;
         else if (raw && Array.isArray(raw.reports)) list = raw.reports;
@@ -72,33 +79,61 @@
         return jsonResp({ success: true, data: list });
       }).catch(() => jsonResp({ success: true, data: [] }));
     }
-
-    // 报告导出：静态直连
+    // 导出
     if (path === '/api/reports/export' && method === 'GET') {
-      // 直接触发下载 data/reports.json（浏览器会当 JSON 处理）
       return origFetch('./data/reports.json');
     }
-
-    // 报告写入类
+    // AI 事实质检批量结果查询：静态无历史结果
+    if (path.startsWith('/api/llm/audit/results') && method === 'GET') {
+      return jsonResp({ success: true, data: [] });
+    }
+    // 写：一律拒绝（含 /api/reports POST/PUT/DELETE、/import、/audit）
     if (path.startsWith('/api/reports')) {
       if (method === 'POST' || method === 'PUT' || method === 'DELETE') {
         return jsonResp(WRITE_DISABLED, 503);
       }
     }
 
-    // AI 相关：一律降级
-    if (path === '/api/llm/ask' || path === '/api/llm/relate' || path === '/api/llm/parse') {
+    // ============ AI 系列 —— 全部降级 ============
+    if (path === '/api/llm/ask' ||
+        path === '/api/llm/relate' ||
+        path === '/api/llm/parse' ||
+        path === '/api/llm/suggest-questions' ||
+        path === '/api/llm/governance-report' ||
+        path === '/api/llm/audit-report' ||
+        path.startsWith('/api/llm/audit')) {
       return jsonResp(AI_UNAVAILABLE, 503);
     }
 
-    // 跨报告索引：无后端 → 命中 0 条兜底（前端会渲染"样本不足"提示）
+    // ============ 关系索引 ============
     if (path === '/api/relations/find') {
       return jsonResp({ success: true, data: { count: 0, reports: [], type: '', name: '' } });
     }
+    if (path === '/api/relations/top') {
+      return jsonResp({ success: true, data: [] });
+    }
 
-    // 兜底：透传（可能返回 404，交给上游处理）
+    // ============ 统计 ============
+    if (path === '/api/stats') {
+      return jsonResp({ success: true, data: { totalReports: 0, byType: {}, byLiability: {}, byCause: {} } });
+    }
+
+    // ============ 纠错反馈 ============
+    if (path === '/api/corrections' && method === 'GET') {
+      return jsonResp({ success: true, data: [] });
+    }
+    if (path === '/api/corrections' && method === 'POST') {
+      return jsonResp(WRITE_DISABLED, 503);
+    }
+
+    // ============ 健康检查 ============
+    if (path === '/api/health') {
+      return jsonResp({ success: true, data: { status: 'ok', mode: 'static-mirror', version: 'v3.5.1' } });
+    }
+
+    // 兜底：透传
     return origFetch(input, init);
   };
 
-  console.log('[static-shim] 已启用：交通事故 KG 静态镜像模式（AI/写入将走降级路径）');
+  console.log('[static-shim v3.5.1] 已启用：交通事故 KG 静态镜像模式（AI/写入将走降级路径）');
 })();
