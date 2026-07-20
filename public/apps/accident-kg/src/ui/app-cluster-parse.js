@@ -1010,15 +1010,83 @@ function parseReport() {
       liability: '多案例责任认定，见各案例裁判结果',
       type: '典型案例合集'
     };
-    currentParsedReport = { text, entities: aggregateEntities, reports: caseReports, report: caseReports[0], isBatch: true };
+    currentParsedReport = { text, entities: aggregateEntities, reports: caseReports, report: caseReports[0], isBatch: true, source: 'rule' };
+    window.__lastRuleParse = currentParsedReport;
     displayParseResult(aggregateEntities);
     return;
   }
 
   const entities = extractEntitiesFromText(text);
   const structuredReport = buildStructuredReport(text, entities);
-  currentParsedReport = { text, entities, report: structuredReport, reports: [structuredReport], isBatch: false };
+  currentParsedReport = { text, entities, report: structuredReport, reports: [structuredReport], isBatch: false, source: 'rule' };
+  window.__lastRuleParse = currentParsedReport;
   displayParseResult(entities);
+}
+
+// v3.4.8: 用 AI 解析（调用火山方舟 Coding Plan）— 手动触发，不影响主 parser 链路
+async function parseReportByLLM() {
+  const text = document.getElementById('reportText').value.trim();
+  if (!text) { alert('请先输入报告文本！'); return; }
+  const btn = document.getElementById('btnParseByLLM');
+  const badge = document.getElementById('parseSourceBadge');
+  const origText = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = '⚙️ AI 解析中…'; btn.style.opacity = '0.7'; }
+  if (badge) badge.innerHTML = '<span style="color:#7c3aed;">🤖 正在调用火山方舟 Coding Plan，首次抽取约 3-6 秒，命中本地缓存将瞬回…</span>';
+  try {
+    const resp = await fetch('/api/llm/parse', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+    const payload = await resp.json();
+    if (!payload || !payload.success) throw new Error((payload && payload.error) || ('HTTP ' + resp.status));
+    const data = payload.data || {};
+    const ai = data.entities || {};
+    const entities = {
+      persons: Array.isArray(ai.persons) ? ai.persons : [],
+      vehicles: Array.isArray(ai.vehicles) ? ai.vehicles : [],
+      roads: Array.isArray(ai.roads) ? ai.roads : [],
+      violations: ai.violation ? [ai.violation] : [],
+      injuries: ai.injury ? [ai.injury] : [],
+      weather: ai.weather || '',
+      date: ai.date || '',
+      location: ai.location || (ai.roads && ai.roads[0]) || '',
+      liability: ai.liability || '',
+      type: ai.type || '',
+      faultCategories: [], faultCategoryDetails: [], faultFactors: []
+    };
+    const rid = 'llm-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+    const injury = ai.injury || '伤亡情况待核实';
+    const structuredReport = {
+      id: rid,
+      title: ai.title || ((ai.location || '未知地点') + (ai.type || '交通事故') + '报告（AI 解析）'),
+      date: ai.date || '',
+      location: ai.location || (ai.roads && ai.roads[0]) || '未知地点',
+      weather: ai.weather || '天气待核实',
+      violation: ai.violation || '原因待识别',
+      faultCategories: [], faultCategoryDetails: [], faultFactors: [],
+      injury,
+      liability: ai.liability || '责任认定待核实',
+      persons: uniqueNormalizedEntities('person', ai.persons || [], 20),
+      vehicles: uniqueNormalizedEntities('vehicle', ai.vehicles || [], 20),
+      description: text,
+      creator: 'AI 解析入库',
+      source: 'server-json',
+      uploadedAt: (typeof nowUploadTime === 'function' ? nowUploadTime() : new Date().toISOString()),
+      type: ai.type || '交通事故',
+      level: ai.level || '一般事故',
+      parserType: 'llm-ark-code-latest'
+    };
+    currentParsedReport = { text, entities, report: structuredReport, reports: [structuredReport], isBatch: false, source: 'llm', llmMeta: { model: data.model, usage: data.usage, ms: data.ms, cached: !!data.cached } };
+    window.__lastLLMParse = currentParsedReport;
+    if (badge) {
+      const u = data.usage || {};
+      badge.innerHTML = '<span style="color:#7c3aed;">🤖 AI 解析完成 · 底层模型 <b>' + escapeHtml(data.model || 'auto') + '</b> · 耗时 ' + (data.ms || 0) + ' ms · tokens ' + (u.total_tokens || '?') + ' (prompt ' + (u.prompt_tokens || '?') + ' / completion ' + (u.completion_tokens || '?') + ')' + (data.cached ? ' · ✅ 本地缓存命中' : '') + '</span>';
+    }
+    displayParseResult(entities);
+  } catch (err) {
+    console.error('AI 解析失败', err);
+    if (badge) badge.innerHTML = '<span style="color:#dc2626;">❌ AI 解析失败：' + escapeHtml(err.message || String(err)) + '</span>';
+    alert('AI 解析失败：' + (err.message || err));
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = origText || '🤖 用 AI 解析'; btn.style.opacity = '1'; }
+  }
 }
 
 // 显示解析结果：v2.8 升级为可编辑校对表单
@@ -1052,8 +1120,9 @@ function collectReviewedReports() {
       vehicles: splitListValue(reportInputValue(idx, 'vehicles')),
       description: reportInputValue(idx, 'description') || oldReport.description,
       source: 'server-json',
-      creator: oldReport.creator || '解析入库',
-      parserType: currentParsedReport.isBatch ? 'multi-case-v332-gap-aware' : 'v3.3.2-gap-aware-chain'
+      creator: oldReport.creator || (currentParsedReport.source === 'llm' ? 'AI 解析入库' : '解析入库'),
+      // v3.4.8: 尊重 oldReport.parserType（AI 解析时为 llm-ark-code-latest），不再硬编码规则版本
+      parserType: oldReport.parserType || (currentParsedReport.isBatch ? 'multi-case-v332-gap-aware' : 'v3.3.2-gap-aware-chain')
     };
     return reviewed;
   }).filter(r => !r._skip);
@@ -1093,7 +1162,18 @@ function renderReviewForm(reports) {
 function displayParseResult(entities) {
   const container = document.getElementById('parsedEntities');
   const resultDiv = document.getElementById('parseResult');
-  let html = '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;">';
+  const src = (currentParsedReport && currentParsedReport.source) || 'rule';
+  const hasRule = !!window.__lastRuleParse;
+  const hasLLM  = !!window.__lastLLMParse;
+  const srcLabel = src === 'llm'
+    ? '<span style="display:inline-block;padding:3px 10px;background:#ede9fe;color:#5b21b6;border-radius:999px;font-size:12px;font-weight:800;">🤖 当前结果来自：AI 解析</span>'
+    : '<span style="display:inline-block;padding:3px 10px;background:#dbeafe;color:#1d4ed8;border-radius:999px;font-size:12px;font-weight:800;">🔍 当前结果来自：规则解析</span>';
+  let head = '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">' + srcLabel;
+  if (hasRule && hasLLM) head += '<button onclick="showParseCompare()" style="padding:5px 12px;background:#fff;border:1px solid #cbd5e1;border-radius:999px;font-size:12px;font-weight:700;color:#334155;cursor:pointer;">🔀 查看规则 vs AI 对比</button>';
+  if (src === 'rule' && !hasLLM) head += '<span style="font-size:12px;color:#94a3b8;">如果漏抽实体或结果不理想，可点击 <b>🤖 用 AI 解析</b> 对比</span>';
+  if (src === 'llm' && !hasRule) head += '<span style="font-size:12px;color:#94a3b8;">可点击 <b>🔍 规则解析</b> 对比结果</span>';
+  head += '</div>';
+  let html = head + '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;">';
   html += '<div style="padding:15px;background:#dbeafe;border-radius:8px;"><div style="font-weight:600;color:#1d4ed8;margin-bottom:8px;">👤 当事人 (' + entities.persons.length + ')</div><div style="color:#3b82f6;font-size:13px;">' + escapeHtml(entities.persons.length ? entities.persons.join('、') : '未识别') + '</div></div>';
   html += '<div style="padding:15px;background:#fee2e2;border-radius:8px;"><div style="font-weight:600;color:#dc2626;margin-bottom:8px;">🚗 车辆 (' + entities.vehicles.length + ')</div><div style="color:#ef4444;font-size:13px;">' + escapeHtml(entities.vehicles.length ? entities.vehicles.join('、') : '未识别') + '</div></div>';
   html += '<div style="padding:15px;background:#fef3c7;border-radius:8px;"><div style="font-weight:600;color:#d97706;margin-bottom:8px;">🛣️ 道路 (' + entities.roads.length + ')</div><div style="color:#f59e0b;font-size:13px;">' + escapeHtml(entities.roads.length ? entities.roads.join('、') : '未识别') + '</div></div>';
@@ -1140,13 +1220,61 @@ function clearParse() {
   document.getElementById('reportText').value = '';
   document.getElementById('parseResult').style.display = 'none';
   currentParsedReport = null;
+  window.__lastRuleParse = null;
+  window.__lastLLMParse = null;
+  var badge = document.getElementById('parseSourceBadge');
+  if (badge) badge.textContent = '双路并行：规则解析无需联网，与主 parser 链路一致；AI 解析调用火山方舟 Coding Plan，仅在本页手动触发。';
   var prev = document.getElementById('formPreviewText'); if (prev) prev.value = '';
   var fn = document.getElementById('reportFileName'); if (fn) fn.textContent = '';
   var fi = document.getElementById('reportFileInput'); if (fi) fi.value = '';
   ['datetime','road','p1','v1','vt1','viol','p2','v2','vt2','accform','injury','liab1','liab2'].forEach(function(id){ var el=document.getElementById('rf_'+id); if(el){ if(el.tagName==='SELECT') el.selectedIndex=0; else el.value=''; } });
 }
 
-// 添加到知识图谱：v2.8 写入服务端 JSON，同时保留 localStorage 兜底
+// v3.4.8: 规则 vs AI 对比弹窗
+function showParseCompare() {
+  var R = window.__lastRuleParse;
+  var L = window.__lastLLMParse;
+  if (!R && !L) { alert('还没有可对比的解析结果'); return; }
+  var rE = (R && R.entities) || {};
+  var lE = (L && L.entities) || {};
+  var fmt = function (arr) { return Array.isArray(arr) && arr.length ? escapeHtml(arr.join('、')) : '<span style="color:#94a3b8;">—</span>'; };
+  var cell = function (v) { return '<td style="padding:8px 10px;vertical-align:top;border-top:1px solid #e2e8f0;font-size:13px;line-height:1.6;">' + v + '</td>'; };
+  var rows = [
+    ['👤 当事人', fmt(rE.persons), fmt(lE.persons)],
+    ['🚗 车辆', fmt(rE.vehicles), fmt(lE.vehicles)],
+    ['🛣️ 道路', fmt(rE.roads), fmt(lE.roads)],
+    ['📅 时间', escapeHtml(rE.date || '—'), escapeHtml(lE.date || '—')],
+    ['📍 地点', escapeHtml(rE.location || '—'), escapeHtml(lE.location || '—')],
+    ['⚠️ 违法/原因', fmt(rE.violations), fmt(lE.violations)],
+    ['🩹 伤亡', fmt(rE.injuries), fmt(lE.injuries)],
+    ['⚖️ 责任', escapeHtml(rE.liability || '—'), escapeHtml(lE.liability || '—')],
+  ];
+  var html = '<div id="llmCmpMask" onclick="closeParseCompare(event)" style="position:fixed;inset:0;background:rgba(15,23,42,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;">';
+  html += '<div style="background:#fff;border-radius:14px;max-width:900px;width:100%;max-height:82vh;overflow:auto;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,0.35);" onclick="event.stopPropagation()">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div style="font-size:17px;font-weight:800;color:#0f172a;">🔀 规则解析 vs AI 解析 对比</div><button onclick="closeParseCompare()" style="padding:4px 12px;border:1px solid #cbd5e1;background:#f8fafc;border-radius:8px;cursor:pointer;">✕ 关闭</button></div>';
+  html += '<table style="width:100%;border-collapse:collapse;"><thead><tr>';
+  html += '<th style="text-align:left;padding:8px 10px;background:#f8fafc;font-size:12px;color:#475569;width:110px;">字段</th>';
+  html += '<th style="text-align:left;padding:8px 10px;background:#dbeafe;font-size:12px;color:#1d4ed8;">🔍 规则解析</th>';
+  html += '<th style="text-align:left;padding:8px 10px;background:#ede9fe;font-size:12px;color:#5b21b6;">🤖 AI 解析</th></tr></thead><tbody>';
+  rows.forEach(function (r) { html += '<tr><td style="padding:8px 10px;font-size:12px;color:#334155;font-weight:700;border-top:1px solid #e2e8f0;width:110px;">' + r[0] + '</td>' + cell(r[1]) + cell(r[2]) + '</tr>'; });
+  html += '</tbody></table>';
+  html += '<div style="margin-top:14px;display:flex;gap:10px;justify-content:flex-end;">';
+  if (R) html += '<button onclick="useParseResult(\'rule\')" style="padding:8px 16px;background:#1d4ed8;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">✓ 使用规则结果入库</button>';
+  if (L) html += '<button onclick="useParseResult(\'llm\')" style="padding:8px 16px;background:#5b21b6;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">✓ 使用 AI 结果入库</button>';
+  html += '</div>';
+  html += '</div></div>';
+  var holder = document.createElement('div'); holder.innerHTML = html; document.body.appendChild(holder.firstChild);
+}
+function closeParseCompare(ev) { var m = document.getElementById('llmCmpMask'); if (m) m.remove(); }
+function useParseResult(which) {
+  var target = which === 'llm' ? window.__lastLLMParse : window.__lastRuleParse;
+  if (!target) { alert('当前无可用的解析结果'); return; }
+  currentParsedReport = target;
+  closeParseCompare();
+  displayParseResult(target.entities || {});
+}
+
+// 添加到知识图谱：v2.8 写入服务端JSON，同时保留 localStorage 兜底
 async function addToGraph() {
   if (!currentParsedReport || !currentParsedReport.reports || !currentParsedReport.reports.length) {
     alert('没有可添加的解析结果！');

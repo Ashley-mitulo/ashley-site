@@ -1,6 +1,6 @@
 // ==================== Tab 切换功能 ====================
 function switchTab(tabId) {
-  const tabs = ['graph', 'chain', 'cluster', 'entities', 'upload', 'reports'];
+  const tabs = ['graph', 'chain', 'cluster', 'entities', 'upload', 'reports', 'aiAsk'];
   const legendPanel = document.querySelector ? document.querySelector('.legend-panel') : null;
   if (legendPanel) legendPanel.style.display = tabId === 'graph' ? 'block' : 'none';
   document.querySelectorAll('.tab').forEach((tab, i) => {
@@ -21,6 +21,7 @@ function switchTab(tabId) {
       initEntityCategories();
     }
     if (tabId === 'reports') initReports();
+    if (tabId === 'aiAsk' && typeof renderAiAskTab === 'function') renderAiAskTab();
   }, 100);
 }
 
@@ -118,7 +119,33 @@ function renderSelectedNodeRelations(nodeId) {
   if (!node) return;
   const typeInfo = getTypeInfo(node.type);
   const relations = getDirectRelations(nodeId);
-  let html = '<div class="analysis-title">🎯 已选节点：<span style="color:' + typeInfo.color + '">' + escapeHtml(node.name) + '</span> <span style="font-size:12px;color:#64748b;font-weight:500;">' + escapeHtml(typeInfo.name) + '</span></div>';
+
+  // v3.5.0 收尾：顶部"节点信息卡" + "AI 关联分析按钮"（与实体分析 Tab 共享同一白名单与后端 API）
+  let html = '';
+  // 卡片：节点名/类型/关联数/归属事故(如果是 accident 节点)
+  html += '<div style="padding:12px;background:linear-gradient(135deg,' + typeInfo.color + '10,' + typeInfo.color + '05);border:1px solid ' + typeInfo.color + '40;border-radius:10px;margin-bottom:12px;">';
+  html += '<div class="analysis-title" style="margin:0 0 6px;">🎯 已选节点：<span style="color:' + typeInfo.color + '">' + escapeHtml(node.name) + '</span> <span style="font-size:12px;color:#64748b;font-weight:500;">' + escapeHtml(typeInfo.name) + '</span></div>';
+  html += '<div style="font-size:12px;color:#475569;line-height:1.6;">一层直接关系：<b style="color:' + typeInfo.color + '">' + relations.length + '</b> 条';
+  if (node.type === 'accident' && node.reportId) {
+    html += ' ・ 归属报告：<b>' + escapeHtml(node.name) + '</b>';
+  }
+  if (node.roadCategory) html += ' ・ 道路大类：<b>' + escapeHtml(node.roadCategory) + '</b>';
+  if (node.weatherCategory) html += ' ・ 天气大类：<b>' + escapeHtml(node.weatherCategory) + '</b>';
+  if (node.timeCategory) html += ' ・ 时间段：<b>' + escapeHtml(node.timeCategory) + '</b>';
+  if (node.injuryCategory) html += ' ・ 伤亡类：<b>' + escapeHtml(node.injuryCategory) + '</b>';
+  if (node.liabilityCategory) html += ' ・ 责任大类：<b>' + escapeHtml(node.liabilityCategory) + '</b>';
+  html += '</div>';
+  // AI 关联按钮（同实体白名单）
+  if (typeof getRelateIndexType === 'function' && getRelateIndexType(node.type)) {
+    const btnId = 'aiRelateBtn_graph_' + safeId(nodeId);
+    const boxId = 'aiRelateBox_graph_' + safeId(nodeId);
+    html += '<div style="margin-top:10px;"><button id="' + btnId + '" onclick="runAiRelateAnalysis(\'' + escapeHtml(node.type) + '\',\'' + escapeHtml(node.name).replace(/'/g, '\\&#39;') + '\',\'' + boxId + '\')" style="padding:8px 16px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;box-shadow:0 2px 6px rgba(124,58,237,0.25);">🧠 用 AI 分析全库同类事故</button><span style="margin-left:10px;font-size:12px;color:#94a3b8;">结果仅展示，不写入图谱</span></div>';
+    html += '<div id="' + boxId + '" style="margin-top:10px;"></div>';
+  } else {
+    html += '<div style="margin-top:8px;font-size:11px;color:#94a3b8;">当前节点类型暂不支持跨报告 AI 关联分析。</div>';
+  }
+  html += '</div>';
+
   html += '<div style="color:#64748b;font-size:13px;margin-bottom:12px;">共发现 <strong>' + relations.length + '</strong> 条一层直接关系。点击图谱其它节点可切换分析对象。</div>';
   if (!relations.length) {
     html += '<div style="color:#94a3b8;font-size:14px;">暂无直接连接关系。</div>';
@@ -602,6 +629,13 @@ function showEntityAssociations(nodeId) {
   if (entityAssociationExpandedType !== 'all' && !summaries.some(s => s.type === entityAssociationExpandedType)) entityAssociationExpandedType = 'all';
   let html = '<div class="analysis-title">🔍 实体：<span style="color:' + info.color + '">' + escapeHtml(node.name) + '</span> <span style="font-size:12px;color:#64748b;font-weight:500;">' + escapeHtml(info.name) + '</span></div>';
   html += '<div style="color:#64748b;font-size:13px;margin-bottom:14px;">先按实体大类汇总该实体在全库事故报告中的关联数量；点击任一类型卡片，再展开该类型的详细证据链。</div>';
+  // v3.5.0 Phase A: AI 跨报告关联分析入口
+  if (typeof getRelateIndexType === 'function' && getRelateIndexType(node.type)) {
+    const btnId = 'aiRelateBtn_' + safeId(nodeId);
+    const boxId = 'aiRelateBox_' + safeId(nodeId);
+    html += '<div style="margin-bottom:14px;"><button id="' + btnId + '" onclick="runAiRelateAnalysis(\'' + escapeHtml(node.type) + '\',\'' + escapeHtml(node.name).replace(/'/g, '\\&#39;') + '\',\'' + boxId + '\')" style="padding:8px 16px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;box-shadow:0 2px 6px rgba(124,58,237,0.25);">🧠 用 AI 分析全库同类事故</button><span style="margin-left:10px;font-size:12px;color:#94a3b8;">结果仅展示，不写入图谱</span></div>';
+    html += '<div id="' + boxId + '" style="margin-bottom:14px;"></div>';
+  }
   html += '<div class="entity-summary-grid">';
   const allActive = entityAssociationExpandedType === 'all' ? ' active' : '';
   html += '<div class="entity-summary-card' + allActive + '" onclick="setEntityAssociationExpandedType(&quot;all&quot;, &quot;' + escapeHtml(nodeId) + '&quot;)"><div style="font-weight:700;color:#334155;">全部关联</div><div class="entity-summary-count" style="color:#334155;">' + allItems.length + '</div><div class="entity-summary-desc">展示所有类型的一至三层关联详情。</div></div>';
@@ -753,21 +787,31 @@ function initGraph() {
   chart.setOption(option);
   
   // 节点点击选中：高亮邻接关系，并在下方展示一层关系和分析过程
+  // v3.5.1: 兼容 edge 命中——密集连线区域鼠标点在节点附近常被拾取为 edge，兜底解析为起点节点，
+  // 避免"点击无反应"。
   if (chart.off) chart.off('click');
   chart.on('click', function(params) {
+    let nodeId = null;
     if (params.dataType === 'node') {
-      const nodeId = params.data.id;
-      const node = getNodeById(nodeId);
-      if (node && node.type === 'accident' && node.reportId && String(node.reportId) !== String(graphEntryReportId)) {
-        graphEntryAutoMode = false;
-        viewReportLocalGraph(node.reportId);
-        return;
-      }
-      graphExpandedNodeId = nodeId;
-      graphFocusedNodeId = nodeId;
-      initGraph();
-      renderSelectedNodeRelations(nodeId);
+      nodeId = params.data && params.data.id;
+    } else if (params.dataType === 'edge') {
+      // edge 兜底：优先取起点节点，其次终点节点
+      const src = params.data && params.data.source;
+      const tgt = params.data && params.data.target;
+      nodeId = (src && getNodeById(src)) ? src : (tgt && getNodeById(tgt) ? tgt : null);
     }
+    if (!nodeId) return;
+    const node = getNodeById(nodeId);
+    if (!node) return;
+    if (node.type === 'accident' && node.reportId && String(node.reportId) !== String(graphEntryReportId)) {
+      graphEntryAutoMode = false;
+      viewReportLocalGraph(node.reportId);
+      return;
+    }
+    graphExpandedNodeId = nodeId;
+    graphFocusedNodeId = nodeId;
+    initGraph();
+    renderSelectedNodeRelations(nodeId);
   });
   
   if (!graphResizeHandlerBound) {

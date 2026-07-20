@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🚗 交通事故分析知识图谱 v3.4.7 三轮盲测闭环版</title>
+<title>🚗 交通事故分析知识图谱 v3.5.0 AI 加工版</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script src="./static-shim.js?v=20260720-v352a"></script>
 <script src="./src/api/reportsApi.js"></script>
 <script src="./src/parser/lexicon.js"></script>
 <script src="./src/parser/relationExtractor.js"></script>
@@ -135,7 +136,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 <body>
 <div class="container">
   <div class="header">
-    <h1>🚗 交通事故分析知识图谱 v3.4.7 三轮盲测闭环版</h1>
+    <h1>🚗 交通事故分析知识图谱 v3.5.0 AI 加工版</h1>
     <p>独立项目 | 端口: 3003 | 服务端持久化 | 新闻短讯弱链路 | 原因待查/责任待认定 | 缺口节点 | 低置信提示 | 证据高亮 | 链路可信度评分</p>
   </div>
 
@@ -153,9 +154,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     <button class="tab" onclick="switchTab('entities')">🧠 实体分析</button>
     <button class="tab" onclick="switchTab('upload')">📄 报告解析</button>
     <button class="tab" onclick="switchTab('reports')">📚 报告库</button>
+    <button class="tab" onclick="switchTab('aiAsk')">🧠 智能问答</button>
   </div>
 
-  <div id="tab-graph" class="tab-content active"><div class="graph-container"><div class="toolbar"><input id="graphSearchInput" style="min-width:260px;" placeholder="搜索事故标题/地点/人名/车牌/违法行为" oninput="refreshGraphAccidentOptions()"><select id="graphAccidentSelect" style="min-width:360px;"></select><button onclick="applyGraphEntry()">从该事故入手</button><button class="secondary" onclick="resetGraphEntry()">重置为最近事故</button><span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#475569;">🎚️ 置信度≥<b id="confThresholdVal" style="color:#2563eb;min-width:34px;display:inline-block;text-align:right;">0%</b><input id="confThresholdSlider" type="range" min="0" max="90" step="5" value="0" style="width:120px;cursor:pointer;" oninput="setGraphConfidenceThreshold(this.value)"></span></div><div id="knowledgeGraph"></div><div id="nodeRelationPanel" class="analysis-panel"><div class="analysis-title">🖱️ 节点关系分析</div><div style="color:#64748b;font-size:14px;">默认展示时间最近的一起事故局部图谱；点击违法行为等节点会向外拓展同类事故和其它违法类型事故，点击事故节点可切换到该事故的详细图谱。</div></div></div></div>
+  <div id="tab-graph" class="tab-content active"><div class="graph-container"><div class="toolbar"><input id="graphSearchInput" style="min-width:260px;" placeholder="搜索事故标题/地点/人名/车牌/违法行为" oninput="refreshGraphAccidentOptions()"><select id="graphAccidentSortSelect" onchange="setGraphAccidentSort(this.value)" style="min-width:170px;"><option value="uploadDesc">上传时间倒序</option><option value="uploadAsc">上传时间正序</option><option value="dateDesc">事故时间倒序</option><option value="dateAsc">事故时间正序</option><option value="titleAsc">标题 A-Z</option></select><select id="graphAccidentSelect" style="min-width:360px;"></select><button onclick="applyGraphEntry()">从该事故入手</button><button class="secondary" onclick="resetGraphEntry()">重置为最近事故</button><span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#475569;">🎚️ 置信度≥<b id="confThresholdVal" style="color:#2563eb;min-width:34px;display:inline-block;text-align:right;">0%</b><input id="confThresholdSlider" type="range" min="0" max="90" step="5" value="0" style="width:120px;cursor:pointer;" oninput="setGraphConfidenceThreshold(this.value)"></span></div><div id="knowledgeGraph"></div><div id="nodeRelationPanel" class="analysis-panel"><div class="analysis-title">🖱️ 节点关系分析</div><div style="color:#64748b;font-size:14px;">默认展示时间最近的一起事故局部图谱；点击违法行为等节点会向外拓展同类事故和其它违法类型事故，点击事故节点可切换到该事故的详细图谱。</div></div></div></div>
   <div id="tab-chain" class="tab-content"><div class="graph-container"><div class="toolbar"><input id="chainSearchInput" style="min-width:280px;" placeholder="搜索事故标题/地点/违法行为" oninput="refreshChainAccidentOptions()"><select id="chainAccidentSelect" style="min-width:420px;"></select><button onclick="applyChainReport()">查看事故链路</button><button class="secondary" onclick="syncChainWithGraph()">同步当前图谱事故</button></div><div id="chainContent"></div></div></div>
   <div id="tab-cluster" class="tab-content"><div class="graph-container"><div id="clusterContent" class="cluster-grid"></div></div></div>
   <div id="tab-entities" class="tab-content"><div class="graph-container"><div class="entity-layout"><aside class="entity-sidebar"><div class="entity-sidebar-header"><div class="analysis-title" style="margin-bottom:0;">📚 实体分类</div><span style="font-size:12px;color:#94a3b8;white-space:nowrap;">可拖右边缘缩放</span></div><input id="entitySearchInput" class="entity-search" placeholder="搜索实体名称/类型/车牌/道路/违法行为" oninput="setEntityFilter(this.value)"><div class="entity-sidebar-tip">左侧面板已独立滚动；数据多时不用拉完整页面，拖动右侧边缘可调整宽度。</div><div id="entityCategoryList" class="entity-category-list"></div><div id="relation-stats-panel" class="analysis-panel" style="margin-top:16px;"></div></aside><div class="entity-association-wrap"><div id="entityAssociationPanel" class="analysis-panel" style="margin-top:0;"><div class="analysis-title">🔍 多层关联探索</div><div style="color:#64748b;font-size:14px;">点击左侧任一实体，查看它的一层、二层、三层关联实体及关联原因。</div></div></div></div></div></div>
@@ -166,11 +168,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
           <div style="font-size:18px;font-weight:600;color:#1e293b;">📚 事故报告库</div>
           <div style="font-size:14px;color:#64748b;">共 <span id="reportCount">10</span> 篇报告</div>
         </div>
-        <div class="toolbar"><input id="reportTitleFilter" style="min-width:280px;" placeholder="按标题/地点/创建人/类型筛选" oninput="setReportFilter(this.value)"><select id="reportSortSelect" onchange="setReportSort(this.value)"><option value="dateDesc">时间倒序</option><option value="dateAsc">时间正序</option><option value="titleAsc">标题 A-Z</option><option value="titleDesc">标题 Z-A</option><option value="creatorAsc">创建人 A-Z</option><option value="typeAsc">类型 A-Z</option><option value="uploadDesc">上传时间倒序</option></select><button onclick="exportReports('json')">导出 JSON</button><button onclick="exportReports('csv')">导出 CSV</button><button class="secondary" onclick="document.getElementById('reportImportFile').click()">导入 JSON</button><input id="reportImportFile" type="file" accept="application/json,.json" style="display:none" onchange="importReportsFromFile(this.files && this.files[0])"><button class="secondary" onclick="reloadServerReports()">重载服务端数据</button></div>
+        <div class="toolbar"><input id="reportTitleFilter" style="min-width:280px;" placeholder="按标题/地点/创建人/类型筛选" oninput="setReportFilter(this.value)"><select id="reportSortSelect" onchange="setReportSort(this.value)"><option value="uploadDesc">上传时间倒序</option><option value="uploadAsc">上传时间正序</option><option value="dateDesc">事故时间倒序</option><option value="dateAsc">事故时间正序</option><option value="titleAsc">标题 A-Z</option><option value="titleDesc">标题 Z-A</option><option value="creatorAsc">创建人 A-Z</option><option value="typeAsc">类型 A-Z</option></select><button onclick="exportReports('json')">导出 JSON</button><button onclick="exportReports('csv')">导出 CSV</button><button class="secondary" onclick="document.getElementById('reportImportFile').click()">导入 JSON</button><input id="reportImportFile" type="file" accept="application/json,.json" style="display:none" onchange="importReportsFromFile(this.files && this.files[0])"><button class="secondary" onclick="reloadServerReports()">重载服务端数据</button></div>
         <div style="max-height:620px;overflow:auto;border-radius:12px;"><table class="report-table"><thead><tr><th onclick="setReportSort('titleAsc')">标题</th><th onclick="setReportSort('dateDesc')">事故时间</th><th onclick="setReportSort('uploadDesc')">上传时间</th><th onclick="setReportSort('creatorAsc')">创建人</th><th onclick="setReportSort('typeAsc')">事故类型</th><th>等级</th><th>地点</th><th>操作</th></tr></thead><tbody id="reportsList"></tbody></table></div>
         <div id="reportDetailPanel" class="report-detail-panel"></div>
       </div>
     </div>
+  </div>
+
+  <div id="tab-aiAsk" class="tab-content">
+    <div class="graph-container"><div id="aiAskContent"></div></div>
   </div>
 
   <div id="tab-upload" class="tab-content">
@@ -209,11 +215,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
           <input id="reportFileInput" type="file" accept=".txt,.md,text/plain" style="display:none" onchange="loadReportFromFile(this.files && this.files[0])">
         </div>
 
-        <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;">
-          <button onclick="parseReport()" style="padding:12px 32px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">🔍 解析报告</button>
+        <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button onclick="parseReport()" style="padding:12px 32px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">🔍 规则解析</button>
+          <button onclick="parseReportByLLM()" id="btnParseByLLM" style="padding:12px 32px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">🤖 用 AI 解析</button>
           <button onclick="clearParse()" style="padding:12px 32px;background:#f1f5f9;color:#64748b;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">🗑️ 清空</button>
         </div>
-        <div id="parseResult" style="margin-top:30px;text-align:left;max-width:700px;margin-left:auto;margin-right:auto;display:none;">
+        <div id="parseSourceBadge" style="margin-top:14px;text-align:center;font-size:12px;color:#94a3b8;">双路并行：规则解析无需联网，与主 parser 链路一致；AI 解析调用火山方舟 Coding Plan，仅在本页手动触发。</div>
+        <div id="parseResult" style="margin-top:20px;text-align:left;max-width:900px;margin-left:auto;margin-right:auto;display:none;">
           <div style="font-size:16px;font-weight:600;color:#1e293b;margin-bottom:15px;">📊 解析结果</div>
           <div id="parsedEntities"></div>
           <div style="margin-top:20px;text-align:center;">
@@ -227,9 +235,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 
 <div class="legend-panel"><div class="legend-title">🎨 实体类型图例</div><div id="legendList"></div><div class="legend-title" style="margin-top:16px;border-top:1px solid #e2e8f0;padding-top:16px;">🔗 关系强度图例</div><div id="relationLegendList"></div></div>
 
-<script src="./src/ui/app-core.js?v=20260717-v347"></script>
-<script src="./src/ui/app-graph.js?v=20260717-v347"></script>
-<script src="./src/ui/app-cluster-parse.js?v=20260717-v347"></script>
-<script src="./src/ui/app-reports-features.js?v=20260717-v347"></script>
+<script src="./src/ui/app-core.js?v=20260720-v352a"></script>
+<script src="./src/ui/app-graph.js?v=20260720-v352a"></script>
+<script src="./src/ui/app-cluster-parse.js?v=20260720-v352a"></script>
+<script src="./src/ui/app-reports-features.js?v=20260720-v352a"></script>
+<script src="./src/ui/app-ai-relate.js?v=20260720-v352a"></script>
+<script src="./src/ui/app-ai-ask.js?v=20260720-v352a"></script>
 </body>
 </html>

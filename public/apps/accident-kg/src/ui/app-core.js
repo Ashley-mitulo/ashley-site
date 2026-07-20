@@ -277,7 +277,8 @@ let graphExpandedNodeId = null;
 let graphFocusedNodeId = null;
 let graphEntryAutoMode = true;
 let reportFilterText = '';
-let reportSortMode = 'dateDesc';
+let reportSortMode = 'uploadDesc';
+let graphAccidentSortMode = 'uploadDesc'; // v3.4.8: 知识图谱事故下拉独立排序
 let entityFilterText = '';
 let graphEntityTypeFilters = new Set(Object.keys(entityColors));
 // v3.3.4 建议4：置信度阈值过滤（仅显示 confidence >= 阈值的关系边；gap 缺口边不受限）。
@@ -426,8 +427,12 @@ function normalizeEntityName(type, name) {
   }
   if (type === 'person') {
     text = text.replace(/^(驾驶员|当事人|伤者|乘客|行人|车主|司机|违法人|责任人|被保险人)/g, '').trim();
-    if (!/^[\u4e00-\u9fa5]{2,4}$/.test(text)) return '';
+    // v3.4.8: 放宽姓名规则以兼容 AI 抽出的官方脱敏姓名（如 魏XX、张某、A某、甲、乙）
+    if (!text) return '';
+    if (text.length > 16) return '';
     if (/^(某某|未知|人员|当事|驾驶|乘客|伤者)$/.test(text)) return '';
+    // 至少含一个汉字/拉丁字母/常见代号；纯 X/*/? 之类不算
+    if (!/[\u4e00-\u9fa5A-Za-z甲乙丙丁戊己庚辛壬癸]/.test(text)) return '';
     return text;
   }
   return text;
@@ -909,16 +914,20 @@ function reportMatchesQuery(report, query) {
 }
 
 function getSortedReports(source) {
+  return getSortedReportsBy(source, reportSortMode);
+}
+
+function getSortedReportsBy(source, mode) {
   const rows = [...source];
   const creator = r => getReportCreator(r);
   rows.sort((a, b) => {
-    if (reportSortMode === 'dateAsc') return String(a.date).localeCompare(String(b.date));
-    if (reportSortMode === 'titleAsc') return String(a.title).localeCompare(String(b.title), 'zh-Hans-CN');
-    if (reportSortMode === 'titleDesc') return String(b.title).localeCompare(String(a.title), 'zh-Hans-CN');
-    if (reportSortMode === 'creatorAsc') return creator(a).localeCompare(creator(b), 'zh-Hans-CN');
-    if (reportSortMode === 'typeAsc') return String(a.type || '').localeCompare(String(b.type || ''), 'zh-Hans-CN');
-    if (reportSortMode === 'uploadAsc') return String(getUploadTime(a)).localeCompare(String(getUploadTime(b)));
-    if (reportSortMode === 'uploadDesc') return String(getUploadTime(b)).localeCompare(String(getUploadTime(a)));
+    if (mode === 'dateAsc') return String(a.date).localeCompare(String(b.date));
+    if (mode === 'titleAsc') return String(a.title).localeCompare(String(b.title), 'zh-Hans-CN');
+    if (mode === 'titleDesc') return String(b.title).localeCompare(String(a.title), 'zh-Hans-CN');
+    if (mode === 'creatorAsc') return creator(a).localeCompare(creator(b), 'zh-Hans-CN');
+    if (mode === 'typeAsc') return String(a.type || '').localeCompare(String(b.type || ''), 'zh-Hans-CN');
+    if (mode === 'uploadAsc') return String(getUploadTime(a)).localeCompare(String(getUploadTime(b)));
+    if (mode === 'uploadDesc') return String(getUploadTime(b)).localeCompare(String(getUploadTime(a)));
     return String(b.date).localeCompare(String(a.date));
   });
   return rows;
@@ -982,15 +991,29 @@ function refreshGraphAccidentOptions() {
   if (!select || typeof accidentReports === 'undefined') return;
   const input = document.getElementById('graphSearchInput');
   const query = input ? input.value : '';
-  const filtered = getSortedReports(accidentReports.filter(r => reportMatchesQuery(r, query))).slice(0, 200);
-  let html = '<option value="">按时间默认最近事故</option>';
+  // v3.4.8: 不再复用报告库的 reportSortMode，使用图谱专属的 graphAccidentSortMode
+  const filtered = getSortedReportsBy(accidentReports.filter(r => reportMatchesQuery(r, query)), graphAccidentSortMode).slice(0, 200);
+  const sortSel = document.getElementById('graphAccidentSortSelect');
+  if (sortSel && sortSel.value !== graphAccidentSortMode) sortSel.value = graphAccidentSortMode;
+  const labelFor = (r) => {
+    if (graphAccidentSortMode === 'uploadDesc' || graphAccidentSortMode === 'uploadAsc') {
+      return (getUploadTime(r) || '未知上传时间') + '｜' + r.title;
+    }
+    return (r.date || '未知时间') + '｜' + r.title;
+  };
+  let html = '<option value="">' + (graphAccidentSortMode.startsWith('upload') ? '默认→最近入库事故' : '默认→时间最近事故') + '</option>';
   ensureDefaultGraphEntry();
   filtered.forEach((r, i) => {
     const id = getReportId(r, accidentReports.indexOf(r));
-    html += '<option value="' + escapeHtml(id) + '">' + escapeHtml(r.date + '｜' + r.title) + '</option>';
+    html += '<option value="' + escapeHtml(id) + '">' + escapeHtml(labelFor(r)) + '</option>';
   });
   select.innerHTML = html;
   if (graphEntryReportId) select.value = graphEntryReportId;
+}
+
+function setGraphAccidentSort(mode) {
+  graphAccidentSortMode = mode || 'uploadDesc';
+  refreshGraphAccidentOptions();
 }
 
 
@@ -1026,7 +1049,7 @@ function setReportFilter(value) {
 }
 
 function setReportSort(mode) {
-  reportSortMode = mode || 'dateDesc';
+  reportSortMode = mode || 'uploadDesc';
   const select = document.getElementById('reportSortSelect');
   if (select) select.value = reportSortMode;
   initReports();
