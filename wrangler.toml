@@ -7,5 +7,12 @@ binding = "DB"
 database_name = "ashley-site"
 database_id = "4edfec79-d05d-4c73-91dd-119113f2ebc9"
 
+[[kv_namespaces]]
+binding = "TUNNEL_KV"
+name = "ashley-site-tunnel-kv"
+id = "d9e51503dbe247eea8b0ec3e7592b561"
+preview_id = "d9e51503dbe247eea8b0ec3e7592b561"
+
 [vars]
 JWT_SECRET = "change…hars"
+# TUNNEL_REGISTER_SECRET = "set_in_cloudflare_dashboard"
