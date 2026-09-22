@@ -34,14 +34,16 @@ Write-Host ""
 
 # 清理旧文件
 $kgLog = "$env:TEMP\cloudflared-kg.log"
+$kgOutLog = "$env:TEMP\cloudflared-kg.out.log"
 $agentLog = "$env:TEMP\cloudflared-agent.log"
-Remove-Item $kgLog -ErrorAction SilentlyContinue
-Remove-Item $agentLog -ErrorAction SilentlyContinue
+$agentOutLog = "$env:TEMP\cloudflared-agent.out.log"
+Remove-Item $kgLog,$kgOutLog -ErrorAction SilentlyContinue
+Remove-Item $agentLog,$agentOutLog -ErrorAction SilentlyContinue
 
 # 启动 KG 隧道
 Write-Host "[2/5] 启动交通事故 KG 隧道 (端口 $KG_PORT)..." -ForegroundColor Yellow
 Start-Process -FilePath "C:\cloudflared\cloudflared.exe" -ArgumentList "tunnel", "--url", "http://localhost:$KG_PORT" `
-    -RedirectStandardOutput $kgLog -NoNewWindow
+    -RedirectStandardOutput $kgOutLog -RedirectStandardError $kgLog -NoNewWindow
 Start-Sleep -Seconds 6
 
 # 提取 KG URL
@@ -63,7 +65,7 @@ Write-Host ""
 # 启动 Agent 隧道
 Write-Host "[3/5] 启动交通智能体隧道 (端口 $AGENT_PORT)..." -ForegroundColor Yellow
 Start-Process -FilePath "C:\cloudflared\cloudflared.exe" -ArgumentList "tunnel", "--url", "http://localhost:$AGENT_PORT" `
-    -RedirectStandardOutput $agentLog -NoNewWindow
+    -RedirectStandardOutput $agentOutLog -RedirectStandardError $agentLog -NoNewWindow
 Start-Sleep -Seconds 6
 
 # 提取 Agent URL
@@ -110,10 +112,11 @@ if ($agentUrl) {
 }
 # ===== 港口危货 KG 隧道 (3010) =====
 $portKgLog = "$env:TEMP\cloudflared-portkg.log"
-Remove-Item $portKgLog -ErrorAction SilentlyContinue
+$portKgOutLog = "$env:TEMP\cloudflared-portkg.out.log"
+Remove-Item $portKgLog,$portKgOutLog -ErrorAction SilentlyContinue
 Write-Host "[启动] 港口危货KG隧道 (端口 $PORTKG_PORT)..." -ForegroundColor Yellow
 Start-Process -FilePath "C:\cloudflared\cloudflared.exe" -ArgumentList "tunnel", "--url", "http://localhost:$PORTKG_PORT" `
-    -RedirectStandardOutput $portKgLog -NoNewWindow
+    -RedirectStandardOutput $portKgOutLog -RedirectStandardError $portKgLog -NoNewWindow
 Start-Sleep -Seconds 6
 $portKgUrl = $null
 $lines = Get-Content $portKgLog -ErrorAction SilentlyContinue
