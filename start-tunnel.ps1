@@ -1,4 +1,4 @@
-# Ashley Site - Cloudflare Tunnel 启动器 (PowerShell 版)
+﻿# Ashley Site - Cloudflare Tunnel 启动器 (PowerShell 版)
 # 用法：右键 → 使用 PowerShell 运行
 
 $ErrorActionPreference = "Continue"
@@ -21,7 +21,7 @@ $PORTKG_PORT = 3010
 # 检查 cloudflared
 Write-Host "[1/5] 检查 cloudflared 是否安装..." -ForegroundColor Yellow
 try {
-    $null = Get-Command cloudflared -ErrorAction Stop
+    $null = Get-Command "C:\cloudflared\cloudflared.exe" -ErrorAction Stop
     Write-Host "[OK] cloudflared 已安装" -ForegroundColor Green
 } catch {
     Write-Host "[错误] 未找到 cloudflared，请先安装：" -ForegroundColor Red
@@ -40,7 +40,7 @@ Remove-Item $agentLog -ErrorAction SilentlyContinue
 
 # 启动 KG 隧道
 Write-Host "[2/5] 启动交通事故 KG 隧道 (端口 $KG_PORT)..." -ForegroundColor Yellow
-Start-Process -FilePath "cloudflared" -ArgumentList "tunnel", "--url", "http://localhost:$KG_PORT" `
+Start-Process -FilePath "C:\cloudflared\cloudflared.exe" -ArgumentList "tunnel", "--url", "http://localhost:$KG_PORT" `
     -RedirectStandardOutput $kgLog -NoNewWindow
 Start-Sleep -Seconds 6
 
@@ -62,7 +62,7 @@ Write-Host ""
 
 # 启动 Agent 隧道
 Write-Host "[3/5] 启动交通智能体隧道 (端口 $AGENT_PORT)..." -ForegroundColor Yellow
-Start-Process -FilePath "cloudflared" -ArgumentList "tunnel", "--url", "http://localhost:$AGENT_PORT" `
+Start-Process -FilePath "C:\cloudflared\cloudflared.exe" -ArgumentList "tunnel", "--url", "http://localhost:$AGENT_PORT" `
     -RedirectStandardOutput $agentLog -NoNewWindow
 Start-Sleep -Seconds 6
 
@@ -112,7 +112,7 @@ if ($agentUrl) {
 $portKgLog = "$env:TEMP\cloudflared-portkg.log"
 Remove-Item $portKgLog -ErrorAction SilentlyContinue
 Write-Host "[启动] 港口危货KG隧道 (端口 $PORTKG_PORT)..." -ForegroundColor Yellow
-Start-Process -FilePath "cloudflared" -ArgumentList "tunnel", "--url", "http://localhost:$PORTKG_PORT" `
+Start-Process -FilePath "C:\cloudflared\cloudflared.exe" -ArgumentList "tunnel", "--url", "http://localhost:$PORTKG_PORT" `
     -RedirectStandardOutput $portKgLog -NoNewWindow
 Start-Sleep -Seconds 6
 $portKgUrl = $null
