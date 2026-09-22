@@ -16,11 +16,13 @@ export async function onRequest(context) {
   // 从 KV 读隧道地址
   const accidentKgUrl = await env.TUNNEL_KV.get('tunnel:accident-kg:url');
   const transportUrl = await env.TUNNEL_KV.get('tunnel:transport:url');
+  const portKgUrl = await env.TUNNEL_KV.get('tunnel:port-hazardous-kg:url');
   const updatedAt = await env.TUNNEL_KV.get('tunnel:updatedAt');
 
   const result = {
     'accident-kg': accidentKgUrl || null,
     'transport': transportUrl || null,
+    'port-hazardous-kg': portKgUrl || null,
     updatedAt: updatedAt ? parseInt(updatedAt) : null,
     ttl: 300 // 建议前端 5 分钟轮询一次
   };

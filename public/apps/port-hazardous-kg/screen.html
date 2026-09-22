@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>港口危险货物安全知识库 · 大屏演示</title>
+<link rel="stylesheet" href="css/screen.css">
+</head>
+<body>
+<!-- 1920×1080 固定设计稿 + 等比缩放；外层 #stage 是知识库容器 -->
+<div id="stage">
+  <div class="knowledge-container">
+    <!-- A. 顶栏（容器头部） -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo"><svg viewBox="0 0 24 24" width="34" height="34"><path d="M12 2L2 20h20L12 2z" fill="#F59E0B" stroke="none"/><path d="M12 9v4" stroke="#060B18" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="12" cy="16" r="1.2" fill="#060B18"/></svg></span>
+        <div>
+          <div class="brand-name">港口危险货物安全知识库</div>
+          <div class="brand-sub">知识图谱 · 依据交办水函〔2026〕1773号 3.5.5 建设</div>
+          <div class="brand-scope" id="scope-line"><span class="scope-cur">本期范围：储存环节 · 储罐/仓库</span><span class="scope-planned">｜规划接入：装卸·运输·作业·人员</span></div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span class="uptime" id="screen-uptime">最后更新 --</span>
+        <span class="clock" id="clock">--:--:--</span>
+        <span class="status"><span class="dot" id="screen-dot"></span><span id="screen-status">连接中…</span></span>
+        <span class="ctrl">
+          <button id="btn-pause" class="btn-ctrl">⏸ 暂停</button>
+          <a href="index.html" class="btn-exit" title="退出演示">✕</a>
+        </span>
+      </div>
+    </header>
+
+    <!-- 主体三栏 -->
+    <main class="body">
+      <!-- B. 左：监管态势 -->
+      <aside class="left">
+        <div class="metric kn"><div class="metric-label">知识规模</div><div class="metric-num" id="m-node">–</div><div class="metric-unit">节点 · <span id="m-edge">–</span> 关联</div></div>
+        <div class="metric"><div class="metric-label">纳管企业</div><div class="metric-num" id="m-ent">–</div><div class="metric-unit">家 · <span id="m-port">–</span> 港口</div></div>
+        <div class="metric danger"><div class="metric-label">储罐设施</div><div class="metric-num" id="m-tank">–</div><div class="metric-unit">座 · <span id="m-tankgroup">–</span> 组 · <span id="m-nontank">–</span> 非罐</div></div>
+        <div class="metric warn"><div class="metric-label">已判定隐患</div><div class="metric-num" id="m-hazard">–</div><div class="metric-unit">罐区禁配共存 <span id="m-hazard-sub">–</span> 起</div></div>
+      </aside>
+
+      <!-- C. 中：一核六维 -->
+      <section class="center">
+        <div id="galaxy" class="galaxy"></div>
+        <div class="focus-card" id="focus-card"></div>
+        <!-- 一屏一焦点指挥舱：推理剧场（巡检联动，替换原右栏榜单） -->
+        <div class="theater" id="theater">
+          <div class="th-head">
+            <div class="th-title">🧭 推理剧场</div>
+            <span class="th-curtag" id="th-curtag">全域罗盘</span>
+          </div>
+          <div class="th-stage" id="th-stage"></div>
+          <div class="th-out" id="th-out"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- E. 底部结论条 -->
+    <footer class="concl-bar">
+      <div class="concl-track" id="concl-track"></div>
+    </footer>
+  </div>
+</div>
+
+<script src="static-shim.js"></script>
+  <script src="vendor/echarts.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/screen.js"></script>
+</body>
+</html>

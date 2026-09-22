@@ -1,0 +1,120 @@
+/* screen.css — 大屏演示页 v2（1920×1080 等比缩放，容器层+一核六维，无渐变/阴影/毛玻璃） */
+html, body { width:100%; height:100%; overflow:hidden; margin:0; background:#060B18; color:#E8F0FF;
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; }
+* { box-sizing:border-box; }
+
+/* 等比缩放容器（页面底色 #060B18，容器内 #0A1326 差一档形成容器感） */
+#stage { position:absolute; left:50%; top:50%; width:1920px; height:1080px; transform-origin:center center;
+  background:#060B18; padding:16px; display:flex; }
+.knowledge-container { flex:1; background:#0A1326; border:1px solid #1E3055; border-radius:8px; display:flex; flex-direction:column; overflow:hidden; }
+
+/* A. 顶栏 */
+.topbar { height:104px; flex-shrink:0; display:flex; align-items:center; padding:0 24px; border-bottom:1px solid #1E3055; }
+.brand { display:flex; align-items:center; gap:14px; }
+.logo { display:flex; }
+.brand-name { font-size:36px; font-weight:500; line-height:1.1; }
+.brand-sub { font-size:18px; color:#7C93B8; margin-top:4px; }
+.brand-scope { font-size:14px; margin-top:3px; }
+.brand-scope .scope-cur { color:#22D3EE; }
+.brand-scope .scope-planned { color:#4A5F80; }
+.topbar-right { margin-left:auto; display:flex; align-items:center; gap:24px; }
+.clock { font-size:20px; color:#E8F0FF; font-variant-numeric:tabular-nums; }
+.uptime { font-size:16px; color:#4A5F80; }
+.status { display:flex; align-items:center; gap:8px; font-size:16px; color:#7C93B8; }
+.dot { width:14px; height:14px; border-radius:50%; background:#22C55E; }
+.dot.off { background:#F59E0B; animation:blink 1s infinite; }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.2;} }
+.ctrl { display:flex; align-items:center; gap:10px; }
+.btn-ctrl { background:#0E1930; color:#E8F0FF; border:1px solid #1E3055; border-radius:6px; padding:8px 18px; font-size:16px; cursor:pointer; }
+.btn-ctrl:hover { border-color:#22D3EE; }
+.btn-exit { color:#7C93B8; font-size:22px; text-decoration:none; margin-left:6px; }
+.btn-exit:hover { color:#EF4444; }
+
+/* 主体 */
+.body { flex:1; display:flex; padding:16px 24px 16px; gap:16px; min-height:0; }
+
+/* B. 左栏 */
+.left { width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:16px; }
+.metric { height:138px; background:#0E1930; border:1px solid #1E3055; border-radius:10px; padding:18px 24px;
+  display:flex; flex-direction:column; justify-content:center; }
+.metric.danger .metric-num { color:#EF4444; }
+.metric.warn .metric-num { color:#F59E0B; }
+.metric .metric-num { font-size:56px; font-weight:500; color:#22D3EE; line-height:1.1; margin-top:4px; }
+.metric-label { font-size:16px; color:#7C93B8; }
+.metric-unit { font-size:14px; color:#4A5F80; margin-left:8px; }
+.metric-unit span { color:#4A5F80; }
+
+/* C. 中部：一核六维 */
+.center { flex:1; min-width:0; position:relative; display:flex; flex-direction:column; }
+.galaxy { width:100%; flex:1; min-height:0; }
+.focus-card { position:absolute; right:14px; bottom:14px; min-width:300px; max-width:380px; background:rgba(14,25,48,.94);
+  border:1px solid #1E3055; border-left:3px solid #22D3EE; border-radius:8px; padding:14px 18px; z-index:5; }
+.focus-card .fc-title { font-size:20px; font-weight:500; }
+.focus-card .fc-count { font-size:16px; color:#7C93B8; }
+.focus-card .fc-props { font-size:14px; color:#7C93B8; margin-top:6px; line-height:1.6; }
+.focus-card .fc-scores { font-size:16px; color:#E8F0FF; margin-top:8px; line-height:1.6; }
+.focus-card .fc-conclusion { font-size:18px; color:#F59E0B; margin-top:8px; line-height:1.5; border-top:1px solid #1E3055; padding-top:8px; }
+.focus-card .fc-risk { font-size:18px; color:#EF4444; margin-top:8px; line-height:1.5; border-top:1px solid #1E3055; padding-top:8px; }
+/* v1.5 指挥舱：焦点卡增强——大号风险分 / 四宫格 / 迷你推理链 / 建议动作 / 右推入动效 */
+.focus-card .fc-riskbig { display:flex; align-items:baseline; gap:8px; margin-top:10px; }
+.focus-card .fc-rsnum { font-size:46px; font-weight:800; color:#EF4444; line-height:1; font-family:var(--mono,ui-monospace,Consolas,monospace); }
+/* 提案⑧：高危风险分左侧黄黑警示小条 */
+.focus-card .fc-rsnum.warn-hazard { position:relative; padding-left:14px; }
+.focus-card .fc-rsnum.warn-hazard::before { content:""; position:absolute; left:0; top:2px; bottom:2px; width:5px; border-radius:2px; background:repeating-linear-gradient(45deg,#facc15 0 4px,#111 4px 8px); }
+.focus-card .fc-rslabel { font-size:14px; color:#9FB3D1; }
+.focus-card .fc-quadgrid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:10px; }
+.focus-card .fc-quad { background:rgba(34,211,238,.06); border:1px solid #1E3055; border-radius:6px; padding:6px 8px; }
+.focus-card .fc-qk { font-size:11px; color:#7C93B8; }
+.focus-card .fc-qv { font-size:13px; color:#E8F0FF; margin-top:2px; line-height:1.3; word-break:break-all; }
+.focus-card .fc-chain { margin-top:10px; font-size:13px; color:#B8C9E2; line-height:1.5; border-left:2px solid #22D3EE; padding-left:8px; }
+.focus-card .fc-chain-badge { display:inline-block; font-size:11px; color:#22D3EE; border:1px solid #22D3EE; border-radius:3px; padding:0 4px; margin-right:6px; vertical-align:1px; }
+.focus-card .fc-action { margin-top:8px; font-size:13px; color:#F59E0B; background:rgba(245,158,11,.08); border:1px solid rgba(245,158,11,.3); border-radius:6px; padding:6px 8px; }
+.focus-card { transition:opacity .3s, transform .4s; }
+.focus-card.enter { animation:fcEnter .4s ease; }
+@keyframes fcEnter { from { opacity:0; transform:translateX(28px); } to { opacity:1; transform:translateX(0); } }
+
+/* D. 一屏一焦点指挥舱：推理剧场（替换右栏榜单） */
+.theater { flex-shrink:0; height:246px; background:#0E1930; border:1px solid #1E3055; border-radius:10px; padding:14px 18px 16px; display:flex; flex-direction:column; overflow-y:auto; }
+.th-head { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.th-title { font-size:18px; font-weight:800; letter-spacing:.4px; color:#E8F0FF; }
+.th-curtag { font-size:14px; color:#22D3EE; border:1px solid #22D3EE; border-radius:4px; padding:2px 10px; }
+.th-stage { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; }
+.th-chain { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center; }
+.th-node { background:#132442; border:1px solid #1E3055; color:#9FB3D1; border-radius:11px; padding:8px 16px; font-size:14px; font-weight:700; opacity:.42; transform:translateY(14px); transition:opacity .4s, transform .4s, border-color .4s, background .4s, color .4s; }
+.th-node.th-high { border-color:rgba(226,75,74,.6); color:#ffb3b3; background:rgba(226,75,74,.16); }
+.th-link { display:flex; flex-direction:column; align-items:center; gap:2px; opacity:.42; transform:translateY(10px); transition:opacity .4s, transform .4s; min-width:64px; }
+.th-lk-label { font-size:14px; color:#22D3EE; font-weight:700; white-space:nowrap; }
+.th-lk-label::before, .th-lk-label::after { content:"—"; color:#1E3055; margin:0 2px; }
+.th-lk-rule { font-size:11px; color:#4A5F80; }
+.th-node.th-live { opacity:1; transform:translateY(0); border-color:#22D3EE; background:rgba(56,189,248,.12); color:#E8F0FF; box-shadow:0 0 16px rgba(56,189,248,.25); }
+.th-link.th-live { opacity:1; transform:translateY(0); }
+.th-link.th-live .th-lk-label { color:#2DD4A7; text-shadow:0 0 10px rgba(45,212,167,.6); }
+/* 链走完浮出的依据卡（大屏单行，无滚动条） */
+.th-out { margin-top:10px; }
+.th-cards { display:flex; gap:10px; }
+.th-card { background:#132442; border:1px solid #1E3055; border-radius:9px; padding:8px 12px; flex:1; min-width:0; animation:thUp .5s ease-out both; }
+.th-card:nth-child(2) { animation-delay:.12s; }
+.th-card:nth-child(3) { animation-delay:.24s; }
+.th-card-t { font-size:11px; font-weight:800; color:#22D3EE; letter-spacing:.5px; }
+.th-card-name { font-size:13px; font-weight:700; color:#E8F0FF; margin-top:4px; }
+.th-card-d { font-size:11px; color:#7C93B8; margin-top:3px; line-height:1.4; }
+@keyframes thUp { from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:translateY(0);} }
+.th-verdict { margin-top:8px; background:linear-gradient(90deg, rgba(226,75,74,.28), rgba(226,75,74,.08)); border:1px solid rgba(255,92,92,.6); border-radius:9px; padding:8px 14px; font-size:13px; font-weight:700; color:#ffb3b3; animation:thUp .5s .3s ease-out both; display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap; line-height:1.4; }
+.th-verdict-note { color:#ffd0d0; }
+.th-verdict-sug { color:#ffc46b; font-weight:600; }
+.th-verdict b { color:#fff; }
+
+/* E. 底部结论条 */
+.concl-bar { height:64px; flex-shrink:0; border-top:1px solid #1E3055; overflow:hidden; position:relative; background:#0A1324; }
+.concl-track { position:absolute; white-space:nowrap; font-size:24px; line-height:64px; color:#22D3EE; padding-left:100%; animation:scroll 40s linear infinite; }
+@keyframes scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
+.concl-track span { margin-right:60px; }
+/* 演示 F：结论条打字机光标 + 隐患卡红色脉冲 */
+.concl-track .crt { display:inline-block; width:2px; margin-left:2px; background:#22D3EE; color:#22D3EE; animation:blink 0.8s steps(1) infinite; }
+.metric-num, .rank-score, .rank-badge, .fc-count, .fc-scores { font-family:var(--mono,ui-monospace,Consolas,monospace); font-variant-numeric:tabular-nums; }
+/* P1-3.3 修复：隐患卡红色脉冲（.metric.warn 的 animation 此前被等宽字体重写误删，并行叠加） */
+.metric.warn .metric-num { animation:hazardPulse 2s ease-in-out infinite; }
+@keyframes hazardPulse {
+  0%,100% { text-shadow:none; color:#FF5C5C; }
+  50% { text-shadow:0 0 12px rgba(255,92,92,.9); color:#FF8A8A; }
+}

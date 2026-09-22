@@ -31,7 +31,7 @@ export async function onRequest(context) {
     }
 
     // 验证 project
-    if (!['accident-kg', 'transport'].includes(body.project)) {
+    if (!['accident-kg', 'transport', 'port-hazardous-kg'].includes(body.project)) {
       return new Response(JSON.stringify({ success: false, error: 'Invalid project' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json; charset=utf-8' }

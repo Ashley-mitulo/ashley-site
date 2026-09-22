@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>港口危险货物安全知识图谱</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/drawer.css" />
+</head>
+<body>
+  <!-- ===== 顶栏 ===== -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-mark">⚠</div>
+      <div>
+        <h1>港口危险货物安全知识图谱</h1>
+        <p class="brand-sub">Port Hazardous Goods Safety Knowledge Graph · 综合分析 3.5.5</p>
+      </div>
+      <a href="home.html" class="btn btn-primary" style="padding:5px 14px;font-size:12px;text-decoration:none;margin-left:4px">🪐 知识星系首页</a>
+    </div>
+    <div class="header-right">
+      <div id="api-status" class="api-status">
+        <span class="dot"></span><span class="api-status-text">连接中…</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <!-- ===== 左侧导航 ===== -->
+    <aside class="sidebar">
+      <nav class="side-nav">
+        <button class="nav-item active" data-view="graph" title="全图拓扑力导向图">
+          <span class="nav-ico">🌐</span><span>图谱全景</span>
+        </button>
+        <button class="nav-item" data-view="query" title="按 6 类对象检索">
+          <span class="nav-ico">🔍</span><span>对象查询</span>
+        </button>
+        <button class="nav-item" data-view="similar" title="同类型企业聚类分析">
+          <span class="nav-ico">🏭</span><span>同类型企业</span>
+        </button>
+        <button class="nav-item" data-view="emergency" title="应急处置检索">
+          <span class="nav-ico">🚒</span><span>应急处置</span>
+        </button>
+        <button class="nav-item" data-view="accident" title="相关历史事故关联">
+          <span class="nav-ico">📉</span><span>事故关联</span>
+        </button>
+        <button class="nav-item" data-view="chem" title="禁配关系与化学反应">
+          <span class="nav-ico">⚗️</span><span>禁配/化学</span>
+        </button>
+        <button class="nav-item" data-view="profile" title="货种画像·危险特性">
+          <span class="nav-ico">🔬</span><span>危险特性</span>
+        </button>
+        <button class="nav-item" data-view="extract" title="知识抽取与融合工作台">
+          <span class="nav-ico">🧩</span><span>知识抽取</span>
+        </button>
+      </nav>
+      <div class="side-legend">
+        <div class="legend-title">图例 · 实体类型（点击隐藏/恢复）</div>
+        <div class="legend-item" data-type="dangerous_goods" title="点击隐藏该类，再点恢复"><i style="background:#ff9f43"></i>危险货物</div>
+        <div class="legend-item" data-type="enterprise" title="点击隐藏该类，再点恢复"><i style="background:#2dd4a7"></i>企业</div>
+        <div class="legend-item" data-type="accident" title="点击隐藏该类，再点恢复"><i style="background:#ff5c5c"></i>历史事故</div>
+        <div class="legend-item" data-type="emergency_measure" title="点击隐藏该类，再点恢复"><i style="background:#4dc3ff"></i>应急处置</div>
+        <div class="legend-item" data-type="chemical_reaction" title="点击隐藏该类，再点恢复"><i style="background:#b28cff"></i>化学反应</div>
+        <div class="legend-item" data-type="regulation" title="点击隐藏该类，再点恢复"><i style="background:#67e3a1"></i>法规标准</div>
+        <div class="legend-item" data-type="storage_tank" title="点击隐藏该类，再点恢复" style="align-items:center"><i class="lg-tank">⛽</i>储罐<span class="lg-desc" style="font-size:10px;color:#94a3b8">球/立/卧剖面</span></div>
+      </div>
+    </aside>
+
+    <!-- ===== 主内容区 ===== -->
+    <main class="main">
+
+      <!-- ========== 视图 1：图谱全景 ========== -->
+      <section class="view active" id="view-graph">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>图谱全景浏览</h2>
+            <div class="panel-tools">
+              <span id="graph-count" class="muted">…</span>
+              <select id="graph-relation-filter" class="goods-sel" style="width:170px">
+                <option value="">全部关系</option>
+                <option value="enterprise_deals_goods">经营</option>
+                <option value="accident_involves_goods">涉及事故</option>
+                <option value="goods_incompatible">禁配</option>
+                <option value="emergency_applies_to">适用应急</option>
+                <option value="chemical_reaction_involves">化学反应</option>
+                <option value="regulation_governs_goods">法规约束</option>
+                <option value="tank_stores_goods">储罐储存</option>
+              </select>
+              <button id="btn-layout" class="btn btn-ghost">重排布局</button>
+            </div>
+          </div>
+          <div id="graph-container" class="graph-container"></div>
+          <div id="graph-tip" class="graph-tip">
+            点击图中节点 → 下方显示关联分析（一级/二级/三级关联），点关联实体可下钻展开；再次点击同节点取消高亮。拖拽可布局，滚轮缩放。
+          </div>
+        </div>
+        <!-- 关联分析内嵌面板（图谱视图下方，随视图显隐，不残留不弹窗） -->
+        <div id="graph-panel" class="rel-panel hidden"></div>
+      </section>
+
+      <!-- ========== 视图 2：对象查询 ========== -->
+      <section class="view" id="view-query">
+        <div class="panel">
+          <div class="panel-head"><h2>对象维度查询</h2>
+            <span class="muted">按 6 类图谱对象检索，点击结果联动高亮全图节点</span>
+          </div>
+          <div class="query-bar">
+            <div class="obj-tabs" id="obj-tabs">
+              <button class="obj-tab" data-type="dangerous_goods">危险货物</button>
+              <button class="obj-tab" data-type="enterprise">企业</button>
+              <button class="obj-tab" data-type="accident">事故</button>
+              <button class="obj-tab" data-type="emergency_measure">应急</button>
+              <button class="obj-tab" data-type="regulation">法规</button>
+              <button class="obj-tab" data-type="chemical_reaction">化学</button>
+            </div>
+            <div class="query-input">
+              <input id="q-keyword" type="text" placeholder="输入关键词检索…" />
+              <button id="q-search" class="btn btn-primary">检索</button>
+            </div>
+          </div>
+          <div class="query-body">
+            <div class="query-list-wrap">
+              <div class="query-list-head">
+                <span id="q-list-title">危险货物</span><span id="q-list-count" class="muted"></span>
+              </div>
+              <div id="query-list" class="query-list">
+                <div class="empty">输入关键词开始检索，或直接查看某类对象全部。</div>
+              </div>
+            </div>
+            <div class="query-graph-wrap">
+              <div id="query-graph" class="query-graph"></div>
+              <div class="muted q-graph-tip">点选列表或点击图谱节点 → 下方显示关联分析；点关联实体可下钻</div>
+            </div>
+          </div>
+        </div>
+        <!-- 对象查询内嵌关联面板 -->
+        <div id="query-panel" class="rel-panel hidden"></div>
+        <!-- 知识库与法规出处检索（P0-5） -->
+        <div class="panel" style="margin-top:14px">
+          <div class="panel-head"><h2>知识库 · 法规与规程出处检索</h2>
+            <span class="muted">检索应急处置规程与事故调查报告的知识出处（法规/标准/报告）</span>
+          </div>
+          <div class="inline-tool">
+            <input id="kq-keyword" type="text" placeholder="输入关键词检索知识出处，如 苯 / 禁配 / 泄漏…" class="goods-sel" style="width:300px" />
+            <button id="btn-kq" class="btn btn-primary">检索知识库</button>
+          </div>
+          <div id="kq-result"></div>
+        </div>
+      </section>
+
+      <!-- ========== 视图 3：同类型企业 ========== -->
+      <section class="view" id="view-similar">
+        <div class="panel">
+          <div class="panel-head"><h2>同类型企业聚类分析</h2>
+            <span class="muted">由危货/风险特征 → 聚类出事故同类型（经营同货种）企业</span>
+          </div>
+          <div class="inline-tool">
+            <label>危货货种：</label>
+            <select id="sim-goods" class="goods-sel">
+              <option value="苯">苯</option>
+              <option value="液化石油气(LPG)">液化石油气(LPG)</option>
+              <option value="原油">原油</option>
+              <option value="硝酸铵(含可燃物)">硝酸铵</option>
+              <option value="甲醇">甲醇</option>
+              <option value="丙酮">丙酮</option>
+            </select>
+            <button id="btn-sim" class="btn btn-primary">分析同类型企业</button>
+          </div>
+          <div id="sim-result"></div>
+        </div>
+      </section>
+
+      <!-- ========== 视图 4：应急处置 ========== -->
+      <section class="view" id="view-emergency">
+        <div class="panel">
+          <div class="panel-head"><h2>应急处置检索</h2>
+            <span class="muted">按危货货种或事故类型匹配应急处置措施</span>
+          </div>
+          <div class="inline-tool">
+            <label>危货货种：</label>
+            <select id="emg-key" title="选择危货货种"><option value="液化石油气">液化石油气(LPG)</option></select>
+            <label style="margin-left:12px">事故类型：</label>
+            <select id="emg-accident" class="emg-accident"><option value="">全部</option></select>
+            <button id="btn-emg" class="btn btn-primary">检索处置措施</button>
+          </div>
+          <div class="emg-quick">
+            <span class="emg-quick-label">常用检索：</span>
+            <span class="emg-suggest" data-kw="泄漏">泄漏</span>
+            <span class="emg-suggest" data-kw="火灾">火灾</span>
+            <span class="emg-suggest" data-kw="爆炸">爆炸</span>
+            <span class="emg-suggest" data-kw="中毒">中毒</span>
+            <span class="emg-suggest" data-kw="储罐">储罐</span>
+            <span class="emg-suggest" data-kw="剧毒气体">剧毒气体</span>
+            <span class="emg-suggest" data-kw="腐蚀性">腐蚀性</span>
+            <span class="emg-suggest" data-kw="自燃">自燃</span>
+            <span class="emg-suggest" data-kw="遇湿易燃">遇湿易燃</span>
+            <span class="emg-quick-hint">点击选择情景关键词（可多选）过滤处置措施</span>
+          </div>
+          <div class="emg-layout">
+            <div class="emg-tree" id="emg-tree"></div>
+            <div class="emg-main">
+              <div class="emg-tree-info" id="emg-tree-info"></div>
+              <div id="emg-result"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== 视图 5：事故关联 ========== -->
+      <section class="view" id="view-accident">
+        <div class="panel">
+          <div class="panel-head"><h2>历史事故关联</h2>
+            <span class="muted">某危货 → 其涉及的相关历史事故</span>
+          </div>
+          <div class="inline-tool">
+            <label>危货货种：</label>
+            <select id="acc-goods" class="goods-sel">
+              <option value="苯">苯</option>
+              <option value="液化石油气(LPG)">液化石油气(LPG)</option>
+              <option value="原油">原油</option>
+              <option value="硝酸铵(含可燃物)">硝酸铵</option>
+              <option value="甲醇">甲醇</option>
+              <option value="丙酮">丙酮</option>
+            </select>
+            <button id="btn-acc" class="btn btn-primary">查询相关事故</button>
+          </div>
+          <div id="acc-timeline" class="acc-timeline" style="display:none"></div>
+          <div id="acc-result"></div>
+        </div>
+      </section>
+
+      <!-- ========== 视图 6：禁配/化学 ========== -->
+      <section class="view" id="view-chem">
+        <div class="panel">
+          <div class="panel-head"><h2>禁配关系 & 化学反应</h2>
+            <span class="muted">危货 → 禁配物质 / 混存混运风险警示，及相关化学反应</span>
+          </div>
+          <div class="inline-tool">
+            <label>危货货种：</label>
+            <select id="chem-goods" class="goods-sel">
+              <option value="苯">苯</option>
+              <option value="液化石油气(LPG)">液化石油气(LPG)</option>
+              <option value="原油">原油</option>
+              <option value="硝酸铵(含可燃物)">硝酸铵</option>
+              <option value="甲醇">甲醇</option>
+              <option value="丙酮">丙酮</option>
+            </select>
+            <button id="btn-chem" class="btn btn-primary">查看禁配/反应</button>
+          </div>
+          <div id="chem-result"></div>
+        </div>
+      </section>
+
+      <!-- ========== 视图 7：货种画像 · 危险特性 ========== -->
+      <section class="view" id="view-profile">
+        <div class="panel">
+          <div class="panel-head"><h2>货种画像 · 危险特性</h2>
+            <span class="muted">选中危货的六维风险画像：危险特性 / 理化参数 / 风险评分 / 自然语言结论</span>
+          </div>
+          <div class="inline-tool">
+            <label>危货货种：</label>
+            <input id="profile-goods" type="text" value="苯" placeholder="输入货种名，如 苯 / 氯气 / 硝酸铵" class="goods-sel" style="width:220px" />
+            <button id="btn-profile" class="btn btn-primary">查看危险特性</button>
+          </div>
+          <div id="profile-result"></div>
+        </div>
+      </section>
+
+      <!-- ========== 视图 8：知识抽取与融合工作台（P0-2） ========== -->
+      <section class="view" id="view-extract">
+        <div class="panel">
+          <div class="panel-head"><h2>知识抽取与融合工作台</h2>
+            <span class="muted">粘贴事故调查报告 / 监管通报 → LLM/规则抽取实体 → 人工复核 → 确认入库（3.5.5 知识抽取+融合）</span>
+          </div>
+          <div class="inline-tool" style="flex-direction:column;align-items:stretch;gap:8px">
+            <textarea id="ext-text" rows="6" placeholder="粘贴案例文本，如：某储罐区苯泄漏事故，涉事企业为 XXX 港务公司，应急处置采用围堵收集，苯与过氧化氢混存存在禁配风险…"></textarea>
+            <div style="display:flex;gap:8px">
+              <button id="btn-ext-extract" class="btn btn-primary">① 抽取实体</button>
+              <button id="btn-ext-commit" class="btn btn-success" style="display:none">③ 确认入库（人工复核）</button>
+            </div>
+          </div>
+          <div id="ext-result"><div class="empty">输入案例文本后点击「① 抽取实体」</div></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ===== 底部 ===== -->
+  <footer class="app-footer">
+    <span>原型系统 v0.1 · 依据《港口危险货物重大危险源储罐监测运行分析系统建设指南》3.5.5 知识图谱</span>
+    <span id="data-source"></span>
+  </footer>
+
+  <!-- ECharts（本地化，政务内网可离线渲染） -->
+  <script src="static-shim.js"></script>
+  <script src="vendor/echarts.min.js"></script>
+
+  <!-- 应用逻辑 -->
+  <script src="js/mock.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/graph.js"></script>
+  <script src="js/drilldown.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

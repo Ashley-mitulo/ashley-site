@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>港口危险货物安全知识图谱 · 六维知识星系</title>
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/drawer.css">
+</head>
+<body>
+<div class="home-wrap">
+  <!-- ① 顶栏 -->
+  <header class="hd">
+    <div class="brand">
+      <span class="logo">⚠️</span>
+      <div class="brand-txt">
+        <div class="brand-name">港口危险货物安全知识库</div>
+        <div class="brand-sub">Port Hazardous Goods Safety KG · <span class="tag">综合分析 3.5.5 · 六维透镜</span></div>
+      </div>
+    </div>
+    <div class="global-search">
+      <input id="home-search" type="text" placeholder="搜索货种 / 企业 / 事故…（回车聚焦星系高亮）" />
+      <button id="btn-search">搜索</button>
+    </div>
+    <div class="status"><a href="screen.html" class="enter" style="margin-right:14px;text-decoration:none">🖥 大屏演示</a>
+      <button id="btn-demo" class="enter" style="margin-right:8px;background:rgba(34,211,238,.15);border:1px solid #22D3EE;color:#22D3EE;cursor:pointer;padding:6px 14px;border-radius:8px;font-size:13px">▶ 一键演示</button>
+      <button id="btn-demo-next" class="enter" style="display:none;margin-right:14px;background:rgba(45,212,167,.12);border:1px solid #2dd4a7;color:#2dd4a7;cursor:pointer;padding:6px 14px;border-radius:8px;font-size:13px" title="跳到下一步">⏭ 跳步</button>
+      <span id="s-dot" class="s-dot"></span>
+      <span id="s-txt">连接中…</span>
+    </div>
+  </header>
+
+  <!-- ② 主区（结论先行 v1.5）：左结论流 + 右星系操作台 -->
+  <main class="main">
+    <!-- 左栏 280px：今日发现 结论流 -->
+    <aside class="findings" id="findings-col">
+      <div class="f-head">
+        <div class="f-title"><span class="f-alertdot"></span>今日发现</div>
+        <button id="btn-findings-refresh" class="f-refresh" title="刷新结论">↻</button>
+      </div>
+      <div id="findings-list" class="findings-list"><div class="empty">加载中…</div></div>
+    </aside>
+
+    <!-- 右栏：星系操作台 + 推理剧场 -->
+    <div class="workbench">
+      <div class="galaxy-wrap">
+        <!-- v2.1：中心恒为全域罗盘六边形（无核心切换条；任意实体被点选才推入焦点位） -->
+        <div id="galaxy" class="galaxy"></div>
+        <!-- 域概览条（悬停星团时显示） -->
+        <div id="domain-bar" class="domain-bar hidden"></div>
+        <!-- 面包屑 -->
+        <div id="crumb" class="crumb">首页 › <b>六维知识星系</b></div>
+        <!-- 六域计数一行（提案④/②：星系下方六域计数，替代原右侧栏） -->
+        <div id="domain-counts" class="domain-counts hidden"></div>
+      </div>
+
+      <!-- 推理剧场（提案① Signature） -->
+      <section class="theater" id="theater">
+        <div class="th-head">
+          <div class="th-title">🧭 推理剧场</div>
+          <button id="btn-play" class="th-play">▶ 播放推理</button>
+        </div>
+        <div class="th-stage" id="th-stage"></div>
+        <!-- 结论依据卡 + 红色结论条（链走完后浮出） -->
+        <div class="th-out" id="th-out"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ③ 底部 4 态势指标 -->
+  <section class="kpi" id="kpi-bar">
+    <div class="kpi-item"><span class="kpi-num" id="k-node">–</span><span class="kpi-label">知识节点</span></div>
+    <div class="kpi-item"><span class="kpi-num" id="k-edge">–</span><span class="kpi-label">关联关系</span></div>
+    <div class="kpi-item"><span class="kpi-num" id="k-goods">–</span><span class="kpi-label">危险货种</span></div>
+    <div class="kpi-item"><i class="fh">⇄</i><span class="kpi-num" id="k-incompat">–</span><span class="kpi-label">禁配关系</span></div>
+  </section>
+
+  <!-- ⑤ 页脚 -->
+  <footer class="ft">
+    <span>依据：交办水函〔2026〕1773 号附件2《港口危险货物重大危险源储罐监测运行分析系统建设指南》3.5.5 知识图谱</span>
+    <span class="ft-sep">·</span>
+    <span>最近更新：<b id="ft-updated">–</b></span>
+    <span class="ft-sep">·</span>
+    <span>来源构成：法规 <b id="ft-reg">–</b> · 事故报告 <b id="ft-acc">–</b> · 应急措施 <b id="ft-emg">–</b></span>
+    <span class="ft-right"><a href="index.html" class="enter">进入工作台 →</a></span>
+  </footer>
+</div>
+
+<script src="static-shim.js"></script>
+  <script src="vendor/echarts.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/drilldown.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>

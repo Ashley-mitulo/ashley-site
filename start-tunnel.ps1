@@ -6,7 +6,7 @@ $ErrorActionPreference = "Continue"
 
 Write-Host "================================================================" -ForegroundColor Cyan
 Write-Host "   Ashley 个人网站 - Cloudflare Tunnel 一键启动器" -ForegroundColor Cyan
-Write-Host "   项目：交通事故 KG (3003) + 交通智能体 (3009)" -ForegroundColor Cyan
+Write-Host "   项目：交通事故 KG (3003) + 交通智能体 (3009) + 港口危货KG (3010)" -ForegroundColor Cyan
 Write-Host "================================================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -15,6 +15,7 @@ $SITE_URL = "https://ashley-site.pages.dev"
 $REGISTER_SECRET = "Ashley2026!Tunnel1234567890"
 $KG_PORT = 3003
 $AGENT_PORT = 3009
+$PORTKG_PORT = 3010
 # =================================================
 
 # 检查 cloudflared
@@ -107,6 +108,28 @@ if ($agentUrl) {
     if ($r) { Write-Host "  [OK] transport 注册成功" -ForegroundColor Green }
     else { Write-Host "  [失败] transport 注册失败" -ForegroundColor Red }
 }
+# ===== 港口危货 KG 隧道 (3010) =====
+$portKgLog = "$env:TEMP\cloudflared-portkg.log"
+Remove-Item $portKgLog -ErrorAction SilentlyContinue
+Write-Host "[启动] 港口危货KG隧道 (端口 $PORTKG_PORT)..." -ForegroundColor Yellow
+Start-Process -FilePath "cloudflared" -ArgumentList "tunnel", "--url", "http://localhost:$PORTKG_PORT" `
+    -RedirectStandardOutput $portKgLog -NoNewWindow
+Start-Sleep -Seconds 6
+$portKgUrl = $null
+$lines = Get-Content $portKgLog -ErrorAction SilentlyContinue
+foreach ($line in $lines) {
+    if ($line -match 'https://[a-z0-9-]+\.trycloudflare\.com') {
+        $portKgUrl = $matches[0]; break
+    }
+}
+if ($portKgUrl) {
+    Write-Host "[OK] 港口危货KG 隧道地址：$portKgUrl" -ForegroundColor Green
+    $r = Register-Tunnel "port-hazardous-kg" $portKgUrl
+    if ($r) { Write-Host "  [OK] port-hazardous-kg 注册成功" -ForegroundColor Green }
+    else { Write-Host "  [失败] port-hazardous-kg 注册失败" -ForegroundColor Red }
+} else {
+    Write-Host "[警告] 未能获取港口危货KG 隧道 URL" -ForegroundColor Yellow
+}
 Write-Host ""
 
 Write-Host "================================================================" -ForegroundColor Green
@@ -116,6 +139,7 @@ Write-Host "   网站访问：$SITE_URL" -ForegroundColor Cyan
 Write-Host ""
 if ($kgUrl) { Write-Host "   交通事故 KG：$kgUrl" }
 if ($agentUrl) { Write-Host "   交通智能体：  $agentUrl" }
+if ($portKgUrl) { Write-Host "   港口危货KG：  $portKgUrl" }
 Write-Host ""
 Write-Host "   每 4 分钟自动重新注册（KV 5 分钟过期）"
 Write-Host "   关闭此窗口停止所有隧道"
@@ -143,6 +167,13 @@ while ($true) {
             break
         }
     }
+    $lines = Get-Content $portKgLog -ErrorAction SilentlyContinue
+    foreach ($line in $lines) {
+        if ($line -match 'https://[a-z0-9-]+\.trycloudflare\.com') {
+            $portKgUrl = $matches[0]
+            break
+        }
+    }
 
     if ($kgUrl) {
         $r = Register-Tunnel "accident-kg" $kgUrl
@@ -151,5 +182,9 @@ while ($true) {
     if ($agentUrl) {
         $r = Register-Tunnel "transport" $agentUrl
         if ($r) { Write-Host "  Agent: OK" -ForegroundColor Gray }
+    }
+    if ($portKgUrl) {
+        $r = Register-Tunnel "port-hazardous-kg" $portKgUrl
+        if ($r) { Write-Host "  港口危货KG: OK" -ForegroundColor Gray }
     }
 }
