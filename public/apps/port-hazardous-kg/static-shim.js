@@ -137,6 +137,44 @@
     } catch (e) { return String(url).split('?')[0]; }
   }
 
+  // 解析 query 字符串 → 对象（URL 解码）
+  function parseQuery(url) {
+    const idx = String(url).indexOf('?');
+    if (idx < 0) return {};
+    const qs = String(url).slice(idx + 1).split('&');
+    const o = {};
+    for (const kv of qs) {
+      if (!kv) continue;
+      const [k, ...v] = kv.split('=');
+      try { o[decodeURIComponent(k)] = decodeURIComponent(v.join('=')); } catch { o[k] = v.join('='); }
+    }
+    return o;
+  }
+
+  // base64url 编码（无 +/=/ 字符, 与服务端生成的文件名一致）
+  function b64url(str) {
+    try {
+      // 浏览器: btoa(unescape(encodeURIComponent(str)))
+      let b;
+      if (typeof btoa === 'function') {
+        b = btoa(unescape(encodeURIComponent(str)));
+      } else {
+        b = Buffer.from(str, 'utf8').toString('base64');
+      }
+      return b.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    } catch (e) { return encodeURIComponent(str); }
+  }
+
+  // 从 api-static/analyze/<b64url(goods)>.json 读某货种的全部分析结果
+  async function staticAnalyze(goods) {
+    if (!goods) return null;
+    try {
+      const f = 'analyze/g_' + b64url(goods) + '.json';
+      const data = await staticJson(f);
+      return data || null;
+    } catch { return null; }
+  }
+
   window.fetch = async function (input, init) {
     const url = (typeof input === 'string') ? input : (input && input.url) || '';
     if (!isSameOrigin(url) || !url.includes('/api/')) return origFetch(input, init);
@@ -170,8 +208,57 @@
     // 交互式查询：无隧道无法服务真实数据 → 返回需后端提示（前端会优雅降级显示）
     if (path === '/api/graph/neighbors/') return jsonResp({ nodes: [], edges: [], _static: BACKEND_UNREACHABLE });
     if (path === '/api/graph/relations/') return jsonResp({ nodes: [], edges: [], _static: BACKEND_UNREACHABLE });
-    if (path.indexOf('/api/analyze/') >= 0) return jsonResp({ _static: BACKEND_UNREACHABLE });
-    if (path === '/api/knowledge') return jsonResp([]);
+
+    // ============ 深度接口：静态降级（方案B：从 api-static/analyze/ 读冻结数据） ============
+    // /api/analyze/<ep>?goods=X → 读 analyze/<encodeURIComponent(X)>.json 里的 ep 字段
+    if (path.indexOf('/api/analyze/') >= 0) {
+      const q = parseQuery(url);
+      const goods = q.goods || q.query;  // tank-profile 也用 tank 参数
+      const analyseName = (q.goods || q.query || '').trim();
+      // 解析具体的 analyze 子接口名：/api/analyze/goods-profile → goods-profile
+      const epMatch = path.match(/\/api\/analyze\/([a-z0-9-]+)/);
+      const ep = epMatch ? epMatch[1] : '';
+      if (path.indexOf('/api/analyze/tank-profile') >= 0) {
+        // 储罐画像：api-static/analyze/t_<b64url>.json
+        const tk = (q.tank || '').trim();
+        if (tk) {
+          const tt = await staticJson('analyze/t_' + b64url(tk) + '.json');
+          return jsonResp(tt || { _static: BACKEND_UNREACHABLE });
+        }
+        return jsonResp({ _static: BACKEND_UNREACHABLE });
+      }
+      const gd = (q.goods || q.query || '').trim();
+      if (gd) {
+        const full = await staticAnalyze(gd);
+        if (full) {
+          // 直接返回该货种对应 analyze 子接口的数据；若该子接口未冻结则返回未定义提示
+          const sub = full[ep];
+          if (sub) return jsonResp(sub);
+          return jsonResp({ _static: BACKEND_UNREACHABLE, message: '无该货种的 ' + ep + ' 静态数据' });
+        }
+      }
+      return jsonResp({ _static: BACKEND_UNREACHABLE });
+    }
+
+    // /api/knowledge?query=X → 客户端搜索 api-static/analyze/_knowledge_all.json（含命中词高亮所需字段）
+    if (path === '/api/knowledge') {
+      const q = parseQuery(url);
+      const kw = (q.query || '').trim().toLowerCase();
+      const all = await staticJson('analyze/_knowledge_all.json');
+      if (all && Array.isArray(all.items)) {
+        let items = all.items;
+        if (kw) {
+          items = items.filter(function (it) {
+            const hay = JSON.stringify(it).toLowerCase();
+            return hay.indexOf(kw) >= 0;
+          });
+        }
+        return jsonResp({ items: items, count: items.length });
+      }
+      return jsonResp({ items: [], count: 0 });
+    }
+
+    // /api/evidence?node=X&type=Y → 静态暂无（返回空 claims，前端不空白）
     if (path === '/api/evidence') return jsonResp({ claims: [], _static: BACKEND_UNREACHABLE });
     if (path === '/api/kg/check-name') return jsonResp({ candidates: [] });
     if (path === '/api/kg/export') return jsonResp(BACKEND_UNREACHABLE, 503);
