@@ -29,11 +29,12 @@
   if (window.__PORT_KG_STATIC_SHIM__) return;
   window.__PORT_KG_STATIC_SHIM__ = true;
 
-  // 生产环境：把前端 API 基址从写死的 http://localhost:3010 改为相对路径 (''),让所有 /api 请求走本 shim 统一拦截：
+  // 生产环境：把前端 API 基址从写死的 http://localhost:3010 改为同源绝对地址（= location.origin）,让所有 /api 请求走本 shim 统一拦截：
   //   有隧道 → 转发到隧道(真后端)；无隧道 → 读 api-static/*.json(静态降级)
   // 不设则 api.js 的 BASE 默认落到 localhost:3010,访客浏览器会去访问自己电脑的 3010 → ERR_FAILED → 全部框体空白。
-  if (typeof window.PKG_API_BASE === 'undefined' || window.PKG_API_BASE === 'http://localhost:3010') {
-    window.PKG_API_BASE = '';
+  // ⚠️ 不能用 ''(空串,falsy)——api.js 的 `var BASE = window.PKG_API_BASE || "http://localhost:3010"` 会把空串当 falsy 回退到默认值。必须给非空同源地址。
+  if (typeof window.PKG_API_BASE === 'undefined' || window.PKG_API_BASE === '' || window.PKG_API_BASE === 'http://localhost:3010') {
+    window.PKG_API_BASE = window.location.origin;
   }
 
   const origFetch = window.fetch.bind(window);
