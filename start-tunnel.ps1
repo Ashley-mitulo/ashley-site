@@ -16,6 +16,7 @@ $REGISTER_SECRET = "Ashley2026!Tunnel1234567890"
 $KG_PORT = 3003
 $AGENT_PORT = 3009
 $PORTKG_PORT = 3010
+$PORTGENERALKG_PORT = 3020
 # =================================================
 
 # 检查 cloudflared
@@ -135,6 +136,31 @@ if ($portKgUrl) {
 }
 Write-Host ""
 
+# ===== 港口通用知识库 KG 隧道 (3020) =====
+$portGeneralKgLog = "$env:TEMP\cloudflared-portgeneralkg.log"
+$portGeneralKgOutLog = "$env:TEMP\cloudflared-portgeneralkg.out.log"
+Remove-Item $portGeneralKgLog,$portGeneralKgOutLog -ErrorAction SilentlyContinue
+Write-Host "[启动] 港口通用知识库隧道 (端口 $PORTGENERALKG_PORT)..." -ForegroundColor Yellow
+Start-Process -FilePath "C:\cloudflared\cloudflared.exe" -ArgumentList "tunnel", "--url", "http://localhost:$PORTGENERALKG_PORT" `
+    -RedirectStandardOutput $portGeneralKgOutLog -RedirectStandardError $portGeneralKgLog -NoNewWindow
+Start-Sleep -Seconds 6
+$portGeneralKgUrl = $null
+$pgklines = Get-Content $portGeneralKgLog -ErrorAction SilentlyContinue
+foreach ($line in $pgklines) {
+    if ($line -match 'https://[a-z0-9-]+\.trycloudflare\.com') {
+        $portGeneralKgUrl = $matches[0]; break
+    }
+}
+if ($portGeneralKgUrl) {
+    Write-Host "[OK] 港口通用知识库 隧道地址：$portGeneralKgUrl" -ForegroundColor Green
+    $r = Register-Tunnel "port-general-kg" $portGeneralKgUrl
+    if ($r) { Write-Host "  [OK] port-general-kg 注册成功" -ForegroundColor Green }
+    else { Write-Host "  [失败] port-general-kg 注册失败" -ForegroundColor Red }
+} else {
+    Write-Host "[警告] 未能获取港口通用知识库 隧道 URL" -ForegroundColor Yellow
+}
+Write-Host ""
+
 Write-Host "================================================================" -ForegroundColor Green
 Write-Host "   ✅ 隧道启动完成！" -ForegroundColor Green
 Write-Host ""
@@ -143,6 +169,7 @@ Write-Host ""
 if ($kgUrl) { Write-Host "   交通事故 KG：$kgUrl" }
 if ($agentUrl) { Write-Host "   交通智能体：  $agentUrl" }
 if ($portKgUrl) { Write-Host "   港口危货KG：  $portKgUrl" }
+if ($portGeneralKgUrl) { Write-Host "   港口通用KG：  $portGeneralKgUrl" }
 Write-Host ""
 Write-Host "   每 4 分钟自动重新注册（KV 5 分钟过期）"
 Write-Host "   关闭此窗口停止所有隧道"
@@ -177,6 +204,13 @@ while ($true) {
             break
         }
     }
+    $lines = Get-Content $portGeneralKgLog -ErrorAction SilentlyContinue
+    foreach ($line in $lines) {
+        if ($line -match 'https://[a-z0-9-]+\.trycloudflare\.com') {
+            $portGeneralKgUrl = $matches[0]
+            break
+        }
+    }
 
     if ($kgUrl) {
         $r = Register-Tunnel "accident-kg" $kgUrl
@@ -189,5 +223,9 @@ while ($true) {
     if ($portKgUrl) {
         $r = Register-Tunnel "port-hazardous-kg" $portKgUrl
         if ($r) { Write-Host "  港口危货KG: OK" -ForegroundColor Gray }
+    }
+    if ($portGeneralKgUrl) {
+        $r = Register-Tunnel "port-general-kg" $portGeneralKgUrl
+        if ($r) { Write-Host "  港口通用KG: OK" -ForegroundColor Gray }
     }
 }
