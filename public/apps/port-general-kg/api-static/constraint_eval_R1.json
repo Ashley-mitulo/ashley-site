@@ -1,0 +1,1 @@
+{"constraintId":"R1-APRON-DEPTH","vessel":"ORE TIANJIN 型（40万吨级VLOC）","berth":"青岛港董家口港区 40万吨矿石码头（D1）","verdict":"critical","actual":24.5,"required":24.45,"margin":0.05,"reason":"T=23+0.6+0.3+0.15+0.4","source":"jtst.mot.gov.cn JTS 165-2013","f":24.45,"z":{"Z1":0.6,"Z2":0.3,"Z3":0.15,"Z4":0.4}}

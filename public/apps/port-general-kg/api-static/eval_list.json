@@ -1,0 +1,84 @@
+[
+  {
+    "file": "eval_S5_floating13_pass.json",
+    "solver": "S5-WORKABILITY",
+    "inputs": {
+      "wind_m_s": 13,
+      "heavyGoods": false,
+      "crane": "floating"
+    }
+  },
+  {
+    "file": "eval_S5_floating21_veto.json",
+    "solver": "S5-WORKABILITY",
+    "inputs": {
+      "wind_m_s": 21,
+      "heavyGoods": false,
+      "crane": "floating"
+    }
+  },
+  {
+    "file": "eval_S5_major_float12_veto.json",
+    "solver": "S5-WORKABILITY",
+    "inputs": {
+      "wind_m_s": 12,
+      "heavyGoods": true,
+      "crane": "floating"
+    }
+  },
+  {
+    "file": "eval_S6_soybean_br.json",
+    "solver": "S6-IMPORT-ELIGIBILITY",
+    "inputs": {
+      "variety": "GRAIN-SOYBEAN",
+      "origin": "ORIG-BR"
+    }
+  },
+  {
+    "file": "eval_S6_corn_us.json",
+    "solver": "S6-IMPORT-ELIGIBILITY",
+    "inputs": {
+      "variety": "GRAIN-CORN",
+      "origin": "ORIG-US"
+    }
+  },
+  {
+    "file": "eval_S7_moist8_ok.json",
+    "solver": "S7-COAL-STACK-COMPLIANCE",
+    "inputs": {
+      "moisture_pct": 8,
+      "rankId": "COALRANK-YM"
+    }
+  },
+  {
+    "file": "eval_S7_moist4_veto.json",
+    "solver": "S7-COAL-STACK-COMPLIANCE",
+    "inputs": {
+      "moisture_pct": 4,
+      "rankId": "COALRANK-YM"
+    }
+  },
+  {
+    "file": "eval_S1_vloc_d1.json",
+    "solver": "S1-BERTHING-FEASIBILITY",
+    "inputs": {
+      "vessel": "VLOC-400K-ORETIANJIN",
+      "berth": "BERTH-QD-DJK-D1"
+    }
+  },
+  {
+    "file": "eval_S2_d31_2.json",
+    "solver": "S2-THROUGHPUT",
+    "inputs": {
+      "berth": "BERTH-QD-DJK-D31",
+      "unloaderCount": 2
+    }
+  },
+  {
+    "file": "eval_S3_d31.json",
+    "solver": "S3-YARD",
+    "inputs": {
+      "yard": "YARD-QD-DJK-D31"
+    }
+  }
+]
