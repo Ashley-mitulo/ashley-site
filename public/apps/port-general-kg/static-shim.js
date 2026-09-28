@@ -178,6 +178,16 @@
       let body = {};
       try { body = JSON.parse((init && init.body) || '{}'); } catch {}
       const id = segMatch(path, /\/api\/solvers\/(.+?)\/eval$/);
+      // ① 本地浏览器引擎（window.PortKgEngine）——完全离线实时求解，等价后端
+      if (window.PortKgEngine && typeof window.PortKgEngine.solve === 'function') {
+        try {
+          const result = window.PortKgEngine.solve(id, body);
+          if (result) return jsonResp(result);
+        } catch (e) {
+          console.warn('[port-general-kg] 浏览器引擎求解失败(' + id + '):', e && e.message);
+        }
+      }
+      // ② 静态预置演示场景匹配
       const hit = id ? await matchStaticEval(id, body) : null;
       if (hit) return jsonResp(hit);
       return jsonResp({ error: '静态展示版：求解器需实时求值，未找到匹配的预置演示场景。请启动本地后端 + 隧道。', _static: BACKEND_UNREACHABLE }, 503);
