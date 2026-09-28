@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>港口通用知识库 · 后端工作台</title>
+<link rel="stylesheet" href="css/wb.css">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+  </head>
+<body>
+<div class="wb-app">
+
+  <!-- 顶栏 -->
+  <header class="wb-hd">
+    <div class="wb-brand">
+      <span class="wb-logo">🛠️</span>
+      <div class="wb-brand-txt">
+        <div class="wb-brand-name">港口通用知识库 · 后端工作台</div>
+        <div class="wb-brand-sub">Workbench · 设参数 → 求解 → 比对 → 取证</div>
+      </div>
+    </div>
+    <div class="wb-gsearch">
+      <input id="wb-search" type="text" placeholder="搜索 船舶 / 泊位 / 设备 / 约束…" />
+    </div>
+    <div class="wb-hd-right">
+      <span id="wb-src-state" class="wb-src-state" title="数据源接入状态">数据源</span>
+      <a class="wb-btn wb-btn-home" href="home.html" title="返回首页演示">◀ 返回首页</a>
+    </div>
+  </header>
+
+  <div class="wb-body">
+    <!-- 左导航 -->
+    <nav class="wb-nav">
+      <div class="wb-nav-group">决策场景 · 求解器</div>
+      <div class="wb-nav-item" data-route="solver:S1-BERTHING-FEASIBILITY">⚓ 靠泊可行性</div>
+      <div class="wb-nav-item" data-route="solver:S2-THROUGHPUT">🔧 通过能力测算</div>
+      <div class="wb-nav-item" data-route="solver:S3-YARD">🏗️ 堆场接纳能力</div>
+      <div class="wb-nav-item" data-route="solver:S4-COMPLIANCE">📜 合规与升级</div>
+      <div class="wb-nav-item" data-route="solver:S7-COAL-STACK-COMPLIANCE">🪨 储煤堆存合规</div>
+      <div class="wb-nav-item disabled" title="二期">⏳ 泊位排期（二期）</div>
+
+      <div class="wb-nav-group">知识视图</div>
+      <div class="wb-nav-item" data-route="graph">🔗 知识图谱</div>
+      <div class="wb-nav-group">多域图谱（一期 D2）</div>
+      <div class="wb-nav-item" data-route="graph-domain:dry-bulk">⛽ 干散货</div>
+      <div class="wb-nav-item" data-route="graph-domain:coal">🪨 煤炭</div>
+      <div class="wb-nav-item" data-route="graph-domain:grain">🌾 粮食</div>
+      <div class="wb-nav-item" data-route="graph-domain:general-cargo">📦 件杂货</div>
+
+      <div class="wb-nav-group">档案库 · 六维</div>
+      <div class="wb-nav-item" data-route="archive:cargo">货物特性</div>
+      <div class="wb-nav-item" data-route="archive:process">装卸工艺设备</div>
+      <div class="wb-nav-item" data-route="archive:yard">堆场仓储</div>
+      <div class="wb-nav-item" data-route="archive:safety">安全环保</div>
+      <div class="wb-nav-item" data-route="archive:capacity">作业能力</div>
+      <div class="wb-nav-item" data-route="archive:regulation">法规与事件</div>
+
+      <div class="wb-nav-group">系统</div>
+      <div class="wb-nav-item" data-route="rules">约束规则库</div>
+      <div class="wb-nav-item" data-route="datasources">数据源接入状态</div>
+      <div class="wb-nav-item" data-route="chains">求解链监控</div>
+    </nav>
+
+    <!-- 主区：由路由渲染 -->
+    <main class="wb-main" id="wb-main">
+      <div class="wb-empty">选择左侧求解器或档案库开始</div>
+    </main>
+  </div>
+
+  <!-- 错误红条（显式报错，不静默） -->
+  <div id="wb-errorbar" class="wb-errorbar hidden"></div>
+
+  <!-- 证据抽屉容器 -->
+  <div id="wb-evidence"></div>
+</div>
+
+<script>window.PKG_API_BASE = location.origin;</script>
+<script src="js/api.js"></script>
+<script src="js/wb.js"></script>
+<script src="js/solver-ui.js"></script>
+<script src="js/archive-ui.js"></script>
+<script src="js/rules-ui.js"></script>
+<script src="js/datasources-ui.js"></script>
+<script src="js/chains-ui.js"></script>
+<script src="js/entity-ui.js"></script>
+<script src="vendor/echarts.min.js"></script>
+<script src="js/graph-ui.js"></script>
+</body>
+</html>

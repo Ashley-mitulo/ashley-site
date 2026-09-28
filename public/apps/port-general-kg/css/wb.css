@@ -1,0 +1,256 @@
+/* wb.css — 后端工作台（workbench.html）样式，延续首页墨青灰+琥珀品牌 */
+:root{
+  --bg:#0b1222; --surface:#0d1b2a; --panel:#101f30; --border:#1f3a55;
+  --text:#dbe7f3; --text2:#cfe0f0; --muted:#7fa8c8; --dim:#5f7a95;
+  --amber:#e0a34a; --amber2:#eeb75f; --green:#4ADE80; --teal:#2dd4a7;
+  --red:#ff5c5c; --yellow:#FACC15; --blue:#6EA8FF; --purple:#b28cff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+.wb-app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* 顶栏 */
+.wb-hd{display:flex;align-items:center;gap:18px;padding:10px 18px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.wb-brand{display:flex;align-items:center;gap:10px}
+.wb-logo{font-size:24px}
+.wb-brand-name{font-weight:800;font-size:15px;color:var(--text2)}
+.wb-brand-sub{font-size:11px;color:var(--muted)}
+.wb-gsearch{flex:1;display:flex;justify-content:center}
+.wb-gsearch input{width:100%;max-width:420px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;outline:none}
+.wb-gsearch input:focus{border-color:var(--amber)}
+.wb-hd-right{display:flex;align-items:center;gap:10px}
+.wb-src-state{cursor:pointer;font-size:12px;color:var(--amber);background:rgba(224,163,74,.12);border:1px solid rgba(224,163,74,.4);padding:5px 10px;border-radius:8px}
+.wb-btn{background:var(--amber);color:#0b1222;border:none;border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer;font-size:13px;text-decoration:none}
+.wb-btn:hover{background:var(--amber2)}
+
+/* 主体：左导航 + 主区 */
+.wb-body{display:flex;flex:1;min-height:0}
+.wb-nav{width:218px;background:var(--surface);border-right:1px solid var(--border);padding:12px 10px;overflow-y:auto;flex-shrink:0}
+.wb-nav-group{font-size:11px;color:var(--muted);letter-spacing:.5px;margin:14px 8px 6px;font-weight:700}
+.wb-nav-group:first-child{margin-top:2px}
+.wb-nav-item{padding:8px 12px;border-radius:8px;cursor:pointer;color:var(--text);font-size:13px;margin-bottom:2px}
+.wb-nav-item:hover{background:var(--panel)}
+.wb-nav-item.active{background:rgba(224,163,74,.16);color:var(--amber);font-weight:700;border:1px solid rgba(224,163,74,.35)}
+.wb-nav-item.disabled{color:var(--dim);cursor:not-allowed;opacity:.6}
+
+.wb-main{flex:1;min-width:0;overflow-y:auto;padding:18px 22px;background:var(--bg)}
+.wb-empty{color:var(--muted);text-align:center;padding:60px 0;font-size:14px}
+
+/* 错误红条 */
+.wb-errorbar{position:fixed;top:0;left:0;right:0;background:var(--red);color:#fff;padding:9px 16px;font-weight:700;z-index:2000;box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.wb-errorbar.hidden{display:none}
+/* —— 求解器 UI（solver-ui.js）—— */
+.sb-page{display:flex;flex-direction:column;gap:14px;max-width:860px}
+.sb-head{border-bottom:1px solid var(--border);padding-bottom:10px}
+.sb-title{font-size:18px;font-weight:800;color:var(--text2)}
+.sb-desc{color:var(--muted);font-size:12.5px;margin-top:4px}
+.sb-inputs{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.sb-inputs-t{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px}
+.sb-inputs-row{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+.sb-input{display:flex;flex-direction:column;gap:5px}
+.sb-label{font-size:12px;color:var(--text2);font-weight:600}
+.sb-req{color:var(--red)}
+.sb-select{background:var(--panel);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 12px;font-size:13px;min-width:200px;outline:none}
+.sb-select:focus{border-color:var(--amber)}
+.sb-select:disabled{opacity:.5}
+/* M2: slider 滑块（S2 卸船机台数） */
+.sb-slider{width:220px;accent-color:var(--amber);cursor:pointer;margin:4px 0 2px}
+.sb-slider-val{color:var(--amber);font-size:14px;font-weight:800;margin-left:6px}
+.sb-slider-range{color:var(--dim);font-size:11px}
+.sb-disabled-note{color:var(--yellow);font-size:11px;font-style:normal}
+.sb-eval{background:var(--amber);color:#0b1222;border:none;border-radius:8px;padding:9px 18px;font-weight:800;cursor:pointer;font-size:13px}
+.sb-eval:hover{background:var(--amber2)}
+
+/* 结果区 */
+.sb-result{display:flex;flex-direction:column;gap:12px}
+.sb-result-head{font-size:13px;color:var(--muted);font-weight:600}
+/* 结论条 */
+.sb-conclusion{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;font-size:15px;font-weight:800}
+.sb-concl-label{font-size:12px;color:var(--muted);font-weight:700}
+.sb-concl-ok{background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.4);color:var(--green)}
+.sb-concl-critical{background:rgba(224,163,74,.14);border:1px solid rgba(224,163,74,.45);color:var(--amber2)}
+.sb-concl-veto{background:rgba(255,92,92,.15);border:1px solid rgba(255,92,92,.5);color:var(--red)}
+.sb-concl-unknown{background:rgba(178,140,255,.12);border:1px solid rgba(178,140,255,.4);color:var(--purple)}
+.sb-missing-note{color:var(--yellow);font-size:12px;margin-top:6px}
+
+/* 约束卡 */
+.sb-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.sb-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.sb-card-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.sb-card-name{font-weight:700;color:var(--text2);font-size:13.5px}
+.sb-flag{font-size:12px;font-weight:800;padding:2px 10px;border-radius:12px}
+.sb-card.sb-flag-ok .sb-flag{background:rgba(74,222,128,.15);color:var(--green)}
+.sb-card.sb-flag-critical .sb-flag{background:rgba(224,163,74,.18);color:var(--amber2)}
+.sb-card.sb-flag-veto .sb-flag{background:rgba(255,92,92,.2);color:var(--red)}
+.sb-card.sb-flag-unknown .sb-flag{background:rgba(178,140,255,.16);color:var(--purple)}
+.sb-card.sb-flag-veto{border-color:rgba(255,92,92,.5)}
+.sb-card.sb-flag-critical{border-color:rgba(224,163,74,.45)}
+/* 余量条 */
+.sb-bar{display:flex;align-items:center;gap:8px}
+.sb-bar-track{flex:1;height:8px;background:#1c3044;border-radius:5px;overflow:hidden;position:relative}
+.sb-bar-track i{display:block;height:100%;border-radius:5px}
+.sb-bar-ok{background:var(--green)}
+.sb-bar-critical{background:var(--amber2)}
+.sb-bar-unknown{background:#3a4a63}
+.sb-bar-val{color:var(--muted);font-size:11.5px;white-space:nowrap}
+.sb-unknown-note{color:var(--purple);font-size:11.5px;margin-top:6px}
+.sb-src{color:var(--dim);font-size:11px;margin-top:8px;border-top:1px dashed var(--border);padding-top:6px;word-break:break-all}
+
+/* 五段链 */
+.sb-chain{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.sb-chain-t{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px}
+.sb-chain-steps{display:flex;flex-direction:column;gap:6px}
+.sb-step{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--panel);border:1px solid var(--border);border-radius:8px;font-size:13px}
+.sb-step-ic{color:var(--amber);font-weight:800}
+.sb-step-role{color:var(--teal);font-weight:700;font-size:12px;min-width:32px}
+.sb-step-t{color:var(--text)}
+.sb-miss{color:var(--red);font-size:11px;margin-left:auto}
+.sb-src-ok{color:var(--green);font-size:11px;margin-left:auto}
+.sb-complete{font-size:12px;color:var(--muted);border:1px dashed var(--border);padding:8px 12px;border-radius:8px}
+.sb-loading{color:var(--muted);padding:40px;text-align:center}
+
+/* —— M3 档案库·六维（archive-ui.js）—— */
+.ar-page{display:flex;flex-direction:column;gap:14px}
+.ar-head{border-bottom:1px solid var(--border);padding-bottom:10px}
+.ar-title{font-size:18px;font-weight:800;color:var(--text2)}
+.ar-desc{color:var(--muted);font-size:12.5px;margin-top:4px}
+.ar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.ar-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.ar-card-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.ar-type{font-size:11px;color:var(--muted);background:var(--panel);padding:2px 8px;border-radius:10px}
+.ar-name{font-weight:700;color:var(--text2);font-size:14px;flex:1;min-width:0}
+.ar-rows{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
+.ar-row{display:flex;justify-content:space-between;gap:10px;font-size:12.5px}
+.ar-k{color:var(--muted)}
+.ar-v{color:var(--text);text-align:right}
+.ar-v.ar-multi{text-align:left;white-space:normal}
+.ar-muted{color:var(--dim);font-weight:400}
+.ar-sep{height:1px;background:var(--border);margin:4px 0}
+.ar-src{color:var(--dim);font-size:11px;border-top:1px dashed var(--border);padding-top:6px;word-break:break-all}
+.ar-loading{color:var(--muted);padding:40px;text-align:center}
+/* valueType 三色徽标 */
+.vt-badge{font-size:11px;font-weight:700;padding:1px 8px;border-radius:10px}
+.vt-design{background:rgba(110,168,255,.16);color:var(--blue)}
+.vt-measured{background:rgba(74,222,128,.16);color:var(--green)}
+.vt-forecast{background:rgba(250,204,21,.16);color:var(--yellow)}
+
+/* 法规时效状态徽标 */
+.reg-status{font-size:11px;font-weight:700;padding:1px 8px;border-radius:10px}
+.reg-status-ok{background:rgba(74,222,128,.16);color:var(--green)}
+.reg-status-warn{background:rgba(250,204,21,.18);color:var(--yellow)}
+.reg-status-draft{background:rgba(224,163,74,.2);color:#e0a34a}
+.reg-status-danger{background:rgba(248,113,113,.18);color:#f87171}
+
+/* —— M3 约束规则库（rules-ui.js）—— */
+.ru-page{display:flex;flex-direction:column;gap:14px}
+.ru-head{border-bottom:1px solid var(--border);padding-bottom:10px}
+.ru-title{font-size:18px;font-weight:800;color:var(--text2)}
+.ru-desc{color:var(--muted);font-size:12.5px;margin-top:4px}
+.ru-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.ru-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.ru-card-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.ru-name{font-weight:700;color:var(--text2);font-size:14px;flex:1}
+.ru-badge{font-size:11px;font-weight:700;padding:1px 8px;border-radius:10px}
+.ru-cap{background:rgba(45,212,167,.16);color:var(--teal)}
+.ru-compl{background:rgba(178,140,255,.16);color:var(--purple)}
+.ru-match{background:rgba(224,163,74,.16);color:var(--amber)}
+.ru-rule{background:rgba(110,168,255,.16);color:var(--blue)}
+.ru-body{font-size:13px;color:var(--text);margin-bottom:8px}
+.ru-formula{font-family:monospace;background:var(--panel);padding:2px 6px;border-radius:6px;color:var(--amber)}
+.ru-terms{font-size:11.5px;color:var(--muted);margin-bottom:8px;line-height:1.6}
+.ru-meta{font-size:11px;border-top:1px dashed var(--border);padding-top:6px}
+.ru-basis{color:var(--dim);margin-bottom:3px;word-break:break-all}
+.ru-src{color:var(--dim);word-break:break-all}
+.ru-loading{color:var(--muted);padding:40px;text-align:center}
+
+/* —— M3 数据源接入矩阵（datasources-ui.js）—— */
+.ds-page{display:flex;flex-direction:column;gap:16px}
+.ds-head{border-bottom:1px solid var(--border);padding-bottom:10px}
+.ds-title{font-size:18px;font-weight:800;color:var(--text2)}
+.ds-desc{color:var(--muted);font-size:12.5px;margin-top:4px}
+.ds-group{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.ds-group-t{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:10px}
+.ds-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.ds-item{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.ds-item-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.ds-name{font-size:13px;color:var(--text);font-weight:600}
+.ds-badge{font-size:11px;font-weight:700;padding:1px 8px;border-radius:10px}
+.ds-b-ok{background:rgba(74,222,128,.16);color:var(--green)}
+.ds-b-wait{background:rgba(224,163,74,.16);color:var(--amber)}
+.ds-b-dyn{background:rgba(110,168,255,.16);color:var(--blue)}
+.ds-sub{font-size:11.5px;color:var(--muted);margin-bottom:3px}
+.ds-code{font-family:monospace;background:#0b1222;padding:1px 5px;border-radius:5px;color:var(--blue)}
+.ds-count{color:var(--dim)}
+.ds-note{font-size:11px;color:var(--dim)}
+.ds-loading{color:var(--muted);padding:40px;text-align:center}
+
+/* —— M4 求解链监控（chains-ui.js）—— */
+.ch-page{display:flex;flex-direction:column;gap:16px}
+.ch-head{border-bottom:1px solid var(--border);padding-bottom:10px}
+.ch-title{font-size:18px;font-weight:800;color:var(--text2)}
+.ch-desc{color:var(--muted);font-size:12.5px;margin-top:4px}
+.ch-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.ch-kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.ch-kpi-v{font-size:26px;font-weight:900;color:var(--text2)}
+.ch-kpi-l{font-size:12px;color:var(--muted);margin-top:4px}
+.ch-kpi.ok .ch-kpi-v{color:var(--green)}
+.ch-kpi.warn .ch-kpi-v{color:var(--amber)}
+.ch-kpi.bad .ch-kpi-v{color:var(--red)}
+.ch-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.ch-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.ch-card-ok{border-left:4px solid var(--green)}
+.ch-card-bad{border-left:4px solid var(--red)}
+.ch-card-h{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.ch-name{font-weight:700;color:var(--text2);font-size:14px;flex:1}
+.ch-tag{font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px}
+.ch-tag-ok{background:rgba(74,222,128,.16);color:var(--green)}
+.ch-tag-bad{background:rgba(255,92,92,.2);color:var(--red)}
+.ch-meta{font-size:12px;color:var(--muted)}
+.ch-miss{color:var(--red);font-size:11.5px;margin-top:6px}
+.ch-loading{color:var(--muted);padding:40px;text-align:center}
+
+/* —— M5 串联：全局搜索 + 实体详情路由 —— */
+.wb-sr-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;cursor:pointer}
+.wb-sr-item:hover{border-color:var(--amber)}
+.wb-sr-type{font-size:11px;color:var(--muted);background:var(--panel);padding:2px 8px;border-radius:10px;flex-shrink:0}
+.wb-sr-name{font-size:13.5px;color:var(--text)}
+
+/* v0.2 T-D: na 旗标 + baseline 卡 + 详情文本 */
+.sb-flag-na .sb-flag,.sb-flag-na{background:rgba(127,168,200,.14);color:var(--muted)}
+.sb-card.sb-flag-na{border-color:#2a3a4f}
+.sb-detail{font-size:12.5px;color:var(--text);margin-bottom:6px}
+
+/* v0.2 T-C2: 回首页播放此链 */
+.sb-back-row{display:flex;justify-content:flex-end}
+.sb-back-home{color:var(--teal);text-decoration:none;font-weight:700;border:1px solid rgba(45,212,167,.4);border-radius:8px;padding:6px 14px;font-size:12.5px;display:inline-block}
+.sb-back-home:hover{background:rgba(45,212,167,.14)}
+
+.ch-dyn{margin-top:18px;border-top:1px solid #22374f;padding-top:14px}
+.ch-dyn-h{font-weight:700;color:#cfe0f0;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ch-dyn-total{font-size:12px;color:#e0a34a;background:rgba(224,163,74,.12);border:1px solid rgba(224,163,74,.3);border-radius:20px;padding:1px 10px}
+.ch-dyn-list{display:flex;flex-direction:column;gap:6px}
+.ch-dyn-row{display:flex;align-items:center;gap:10px;padding:7px 12px;background:rgba(20,40,70,.35);border:1px solid #1c3048;border-radius:7px;font-size:12px}
+.ch-dyn-solver{color:#e0a34a;font-weight:700;min-width:90px}
+.ch-dyn-in{color:#9fc0dd;flex:1}
+.ch-dyn-cpl{color:#7eb356;font-family:monospace}
+.ch-dyn-cpl.ok{color:#7eb356}
+.ch-dyn-tm{color:#5c80a0;font-size:11px}
+.ch-dyn-empty{color:#5c80a0;font-size:12px;font-style:italic}
+
+.sb-step-wrap{margin-bottom:2px}
+.sb-step{cursor:pointer;display:flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid #1c3048;border-radius:7px;background:rgba(20,40,70,.25);transition:background .15s}
+.sb-step:hover{background:rgba(20,40,70,.45)}
+.sb-step-toggle{color:#e0a34a;margin-left:auto;font-size:12px;margin-right:4px}
+.sb-step-detail{border:1px solid #1c3048;border-top:none;border-radius:0 0 7px 7px;padding:8px 12px;margin-bottom:6px;background:rgba(13,22,22,.55)}
+.sb-step-item{display:flex;flex-direction:column;gap:2px;padding:4px 0;border-bottom:1px dashed #1c3048;font-size:12px}
+.sb-step-item:last-child{border-bottom:none}
+.sb-item-l{color:#9fc0dd;font-weight:700}
+.sb-item-v{color:#cfe0f0;line-height:1.5}
+.sb-item-src{color:#5c80a0;font-size:11px}
+.sb-step-empty{color:#5c80a0;font-style:italic;font-size:12px}
+
+/* 图谱 G1 缺段徽标（P1-3） */
+.gr-summary{font-size:12.5px;color:#9fc0dd;margin-top:10px;padding:8px 12px;background:rgba(20,40,70,.25);border:1px solid #1c3048;border-radius:7px}
+.gr-badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:8px}
+.gr-badge-ok{background:#123322;color:#7eb356;border:1px solid #2c6e4c}
+.gr-badge-warn{background:#33220f;color:#e0a34a;border:1px solid #9c6d14}

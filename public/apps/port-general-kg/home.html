@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>港口通用知识库 · 六维知识星系</title>
+<link rel="stylesheet" href="css/home.css">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+  </head>
+<body>
+<div class="home-wrap">
+  <!-- ① 顶栏 -->
+  <header class="hd">
+    <div class="brand">
+      <span class="logo">⛏️</span>
+      <div class="brand-txt">
+        <div class="brand-name">港口通用知识库</div>
+        <div class="brand-sub">Port General Knowledge Base · <span class="tag">多域可配置 · 六维透镜</span></div>
+      </div>
+    </div>
+    <div class="global-search">
+      <input id="home-search" type="text" placeholder="搜索 泊位 / 船舶 / 设备 / 约束…（回车聚焦星系高亮）" />
+      <button id="btn-search">搜索</button>
+    </div>
+    <div class="status">
+      <a class="enter wb-enter" href="workbench.html#/graph" title="知识图谱视图：法规/条款/货种/事故关联">🔗 知识图谱</a>
+      <a class="enter wb-enter" href="workbench.html" title="进入后端工作台：求解器 / 档案库 / 系统">🛠️ 后端工作台 →</a>
+      <button id="btn-demo" class="enter" title="一键演示">▶ 一键演示</button>
+      <button id="btn-demo-next" class="enter" style="display:none" title="跳到下一步">⏭ 跳步</button>
+      <span class="scope-tag" title="本期范围">本期：干散货（铁矿石码头试点）｜规划：液体散货 · 集装箱 · 件杂货</span>
+      <select id="data-mode" class="data-mode" title="数据模式">
+        <option value="real">真实数据（正式环境默认）</option>
+        <option value="mock">模拟预演（含MOCK水印，仅形态演示）</option>
+      </select>
+      <span id="s-dot" class="s-dot"></span>
+      <span id="s-txt">连接中…</span>
+    </div>
+  </header>
+
+  <!-- 数据模式全局横幅（P-8：mock 开启时全站显式，含闸门提示；绝不隐藏） -->
+  <div class="data-banner" id="data-banner">
+    <b>演示模式已开启：以下含模拟数据（MOCK），仅供形态预演，不可用于决策。</b>
+    模拟数据 <b>不进入推理链与求解器结论</b>；对接消除的是数据缺口，不提升覆盖环节数（两条闸门）。正式环境该开关默认关闭。
+  </div>
+
+  <!-- ②A 业务主轴（P-2 新增：三层泳道全宽，视觉主线） -->
+  <section class="spine-bar" id="spine-bar" style="display:none">
+    <div class="spine-head">
+      <div class="spine-title">🔩 业务主轴 · <span id="spine-name"></span></div>
+      <div class="spine-bizsel" id="spine-bizsel">
+        <select id="spine-biz"><option value="IRON-ORE-RECEIVING">干散货 · 铁矿石接卸</option>
+          <option value="COAL-RECEIVING">煤炭 · 接卸与堆存合规</option>
+          <option value="GRAIN-RECEIVING">粮食 · 接卸与进口校验</option>
+          <option value="GC-RECEIVING">件杂货 · 接卸与气象可作业</option></select>
+        <span class="spine-hint">置灰项不隐藏——置灰本身就是路线图</span>
+      </div>
+      <!-- 对接进度滑块（P-10 演示杀手锏：拖到 100% 实时点亮缺口） -->
+      <div class="spine-prog" id="spine-prog">
+        <span class="spine-hint">对接进度</span>
+        <input type="range" id="prog-slider" min="0" max="100" step="10" value="0">
+        <span id="prog-val" class="spine-prog-val">0%</span>
+        <span class="spine-hint spine-disclaimer" title="演示用先后顺序，非实施排期承诺">演示用对接顺序・非实施排期</span>
+      </div>
+      <div class="spine-kpis" id="spine-kpis"></div>
+    </div>
+    <div class="spine-lanes" id="spine-lanes"></div>
+    <div class="spine-detail" id="spine-detail" style="display:none"></div>
+    <!-- 可视化增强区（P-3 水系剖面 / P-5 潮位 / P-6 能力负荷） -->
+    <section class="spine-viz" id="spine-viz" style="display:none">
+      <div class="sv-head"><div class="sv-title">📊 可视化增强</div>
+        <div class="sv-tabs">
+          <button class="sv-tab on" data-v="depth">泊位水深剖面</button>
+          <button class="sv-tab" data-v="cap">能力-负荷对比</button>
+          <button class="sv-tab" data-v="tide">潮位特征标尺</button>
+          <button class="sv-tab" data-v="sankey">货物流向桑基</button>
+          <button class="sv-tab" data-v="yard">堆场容量热力</button>
+          <button class="sv-tab" data-v="gantt">在泊时间甘特</button>
+        </div>
+      </div>
+      <div class="sv-pane on" id="sv-depth">
+        <div class="sv-bar"><span class="sv-lbl">船舶</span><select id="sv-vessel"></select>
+          <span class="sv-lbl">泊位</span><select id="sv-berth"></select>
+          <span id="sv-depth-hint" class="sv-hint"></span></div>
+        <div id="sv-depth-svg"></div>
+      </div>
+      <div class="sv-pane" id="sv-cap"><div class="sv-bar"><span class="sv-lbl">卸船机台数</span><input type="range" id="sv-unloader" min="1" max="4" step="1" value="2"><span id="sv-unloader-v" style="font-size:12px">2 台</span><span class="sv-hint">（拖动看瓶颈转移）</span></div><div id="sv-cap-bars"></div></div>
+      <div class="sv-pane" id="sv-tide"><div id="sv-tide-svg"></div></div>
+      <div class="sv-pane" id="sv-sankey"><div class="sv-mock-hint" id="sv-sankey-hint"></div><div id="sv-sankey-body"></div></div>
+      <div class="sv-pane" id="sv-yard"><div class="sv-mock-hint" id="sv-yard-hint"></div><div id="sv-yard-body"></div></div>
+      <div class="sv-pane" id="sv-gantt"><div class="sv-mock-hint" id="sv-gantt-hint"></div><div id="sv-gantt-body"></div></div>
+    </section>
+    <!-- 对接收益卡（P-10：点插头/滑块联动，给业主看接入后能多什么） -->
+    <section class="spine-roi" id="spine-roi">
+      <div class="roi-head">🤝 对接收益（给业主看：接了以后能多什么）</div>
+      <div id="roi-table" class="roi-table"></div>
+    </section>
+  </section>
+
+  <!-- ③ P-4 全国 40 万吨泊位地图（合规：合规定图叠 POI 点，不画边界线） -->
+  <section class="pm-map" id="pm-map">
+    <div class="pm-head"><span class="pm-title">🗺️ 全国 40 万吨铁矿石泊位布局</span><span class="pm-legend" id="pm-legend"></span></div>
+    <div id="pm-canvas" class="pm-canvas"></div>
+    <div id="pm-info" class="pm-info"></div>
+    <div class="pm-subtitle" id="pm-subtitle"></div>
+  </section>
+
+  <!-- ② 主区：结论先行（左结论流 + 右星系/剧场） -->
+  <main class="main">
+    <!-- 左栏：北极星 KPI + 今日发现 结论流 -->
+    <aside class="findings" id="findings-col">
+      <div class="f-head">
+        <div class="f-title"><span class="f-alertdot"></span>今日发现 · 结论流</div>
+        <button id="btn-findings-refresh" class="f-refresh" title="刷新结论">↻</button>
+      </div>
+      <div id="findings-list" class="findings-list"><div class="empty">加载中…</div></div>
+    </aside>
+
+    <!-- 右栏：星系 + 推理剧场 -->
+    <div class="workbench">
+      <div class="galaxy-wrap">
+        <div id="galaxy" class="galaxy"></div>
+        <div id="domain-bar" class="domain-bar hidden"></div>
+        <div id="crumb" class="crumb">首页 › <b>六维知识星系</b></div>
+        <div id="domain-counts" class="domain-counts hidden"></div>
+      </div>
+
+      <section class="theater" id="theater">
+        <div class="th-head">
+          <div class="th-title">🧭 推理剧场</div>
+          <button id="btn-play" class="th-play">▶ 播放推理</button>
+        </div>
+        <div class="th-stage" id="th-stage"><div class="empty">选择一条推理链播放</div></div>
+        <div class="th-out" id="th-out"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ③ 北极星 KPI -->
+  <section class="kpi" id="kpi-bar">
+    <div class="kpi-item"><span class="kpi-num" id="k-chainrate">–</span><span class="kpi-label">链完备率</span></div>
+    <div class="kpi-item"><span class="kpi-num" id="k-broken">–</span><span class="kpi-label">断链</span></div>
+    <div class="kpi-item"><span class="kpi-num" id="k-chains">–</span><span class="kpi-label">可用链</span></div>
+    <div class="kpi-item"><span class="kpi-num" id="k-rules">–</span><span class="kpi-label">约束规则</span></div>
+  </section>
+
+  <!-- ④ 页脚 -->
+  <footer class="ft">
+    <span id="scope-line">本期范围：干散货（铁矿石码头试点）｜规划接入：液体散货 · 集装箱 · 件杂货</span>
+    <span class="ft-sep">·</span>
+    <span>数据来源：公开资料汇编（船舶主尺度 / 泊位台账 / 设备能力 / 规范条款 / 政策名单）</span>
+    <span class="ft-sep">·</span>
+    <span>最近更新：<b id="ft-updated">–</b></span>
+    <span class="ft-right" id="chain-stats-mini"></span>
+  </footer>
+</div>
+
+<!-- 接口契约卡弹层（P-7） -->
+<div id="conn-modal" class="conn-mask">
+  <div class="conn-modal">
+    <span class="conn-close" id="conn-close">×</span>
+    <div id="conn-body"></div>
+  </div>
+</div>
+
+<script src="vendor/echarts.min.js"></script>
+<script>window.PKG_API_BASE = location.origin;</script>
+<script src="js/api.js"></script>
+<script src="js/drybulk-galaxy.js"></script>
+<script src="js/spine-ui.js"></script>
+<script src="js/spine-viz.js"></script>
+<script src="js/port-map-ui.js"></script>
+<script src="js/drybulk-detail.js"></script>
+<script src="js/drybulk-radar.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>
