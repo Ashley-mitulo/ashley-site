@@ -218,7 +218,11 @@
 
     // 业务主轴
     if (path === '/api/process/spines') return jsonResp((await staticJson('spines.json')) || {});
-    if (path.indexOf('/api/process/spine/') === 0) { return jsonResp({ _static: BACKEND_UNREACHABLE }); }
+    if (path.indexOf('/api/process/spine/') === 0) {
+      const sid = path.replace('/api/process/spine/', '');
+      if (sid && !sid.includes('/')) return jsonResp((await staticJson('spine_' + sid + '.json')) || { _static: BACKEND_UNREACHABLE });
+      return jsonResp({ _static: BACKEND_UNREACHABLE });
+    }
 
     // 外部系统
     if (path === '/api/connectors') return jsonResp((await staticJson('connectors.json')) || []);
