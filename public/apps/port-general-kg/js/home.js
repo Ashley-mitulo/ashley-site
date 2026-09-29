@@ -464,6 +464,10 @@
     // P-4 全国 40 万吨泊位地图
     var pmc = document.getElementById('pm-canvas');
     if (pmc && window.PORT_MAP) PORT_MAP.init(pmc);
+    // T3: 术语悬浮解释层（扫描主轴/结论区/标题，不全局扫）
+    if (window.GLOSSARY_TIP && window.GLOSSARY_TIP.init) {
+      window.GLOSSARY_TIP.init([".galaxy-wrap", ".spine-wrap", ".spine", ".concl", ".f-card", "#home-search-panel"]);
+    }
     // 刷新按钮
     var rf = $("btn-findings-refresh"); if (rf) rf.addEventListener("click", function () { load(); });
     // 播放按钮（重播当前链）

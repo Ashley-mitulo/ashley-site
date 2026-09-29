@@ -60,6 +60,8 @@
     else if (route.type === "entity") { if (RENDERERS.entity) RENDERERS.entity(route); else main.innerHTML = '<div class="wb-empty">实体详情（待接通）</div>'; }
     else if (route.type === "graph" || route.type === "graph-chain") { if (RENDERERS.graph) RENDERERS.graph(route); else main.innerHTML = '<div class="wb-empty">知识图谱（待接通）</div>'; }
     else main.innerHTML = '<div class="wb-empty">选择左侧求解器或档案库开始</div>';
+    // T3: 路由渲染后扫描术语（若组件就绪；异步内容由 MutationObserver 兼顾）
+    if (window.GLOSSARY_TIP && window.GLOSSARY_TIP.scan) { try { window.GLOSSARY_TIP.scan(main); } catch (e) {} }
   }
 
   function navigate(hash) {
@@ -81,6 +83,10 @@
       if (e.key === "Enter") { doSearch(sb.value.trim()); }
     });
     renderRoute(parseHash());   // 初始渲染（刷新可复现）
+    // T3: 术语悬浮解释层（扫描标题/结论/卡片区，不全局扫）
+    if (window.GLOSSARY_TIP && window.GLOSSARY_TIP.init) {
+      window.GLOSSARY_TIP.init(["#wb-main", ".sb-conclusion", ".sb-card", ".sb-chain", ".sb-title", ".sb-desc"]);
+    }
   }
 
   // —— 全局搜索：跨船舶/泊位/堆场/设备/约束 模糊匹配，结果点跳 entity 路由 ——

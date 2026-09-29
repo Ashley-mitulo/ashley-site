@@ -258,3 +258,9 @@ body{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background
 .gr-badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:8px}
 .gr-badge-ok{background:#123322;color:#7eb356;border:1px solid #2c6e4c}
 .gr-badge-warn{background:#33220f;color:#e0a34a;border:1px solid #9c6d14}
+/* T3: 术语悬浮解释 */
+.sb-term{border-bottom:1px dashed rgba(94,129,244,.7);cursor:help;padding-bottom:1px}
+.sb-term:hover{color:var(--accent,#5e81f4);border-bottom-color:var(--accent,#5e81f4)}
+.sb-gloss-tip{position:absolute;z-index:9999;max-width:340px;background:var(--elevated,#1b2434);border:1px solid var(--border-strong,#3a4660);border-radius:8px;padding:10px 12px;box-shadow:0 8px 24px rgba(0,0,0,.4);font-size:13px;line-height:1.55;color:var(--text-strong,#e8edf7)}
+.sb-gloss-tip .g-plain{font-weight:600}
+.sb-gloss-tip .g-src{margin-top:5px;font-size:11px;color:var(--muted);opacity:.85}
