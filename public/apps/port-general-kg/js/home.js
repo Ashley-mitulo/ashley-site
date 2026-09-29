@@ -56,6 +56,20 @@
     if (mini) mini.textContent = "链完备率 " + (map.chainCompleteness != null ? map.chainCompleteness : "—");
   }
 
+  // T4: KPI 释义（uiHints.kpi）+ 页面定位条（uiHints.pages）
+  function renderHints() {
+    API.fetchUiHints().then(function (u) {
+      var kp = (u && u.kpi) || {};
+      Object.keys(kp).forEach(function (k) {
+        var el = $("kh-" + k);
+        if (el && kp[k] && kp[k].plain) el.textContent = kp[k].plain;
+      });
+      var pg = (u && u.pages) || {};
+      var wb = $("home-where");
+      if (wb && pg.home && pg.home.where) wb.textContent = pg.home.where;
+    }).catch(function () { /* 释义获取失败不阻塞主页 */ });
+  }
+
   // ---------- 六维星系（复用 drybulk-galaxy.js 渲染） ----------
   function renderGalaxy() {
     var el = $("galaxy");
@@ -459,6 +473,8 @@
     else { load(); bindDemo(); }
     // 业务主轴（P-2：三层泳道，全宽主线）
     if (window.SPINE_UI) SPINE_UI.init();
+    // T4: KPI 释义 + 页面定位条
+    renderHints();
     // 可视化增强（P-3：水深剖面）
     if (window.SPINE_VIZ) SPINE_VIZ.init();
     // P-4 全国 40 万吨泊位地图

@@ -23,6 +23,7 @@
       <button id="btn-search">搜索</button>
     </div>
     <div class="status">
+      <span class="where-bar" id="home-where"></span>
       <a class="enter wb-enter" href="workbench.html#/graph" title="知识图谱视图：法规/条款/货种/事故关联">🔗 知识图谱</a>
       <a class="enter wb-enter" href="workbench.html" title="进入后端工作台：求解器 / 档案库 / 系统">🛠️ 后端工作台 →</a>
       <button id="btn-demo" class="enter" title="一键演示">▶ 一键演示</button>
@@ -137,10 +138,10 @@
 
   <!-- ③ 北极星 KPI -->
   <section class="kpi" id="kpi-bar">
-    <div class="kpi-item"><span class="kpi-num" id="k-chainrate">–</span><span class="kpi-label">链完备率</span></div>
-    <div class="kpi-item"><span class="kpi-num" id="k-broken">–</span><span class="kpi-label">断链</span></div>
-    <div class="kpi-item"><span class="kpi-num" id="k-chains">–</span><span class="kpi-label">可用链</span></div>
-    <div class="kpi-item"><span class="kpi-num" id="k-rules">–</span><span class="kpi-label">约束规则</span></div>
+    <div class="kpi-item"><span class="kpi-num" id="k-chainrate">–</span><span class="kpi-label">链完备率</span><span class="kpi-hint" id="kh-chainCompleteness"></span></div>
+    <div class="kpi-item"><span class="kpi-num" id="k-broken">–</span><span class="kpi-label">断链</span><span class="kpi-hint" id="kh-brokenChains"></span></div>
+    <div class="kpi-item"><span class="kpi-num" id="k-chains">–</span><span class="kpi-label">可用链</span><span class="kpi-hint" id="kh-usableChains"></span></div>
+    <div class="kpi-item"><span class="kpi-num" id="k-rules">–</span><span class="kpi-label">约束规则</span><span class="kpi-hint" id="kh-constraintRules"></span></div>
   </section>
 
   <!-- ④ 页脚 -->

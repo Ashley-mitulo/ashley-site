@@ -9,6 +9,25 @@
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
+  // T4: 页面定位条（uiHints.pages，按路由切换）
+  var UI_HINTS = null;
+  function loadUiHints() {
+    if (UI_HINTS) return Promise.resolve(UI_HINTS);
+    return API.fetchUiHints().then(function (u) { UI_HINTS = u || {}; return UI_HINTS; }).catch(function () { UI_HINTS = {}; return UI_HINTS; });
+  }
+  function updateWhere(route) {
+    var el = $("wb-where"); if (!el) return;
+    loadUiHints().then(function (u) {
+      var pg = (u && u.pages) || {};
+      var key = null;
+      if (route.type === "solver") key = "solver/" + route.id;
+      else if (route.type === "graph" || route.type === "graph-chain" || route.type === "graph-domain") key = "graph";
+      else key = "workbench";
+      var entry = pg[key] || (route.type === "solver" ? pg["workbench"] : null);
+      el.textContent = (entry && entry.where) ? entry.where : "";
+    });
+  }
+
   // —— 错误红条（显式报错）——
   function showError(msg) {
     var bar = $("wb-errorbar");
@@ -51,6 +70,7 @@
   function renderRoute(route) {
     var main = $("wb-main");
     syncNav(route);
+    updateWhere(route);   // T4: 页面定位条
     // 页面标题级占位；各模块 renderer 由后续里程碑注册
     if (route.type === "solver") { if (RENDERERS.solver) RENDERERS.solver(route); else main.innerHTML = '<div class="wb-empty">求解器 ' + esc(route.id) + '（待接通，见 T1.7）</div>'; }
     else if (route.type === "archive") { if (RENDERERS.archive) RENDERERS.archive(route); else main.innerHTML = '<div class="wb-empty">档案库 · 维度（待接通，见 T3.1）</div>'; }
