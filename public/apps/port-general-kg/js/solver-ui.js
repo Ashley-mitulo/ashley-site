@@ -6,6 +6,29 @@
   "use strict";
   var API = window.PKG_API;
   var state = { schema: null, values: {}, result: null };
+  // T2: narration（L1 面向领导可读性）缓存；加载失败不影响求解
+  var NARRATION = null;
+  function loadNarrationOnce() {
+    if (NARRATION !== null) return Promise.resolve(NARRATION);
+    return API.fetchNarration().then(function (n) { NARRATION = n || {}; return NARRATION; })
+      .catch(function () { NARRATION = {}; return NARRATION; });
+  }
+  // 取某求解器某结论的 L1 文案（键未命中 → null，前端静默不渲染）
+  function l1Of(solverId, conclusion) {
+    try {
+      var sol = NARRATION && NARRATION[solverId];
+      var e = sol && sol.conclusions && sol.conclusions[conclusion];
+      return (e && e.plain) ? e : null;
+    } catch (err) { return null; }
+  }
+  // 取某求解器某约束结果的 L1 文案（键 = verdictCn，与 soWhat.constraintResults 一致）
+  function l1OfConstraint(solverId, verdictCn) {
+    try {
+      var sol = NARRATION && NARRATION[solverId];
+      var e = sol && sol.constraintResults && sol.constraintResults[verdictCn];
+      return (e && e.plain) ? e.plain : null;
+    } catch (err) { return null; }
+  }
 
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function $(id) { return document.getElementById(id); }
@@ -70,7 +93,7 @@
     return '<div class="sb-bar"><div class="sb-bar-track"><i class="' + cls + '" style="width:' + w + '%"></i></div>' +
       '<span class="sb-bar-val">余量 ' + margin + ' ' + u + "</span></div>";
   }
-  function renderConstraintCards(result) {
+  function renderConstraintCards(result, solverId) {
     var cards = (result.constraintResults || []).map(function (r) {
       var flagCls = "sb-flag-" + (r.flag || "unknown");
       var extra = "";
@@ -81,6 +104,7 @@
         '<div class="sb-card-h"><span class="sb-card-name">' + esc(r.name) + '</span>' +
         '<span class="sb-flag">' + esc(flagTxt) + "</span></div>" +
         (r.kind === 'baseline' ? (r.detail ? '<div class="sb-detail">' + esc(r.detail) + "</div>" : "") : marginBar(r.margin, r.flag, r.marginUnit, r.marginRef)) + extra +
+        (function () { var p = l1OfConstraint(solverId, r.verdictCn); return p ? '<div class="sb-plain">' + esc(p) + "</div>" : ""; })() +
         (r.source ? '<div class="sb-src">出处：' + esc(r.source.split(/[；;]/)[0]) + "</div>" : "") +
         "</div>";
     }).join("");
@@ -88,10 +112,19 @@
   }
 
   // —— 结论条 ——
-  function renderConclusion(result) {
+  function renderConclusion(result, solverId) {
     var cls = "sb-concl-" + (result.conclusionFlag || "unknown");
     var note = result.missingDataNote ? '<div class="sb-missing-note">⚠ ' + esc(result.missingDataNote) + "</div>" : "";
-    return '<div class="sb-conclusion ' + cls + '"><span class="sb-concl-label">结论</span><span class="sb-concl-txt">' + esc(result.conclusion) + "</span></div>" + note;
+    // T2: L1 区块（键未命中 → 整块不渲染，不显示占位符/不报错）
+    var l1html = "";
+    var l1 = l1Of(solverId, result.conclusion);
+    if (l1) {
+      l1html = '<div class="sb-plain">' + esc(l1.plain) + "</div>";
+      if (l1.consequence && l1.consequenceSource) {
+        l1html += '<div class="sb-plain-cons">' + esc(l1.consequence) + '<span class="sb-plain-src">出处：' + esc(l1.consequenceSource) + "</span></div>";
+      }
+    }
+    return '<div class="sb-conclusion ' + cls + '"><span class="sb-concl-label">结论</span><span class="sb-concl-txt">' + esc(result.conclusion) + "</span></div>" + l1html + note;
   }
 
   // —— 五段链（v0.2 T6: 步骤可展开显示明细 items/results + 证据）——
@@ -155,7 +188,8 @@
       .then(function (res) {
         if (res.error) throw new Error(res.error);
         state.result = res;
-        renderResult(res);
+        // T2: 确保 narration 就绪后再渲染（避免 L1 竞态）
+        return loadNarrationOnce().then(function () { renderResult(res); });
       })
       .catch(function (e) { if (wb) wb.showError(e.message); });
   }
@@ -180,9 +214,9 @@
     var graphLink = homeChain ? '<a class="sb-back-home" href="#/graph:' + encodeURIComponent(homeChain) + '" title="证据链图谱视图" style="margin-left:10px">🔗 链图谱</a>' : '';
     area.innerHTML =
       '<div class="sb-result-head">' + headName + (sub ? ' · ' + sub : '') + "</div>" +
-      renderConclusion(res) +
+      renderConclusion(res, res.solverId) +
       (backLink || graphLink ? '<div class="sb-back-row">' + (backLink || '') + (graphLink || '') + '</div>' : '') +
-      renderConstraintCards(res) +
+      renderConstraintCards(res, res.solverId) +
       renderChain(res.chain) +
       '<div class="sb-complete">本次求解链完备 ' + (res.completeness.complete ? res.completeness.have.length + "/5" : res.completeness.have.length + "/5 缺:" + (res.completeness.missing.join(",") || "source")) + "</div>";
   }
@@ -195,6 +229,8 @@
       // 缓存 vessel 供 disabledWhen 判断
       state.vesselsById = {};
       (seed.vessels || []).forEach(function (v) { state.vesselsById[v.id] = v; });
+      // T2: 并行预加载 narration（失败不阻塞求解）
+      loadNarrationOnce();
       return API.get("/api/solvers/" + route.id + "/schema");
     }).then(function (schema) {
       state.schema = schema;

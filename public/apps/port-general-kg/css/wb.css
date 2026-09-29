@@ -72,6 +72,10 @@ body{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background
 .sb-concl-veto{background:rgba(255,92,92,.15);border:1px solid rgba(255,92,92,.5);color:var(--red)}
 .sb-concl-unknown{background:rgba(178,140,255,.12);border:1px solid rgba(178,140,255,.4);color:var(--purple)}
 .sb-missing-note{color:var(--yellow);font-size:12px;margin-top:6px}
+/* T2: L1（面向领导可读性）区块 */
+.sb-plain{margin-top:8px;padding:10px 14px;background:rgba(94,129,244,.08);border-left:3px solid var(--accent,#5e81f4);border-radius:6px;font-size:14px;line-height:1.6;color:var(--text-strong,#e8edf7)}
+.sb-plain-cons{margin-top:6px;font-size:12.5px;line-height:1.55;color:var(--muted);padding-left:2px}
+.sb-plain-src{display:block;margin-top:3px;font-size:11px;color:var(--muted);opacity:.85}
 
 /* 约束卡 */
 .sb-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
