@@ -315,13 +315,27 @@
   }
   function demoHide() { if (capEl) capEl.classList.remove("show"); }
 
+  // T0: 北极星字幕数值实时化（禁止硬编码；真值来自 /api/home/overview 的 kpi）
+  function kpiVal(id) {
+    var kpi = (OVERVIEW && OVERVIEW.kpi) || [];
+    for (var i = 0; i < kpi.length; i++) { if (kpi[i].id === id) return kpi[i].value; }
+    return null;
+  }
+  function kpiSentence() {
+    if (!OVERVIEW || !OVERVIEW.kpi) { try { console.warn("[demo] KPI 未加载，字幕数值将显示占位符「—」"); } catch (e) {} }
+    return "链完备率" + (kpiVal("chainCompleteness") != null ? kpiVal("chainCompleteness") : "—")
+      + " · 断链" + (kpiVal("brokenChains") != null ? kpiVal("brokenChains") : "—")
+      + " · 可用链" + (kpiVal("usableChains") != null ? kpiVal("usableChains") : "—")
+      + " · 约束规则" + (kpiVal("constraintRules") != null ? kpiVal("constraintRules") : "—");
+  }
+
   var demoSteps = [
     { ms: 1600, fn: function () { demoShow("🗺️ 全域六维星系：中心=链路健康度，六域实体（泊位/船舶/设备/堆场/约束）环绕，轨道半径=风险倒数"); } },
     { ms: 2000, fn: function () { demoShow("① 结论流：40万吨VLOC到港 → 可选泊位仅2个（D1水深临界0.05m/日照长度临界3m），名单外硬否决"); } },
     { ms: 2000, fn: function () { var p = (SEED && SEED.chains && SEED.chains.find(function (c) { return c.isPrimary; })) || (SEED && SEED.chains && SEED.chains[0]); if (p) switchToChain(p.id); demoShow("② 播放主链《40万吨VLOC靠泊决策》：事实→约束→冲突→备选→推荐，每步带出处"); } },
     { ms: 1600, fn: function () { demoShow("③ 深度校验：R1水深余量0.05m临界 / R2长度富余68m / R3名单外硬否决（法规禁止+引航拒绝）"); } },
     { ms: 2000, fn: function () { demoShow("④ 备选方案：A乘潮靠泊 / B精确系缆 / C减载过驳；缺失动态项（堆场剩余/占用/吃水）显示「—」待接入生产系统"); } },
-    { ms: 1800, fn: function () { demoShow("⑤ 北极星：链完备率100% · 断链0 · 可用链2 · 约束规则4 —— 每段可溯源，取不到不编造（\u201c—\u201d）"); } },
+    { ms: 1800, fn: function () { demoShow("⑤ 北极星：" + kpiSentence() + " —— 每段可溯源，取不到不编造（\u201c—\u201d）"); } },
     { ms: 1200, fn: function () { demoHide(); endDemo(); } }
   ];
   function runDemoStep() {
