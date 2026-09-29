@@ -14,10 +14,12 @@
       .catch(function () { NARRATION = {}; return NARRATION; });
   }
   // 取某求解器某结论的 L1 文案（键未命中 → null，前端静默不渲染）
-  function l1Of(solverId, conclusion) {
+  // 优先用稳定键 conclusionKey（动态拼接结论用），回退到结论原文（静态结论用）
+  function l1Of(solverId, conclusion, conclusionKey) {
     try {
       var sol = NARRATION && NARRATION[solverId];
-      var e = sol && sol.conclusions && sol.conclusions[conclusion];
+      if (!sol || !sol.conclusions) return null;
+      var e = (conclusionKey && sol.conclusions[conclusionKey]) || sol.conclusions[conclusion];
       return (e && e.plain) ? e : null;
     } catch (err) { return null; }
   }
@@ -117,7 +119,7 @@
     var note = result.missingDataNote ? '<div class="sb-missing-note">⚠ ' + esc(result.missingDataNote) + "</div>" : "";
     // T2: L1 区块（键未命中 → 整块不渲染，不显示占位符/不报错）
     var l1html = "";
-    var l1 = l1Of(solverId, result.conclusion);
+    var l1 = l1Of(solverId, result.conclusion, result.conclusionKey);
     if (l1) {
       l1html = '<div class="sb-plain">' + esc(l1.plain) + "</div>";
       if (l1.consequence && l1.consequenceSource) {
@@ -211,7 +213,7 @@
     else if (res.berth) sub = esc(res.berth.name);
     else sub = '';
     var homeChain = SOLVER_CHAIN[res.solverId];
-    var backLink = homeChain ? '<a class="sb-back-home" href="home.html?chain=' + encodeURIComponent(homeChain) + '" title="回首页剧场播放这条链">▶ 在首页播放此链</a>' : '';
+    var backLink = homeChain ? '<a class="sb-back-home" href="/home.html?chain=' + encodeURIComponent(homeChain) + '" title="回首页剧场播放这条链">▶ 在首页播放此链</a>' : '';
     var graphLink = homeChain ? '<a class="sb-back-home" href="#/graph:' + encodeURIComponent(homeChain) + '" title="证据链图谱视图" style="margin-left:10px">🔗 链图谱</a>' : '';
     area.innerHTML =
       '<div class="sb-result-head">' + headName + (sub ? ' · ' + sub : '') + "</div>" +

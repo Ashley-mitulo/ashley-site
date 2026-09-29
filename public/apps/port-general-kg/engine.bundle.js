@@ -770,19 +770,23 @@
             source: bsrc
           }
         ];
-        let conclusion, conclusionFlag;
+        let conclusion, conclusionFlag, conclusionKey;
         if (bottleneck === "unloader") {
           conclusion = `\u5378\u8239\u73AF\u8282\u4E3A\u74F6\u9888\uFF1Amin(\u5378\u8239\u673A${unloaderTotal}, \u76AE\u5E26${beltRate}) = ${systemCap} t/h\uFF1B\u52A0\u5378\u8239\u673A\u53F0\u6570\u53EF\u63D0\u6548`;
           conclusionFlag = "critical";
+          conclusionKey = "S2-BOTTLENECK-UNLOADER";
         } else if (bottleneck === "belt") {
           conclusion = `\u74F6\u9888\u8F6C\u79FB\u5230\u76AE\u5E26\uFF1A\u5378\u8239\u673A\u5DF2\u8FBE ${unloaderTotal} t/h \u4F46\u76AE\u5E26\u4EC5 ${beltRate} t/h\uFF0C\u7CFB\u7EDF\u4ECD ${systemCap} t/h\uFF1B\u518D\u52A0\u5378\u8239\u673A\u767D\u6295\uFF0C\u5E94\u6269\u5BB9\u76AE\u5E26`;
           conclusionFlag = "ok";
+          conclusionKey = "S2-BOTTLENECK-SHIFT";
         } else if (bottleneck === "tie") {
           conclusion = `\u5378\u8239\u4E0E\u76AE\u5E26\u6070\u597D\u5339\u914D\uFF1A\u7CFB\u7EDF\u80FD\u529B ${systemCap} t/h`;
           conclusionFlag = "ok";
+          conclusionKey = "S2-BOTTLENECK-TIE";
         } else {
           conclusion = "\u8BBE\u5907\u53F0\u8D26\u4E0D\u5168\uFF0C\u65E0\u6CD5\u6D4B\u7B97\u7CFB\u7EDF\u80FD\u529B";
           conclusionFlag = "unknown";
+          conclusionKey = null;
         }
         const cargo = seed.vessels && seed.vessels[0] && seed.vessels[0].dwt_t || null;
         const t_h = cargo != null && systemCap ? +(cargo / systemCap).toFixed(1) : null;
@@ -799,6 +803,7 @@
           constraintResults,
           conclusion,
           conclusionFlag,
+          conclusionKey,
           cargo,
           t_h,
           unsrc,
@@ -821,6 +826,7 @@
           constraintResults,
           conclusion,
           conclusionFlag,
+          conclusionKey,
           chain,
           completeness,
           missingDataNote: solver.missingDataNote || null
@@ -1160,23 +1166,27 @@
             source: berth.source
           }
         ];
-        let conclusion, conclusionFlag;
+        let conclusion, conclusionFlag, conclusionKey;
         if (struct != null && cls != null) {
           if (struct > cls) {
             conclusion = `\u7ED3\u6784\u6309 ${structW} \u4E07\u5428\u8BBE\u8BA1 > \u767B\u8BB0\u9760\u6CCA ${clsW} \u4E07\u5428\uFF0C\u5177\u5907\u5347\u7EA7\u9760\u6CCA\u80FD\u529B\u6F5C\u529B\uFF08\u9700\u590D\u6838\u7ED3\u6784\u5BCC\u4F59 + \u529E\u7406\u624B\u7EED + \u786E\u8BA4\u5728 40 \u4E07\u5428\u6279\u590D\u540D\u5355\u5185\uFF09`;
             conclusionFlag = "ok";
+            conclusionKey = "S4-UPGRADE-POTENTIAL";
           } else if (struct === cls) {
             conclusion = `\u7ED3\u6784\u4E0E\u767B\u8BB0\u7B49\u7EA7\u4E00\u81F4\uFF08${clsW} \u4E07\u5428\uFF09\uFF0C\u65E0\u5347\u7EA7\u5BCC\u4F59`;
             conclusionFlag = "ok";
+            conclusionKey = "S4-CLASS-ALIGNED";
           } else {
             conclusion = `\u7ED3\u6784\u80FD\u529B\uFF08${structW} \u4E07\u5428\uFF09\u4F4E\u4E8E\u767B\u8BB0\u7B49\u7EA7\uFF08${clsW} \u4E07\u5428\uFF09\uFF0C\u9700\u6838\u67E5`;
             conclusionFlag = "veto";
+            conclusionKey = "S4-STRUCT-BELOW-CLASS";
           }
         } else {
           conclusion = "\u6CCA\u4F4D\u7B49\u7EA7\u4FE1\u606F\u4E0D\u5168";
           conclusionFlag = "unknown";
+          conclusionKey = null;
         }
-        const ctx = { solver, berth, clsW, structW, cls, struct, upCn, content: null };
+        const ctx = { solver, berth, clsW, structW, cls, struct, upCn, conclusionKey, content: null };
         const chain = buildChainS4(ctx, constraintResults, conclusion, conclusionFlag);
         const completeness = checkChain(chain);
         return {
@@ -1190,6 +1200,7 @@
           constraintResults,
           conclusion,
           conclusionFlag,
+          conclusionKey,
           chain,
           completeness,
           missingDataNote: solver.missingDataNote || null
