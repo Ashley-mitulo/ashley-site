@@ -267,3 +267,13 @@ body{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background
 
 /* T4: 页面定位条 */
 .where-bar{display:inline-block;font-size:12px;color:var(--muted,#9fb4cc);background:rgba(94,129,244,.1);border:1px solid rgba(94,129,244,.25);border-radius:6px;padding:3px 9px;margin-right:10px;vertical-align:middle}
+
+/* T6: 通俗/专家模式 */
+.mode-toggle-btn{cursor:pointer;font-size:12px;padding:3px 10px;border-radius:6px;border:1px solid var(--border-strong,#3a4660);background:var(--surface,#141b28);color:var(--text-strong,#e8edf7);margin-left:8px}
+.mode-toggle-btn:hover{border-color:var(--accent,#5e81f4)}
+body.mode-plain .sb-src,
+body.mode-plain .sb-item-src,
+body.mode-plain .sb-src-ok,
+body.mode-plain .sb-miss,
+body.mode-plain .sb-plain-src,
+body.mode-plain .g-src{display:none !important}
