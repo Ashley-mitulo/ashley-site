@@ -75,7 +75,7 @@ window.PORT_MAP = (function () {
     det.innerHTML = '<div class="ar-card"><div class="ar-card-h"><span class="ar-type">' + (b.in40MtList ? '40万吨接靠泊位' : '名单外泊位') + '</span><span class="ar-name">' + b.name + '</span></div>' +
       '<div class="ar-rows"><div class="ar-row"><span class="ar-k">坐标</span><span class="ar-v">' + b.lat + ', ' + b.lon + '（WGS-84）</span></div>' +
       '<div class="ar-row"><span class="ar-k">精度</span><span class="ar-v">' + (b.precision || '—') + ' · 置信 ' + (b.confidence || '—') + '</span></div>' +
-      '<div class="ar-row"><span class="ar-k">名单</span><span class="ar-v">' + (b.in40MtList ? '国家 40 万吨接靠名单内' : '不在 40 万吨接靠名单（法规禁止接靠）') + '</span></div>' +
+      '<div class="ar-row"><span class="ar-k">名单</span><span class="ar-v">' + (b.in40MtList ? '国家 40 万吨接靠名单内' : '不在 40 万吨接靠名单（不可接靠 40 万吨矿船）') + '</span></div>' +
       '<div class="ar-row"><span class="ar-k">出处</span><span class="ar-v">' + (b.source || '—') + '</span></div>' +
       (b.remark ? '<div class="ar-row"><span class="ar-k">备注</span><span class="ar-v">' + b.remark + '</span></div>' : '') +
       '</div><div class="ar-src">精度说明：' + (b.confidence === 'confirmed' ? '公开来源泊位级采信' : '港区/岛级概位待核') + '</div></div>';
