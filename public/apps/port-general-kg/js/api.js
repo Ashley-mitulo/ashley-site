@@ -49,6 +49,11 @@ window.PKG_API = (function () {
     // 首页结论流 / 北极星
     fetchHomeOverview: function () { return get("/api/home/overview"); },
 
+    // narration（L1 面向领导可读性）：术语/结论文案/UI 提示
+    fetchGlossary: function () { return get("/api/glossary"); },
+    fetchNarration: function () { return get("/api/narration"); },
+    fetchUiHints: function () { return get("/api/ui-hints"); },
+
     // 证据溯源 L3
     fetchEvidence: function (node) {
       return get("/api/evidence" + (node ? "?node=" + encodeURIComponent(node) : ""));

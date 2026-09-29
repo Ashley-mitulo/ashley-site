@@ -18,6 +18,9 @@
  *   GET /api/connectors                   → api-static/connectors.json
  *   GET /api/connectors/:id/contract      → api-static/connector_<ID>_contract.json（缺→提示）
  *   GET /api/datasources                  → api-static/datasources.json
+ *   GET /api/glossary                     → api-static/narration_glossary.json（L1 术语）
+ *   GET /api/narration                    → api-static/narration_soWhat.json（L1 结论文案）
+ *   GET /api/ui-hints                     → api-static/narration_uiHints.json（KPI 释义/定位条）
  *   GET /api/port-map/berths              → api-static/port_map_berths.json
  *   GET /api/domains/:id/config           → api-static/domain_<ID>_config.json
  *   GET /api/domains/:id/entities         → api-static/domain_<ID>_entities.json
@@ -232,6 +235,10 @@
       return jsonResp({ _static: BACKEND_UNREACHABLE });
     }
     if (path === '/api/datasources') return jsonResp((await staticJson('datasources.json')) || {});
+    // narration（L1 面向领导可读性）：离线读冻结文件
+    if (path === '/api/glossary') return jsonResp((await staticJson('narration_glossary.json')) || { terms: [] });
+    if (path === '/api/narration') return jsonResp((await staticJson('narration_soWhat.json')) || {});
+    if (path === '/api/ui-hints') return jsonResp((await staticJson('narration_uiHints.json')) || { kpi: {}, pages: {}, demoScripts: {} });
     if (path === '/api/port-map/berths') return jsonResp((await staticJson('port_map_berths.json')) || {});
 
     // 域
