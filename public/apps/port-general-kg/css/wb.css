@@ -277,3 +277,9 @@ body.mode-plain .sb-src-ok,
 body.mode-plain .sb-miss,
 body.mode-plain .sb-plain-src,
 body.mode-plain .g-src{display:none !important}
+
+/* T5: 全站演示讲解字幕（fixed 定位，跨页通用） */
+.demo-caption{position:fixed;left:50%;bottom:36px;background:rgba(13,22,22,.94);border:1px solid rgba(224,163,74,.5);color:#e0a34a;font-size:13px;padding:9px 16px;border-radius:8px;opacity:0;transform:translateX(-50%) translateY(8px);transition:opacity .3s,transform .3s;z-index:9999;pointer-events:none;max-width:78%;text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.45)}
+.demo-caption.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.demo-tour-btn{cursor:pointer;font-size:12px;padding:3px 10px;border-radius:6px;border:1px solid var(--border-strong,#3a4660);background:var(--surface,#141b28);color:var(--text-strong,#e8edf7);margin-left:8px;display:none}
+.demo-tour-btn:hover{border-color:#e0a34a}

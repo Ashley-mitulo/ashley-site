@@ -475,6 +475,13 @@
     if (window.SPINE_UI) SPINE_UI.init();
     // T4: KPI 释义 + 页面定位条
     renderHints();
+    // T5: 全站讲解（home 页，运行时插值 KPI）
+    if (window.DEMO_TOUR) {
+      var dtBtn = $("btn-demo-tour");
+      window.DEMO_TOUR.mount(dtBtn, "home", { provide: function () {
+        return { chainRate: kpiVal("chainCompleteness"), broken: kpiVal("brokenChains"), usable: kpiVal("usableChains"), rules: kpiVal("constraintRules") };
+      } });
+    }
     // 可视化增强（P-3：水深剖面）
     if (window.SPINE_VIZ) SPINE_VIZ.init();
     // P-4 全国 40 万吨泊位地图

@@ -188,6 +188,7 @@
       .then(function (res) {
         if (res.error) throw new Error(res.error);
         state.result = res;
+        window.__SOLVER_STATE = { solverId: res.solverId, conclusion: res.conclusion, values: state.values, result: res };   // T5: 供演示讲解插值
         // T2: 确保 narration 就绪后再渲染（避免 L1 竞态）
         return loadNarrationOnce().then(function () { renderResult(res); });
       })

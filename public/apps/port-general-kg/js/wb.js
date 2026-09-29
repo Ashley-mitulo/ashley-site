@@ -28,6 +28,21 @@
     });
   }
 
+  // T5: 当前页讲解 key
+  function demoKeyOf(route) {
+    if (route.type === "solver") return "solver/" + route.id;
+    if (route.type === "graph" || route.type === "graph-chain" || route.type === "graph-domain") return "graph";
+    return "workbench";
+  }
+  function solverProvide() {
+    var s = window.__SOLVER_STATE || {};
+    var wind = null;
+    try { wind = (s.values && (s.values.wind_m_s != null ? s.values.wind_m_s : s.values.windBeaufort)); } catch (e) {}
+    var plain = "";
+    try { plain = (document.querySelector(".sb-plain") || {}).textContent || ""; } catch (e) {}
+    return { wind: wind, conclusion: s.conclusion, plain: plain, solverName: (s.result && s.result.solverName) || "" };
+  }
+
   // —— 错误红条（显式报错）——
   function showError(msg) {
     var bar = $("wb-errorbar");
@@ -71,6 +86,7 @@
     var main = $("wb-main");
     syncNav(route);
     updateWhere(route);   // T4: 页面定位条
+    if (window.DEMO_TOUR) { try { window.DEMO_TOUR.setPage(demoKeyOf(route), solverProvide); } catch (e) {} }   // T5: 讲解脚本随路由切换
     // 页面标题级占位；各模块 renderer 由后续里程碑注册
     if (route.type === "solver") { if (RENDERERS.solver) RENDERERS.solver(route); else main.innerHTML = '<div class="wb-empty">求解器 ' + esc(route.id) + '（待接通，见 T1.7）</div>'; }
     else if (route.type === "archive") { if (RENDERERS.archive) RENDERERS.archive(route); else main.innerHTML = '<div class="wb-empty">档案库 · 维度（待接通，见 T3.1）</div>'; }
@@ -106,6 +122,10 @@
     // T3: 术语悬浮解释层（扫描标题/结论/卡片区，不全局扫）
     if (window.GLOSSARY_TIP && window.GLOSSARY_TIP.init) {
       window.GLOSSARY_TIP.init(["#wb-main", ".sb-conclusion", ".sb-card", ".sb-chain", ".sb-title", ".sb-desc"]);
+    }
+    // T5: 全站讲解按钮（workbench 页）
+    if (window.DEMO_TOUR) {
+      window.DEMO_TOUR.mount($("btn-wb-tour"), demoKeyOf(parseHash()), { provide: solverProvide });
     }
   }
 
